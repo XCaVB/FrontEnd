@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "../css/styles.css"
 
 export function Horario() {
@@ -131,6 +132,10 @@ export function Horario() {
     }
   ];
 
+  const elegirHora = (dia, hora) => {
+    console.log("Elegiste el día "+ dia + " en el horario "+ hora +" hrs.");
+  }
+
   return (
     <div className="container">
       <h1>Horario de Clases</h1>
@@ -150,13 +155,13 @@ export function Horario() {
             <tbody>
             {horario.map((fila, index) => (
                 <tr key={index}>
-                <td>{fila.hora}</td>
-                <td>{fila.lunes}</td>
-                <td>{fila.martes}</td>
-                <td>{fila.miercoles}</td>
-                <td>{fila.jueves}</td>
-                <td>{fila.viernes}</td>
-                <td>{fila.sabado}</td>
+                <td style={{background:'gray', color:'white'}}>{fila.hora}</td>
+                <td onClick={e => elegirHora("Lunes", fila.hora)} style={{cursor: "pointer"}}>{fila.lunes}</td>
+                <td onClick={e => elegirHora("Martes", fila.hora)} style={{cursor: "pointer"}}>{fila.martes}</td>
+                <td onClick={e => elegirHora("Miércoles", fila.hora)} style={{cursor: "pointer"}}>{fila.miercoles}</td>
+                <td onClick={e => elegirHora("Jueves", fila.hora)} style={{cursor: "pointer"}}>{fila.jueves}</td>
+                <td onClick={e => elegirHora("Viernes", fila.hora)} style={{cursor: "pointer"}}>{fila.viernes}</td>
+                <td onClick={e => elegirHora("Sábado", fila.hora)} style={{cursor: "pointer"}}>{fila.sabado}</td>
                 </tr>
             ))}
             </tbody>
