@@ -36,7 +36,9 @@ export function Docentes(){
                     onChange={e => setContraseña(e.target.value)}
                     placeholder="Contraseña"
                 />
-                <button>Iniciar sesion</button>
+                {nombre.length === 0|| contraseña.length === 0
+                    ?<button>Iniciar sesión</button>
+                    :<button><Link to={"/Docentes/registrar-horarios"}>Iniciar sesion</Link></button>}
             </form>
             {error && <p>Todos los campos son obligatorios</p>}
             <hr />
