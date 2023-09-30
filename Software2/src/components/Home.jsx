@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import "../css/styles.css"
+import { HeaderHome } from "./HeaderHome"
 
 export function Home(){
     const handleSubmit = (e) => {
@@ -7,13 +8,17 @@ export function Home(){
     }
 
     return(
-        <div className="login" onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            <form className='ingreso' style={{justifyContent: "center"}}>
-                <button><Link to={'/Docentes'}>DOCENTES</Link></button>
-                <button><Link to={'/Administrativos'}>ADMINISTRATIVOS</Link></button>
-                <button><Link to={'/Local'}>LOCAL</Link></button>
-            </form>
+        <div>
+            <HeaderHome />
+            <div className="login" onSubmit={handleSubmit}>
+                <h1>Login</h1>  
+                <hr />
+                <form className='ingreso' style={{justifyContent: "center"}}>
+                    <button><Link to={'/Docentes'}>DOCENTES</Link></button>
+                    <button><Link to={'/Administrativos'}>ADMINISTRATIVOS</Link></button>
+                </form>
+                <hr />
+            </div>
         </div>
     )
 }
