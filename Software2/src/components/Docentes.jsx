@@ -1,6 +1,7 @@
 import { useState } from "react"
 import './ingreso.css'
 import { Link } from "react-router-dom"
+import { HeaderOut } from "./HeaderOut"
 
 export function Docentes(){
     const [nombre, setNombre] = useState('')
@@ -18,8 +19,9 @@ export function Docentes(){
 
     return(
         <div>
-            <h1>Ingresa tus credenciales docente</h1>
-
+            <HeaderOut/>
+            <h1 className="ingreso">Ingresa tus credenciales docente</h1>
+            <hr />
             <form 
                 className="ingreso"
                 onSubmit={handleSubmit}
@@ -36,11 +38,12 @@ export function Docentes(){
                     onChange={e => setContraseña(e.target.value)}
                     placeholder="Contraseña"
                 />
-                <button>Iniciar sesion</button>
+                {nombre.length === 0|| contraseña.length === 0
+                    ?<button>Iniciar sesión</button>
+                    :<button><Link to={"/Docentes/registrar-horarios"}>Iniciar sesion</Link></button>}
             </form>
-            {error && <p>Todos los campos son obligatorios</p>}
+            {error && <p className="ingreso">Todos los campos son obligatorios</p>}
             <hr />
-            <button><Link to={'/'}>SALIR</Link></button>
         </div>
     )
 }
