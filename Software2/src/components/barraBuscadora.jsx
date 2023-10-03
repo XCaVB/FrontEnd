@@ -9,7 +9,7 @@ export function BarraBuscadora(){
     const [busqueda, setBusqueda]= useState('');
 
     const peticionGet=async()=>{
-        await axios.get('https://jsonplaceholder.typicode.com/users')
+        await axios.get('https://my-json-server.typicode.com/doncornejo27/probarAPI/contenido')
         .then(response=>{
             setUsuarios(response.data);
             setTablaUsuarios(response.data);
@@ -26,7 +26,7 @@ export function BarraBuscadora(){
     const filtrar=(terminoBusqueda)=>{
         var resultadosBusqueda=tablaUsuarios.filter((elemento)=>{
             if(elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-            || elemento.company.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+            || elemento.rut.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
             ){
             return elemento;
             }
@@ -45,7 +45,7 @@ export function BarraBuscadora(){
                 <input 
                     className="form-control inputBuscar"
                     value={busqueda}
-                    placeholder="Busqueda por Nombre o Empresa"
+                    placeholder="Busqueda por Nombre o Rut"
                     onChange={handleChange}
                 />
             </div>
@@ -55,12 +55,11 @@ export function BarraBuscadora(){
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
-                            <th>Telefono</th>
-                            <th>Nombre de Usuario</th>
-                            <th>Correo</th>
-                            <th>Sitio Web</th>
-                            <th>Ciudad</th>
-                            <th>Empresa</th>
+                            <th>Rut</th>
+                            <th>Carrera</th>
+                            <th>Departamento</th>
+                            <th>Jornada Diurna</th>
+                            <th>Jornada Vespertina</th>
                         </tr>
                     </thead>
 
@@ -70,16 +69,14 @@ export function BarraBuscadora(){
                             <tr key={usuario.id}>
                                 <td>{usuario.id}</td>
                                 <td>{usuario.name}</td>
-                                <td>{usuario.phone}</td>
-                                <td>{usuario.username}</td>
-                                <td>{usuario.email}</td>
-                                <td>{usuario.website}</td>
-                                <td>{usuario.address.city}</td>
-                                <td>{usuario.company.name}</td>
+                                <td>{usuario.rut}</td>
+                                <td>{usuario.carrera}</td>
+                                <td>{usuario.departamento}</td>
+                                <td>{usuario.jornada.diurna}</td>
+                                <td>{usuario.jornada.vespertina}</td>
                             </tr>
                         ))}
                     </tbody>
-
                 </table>
             </div>        
         </div>
