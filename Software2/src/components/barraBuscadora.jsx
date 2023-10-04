@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 import "../css/barraBuscadora.css"
 import axios from "axios";
 
@@ -13,6 +14,7 @@ export function BarraBuscadora(){
         .then(response=>{
             setUsuarios(response.data);
             setTablaUsuarios(response.data);
+            console.log(usuarios);
         }).catch(error=>{
             console.log(error);
         })
@@ -68,7 +70,10 @@ export function BarraBuscadora(){
                         usuarios.map((usuario)=>(
                             <tr key={usuario.id}>
                                 <td>{usuario.id}</td>
-                                <td>{usuario.name}</td>
+                                <td>
+                                    <Link to={`/Administrativos/buscar-profesor/${usuario.id}`}>{usuario.name}
+                                    </Link>
+                                </td>
                                 <td>{usuario.rut}</td>
                                 <td>{usuario.carrera}</td>
                                 <td>{usuario.departamento}</td>

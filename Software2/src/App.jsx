@@ -5,6 +5,7 @@ import { RegistrarDisponible } from './components/registrarDisponible';
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { BuscarProfesor } from './components/buscarProfesor';
+import ProfesorPage from './components/ProfesorPage';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/Docentes/registrar-horarios" element={<RegistrarDisponible/>} />
         <Route path="/Administrativos" element={<Administrativos />} />
         <Route path="/Administrativos/buscar-profesor" element={<BuscarProfesor />} />
+        <Route path="/Administrativos/buscar-profesor/:id" element={<ProfesorPage />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </div>
