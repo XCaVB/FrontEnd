@@ -71,7 +71,11 @@ export function BarraBuscadora(){
                             <tr key={usuario.id}>
                                 <td>{usuario.id}</td>
                                 <td>
-                                    <Link to={`/Administrativos/buscar-profesor/${usuario.id}`}>{usuario.name}
+                                    <Link 
+                                    to={`/Administrativos/buscar-profesor/${usuario.id.toString()}`}
+                                    state={{ usuario: usuario }}
+                                    >
+                                    {usuario.name}
                                     </Link>
                                 </td>
                                 <td>{usuario.rut}</td>
