@@ -15,7 +15,7 @@ export function Header(){
                         {/*Nombre UNAB*/}
                         <h1 className="text-center">Universidad Andrés Bello</h1>
                     </div>
-                    <div className="col-1">
+                    <div className="col-2 p-0">
                         {/*Botón para cerrar sesión*/}
                         <button className="btn cerrar-sesion"><Link to={"/"} style={{color:"white"}}>Cerrar sesión</Link></button> 
                     </div>

@@ -3,7 +3,7 @@ import { BotonHorario } from "./botonHorario";
 import horario from "../data/horarioCalendario"
 import "../css/styles.css"
 
-export function Horario() {
+export function Horario(props) {
     
     // Datos horario
   const armar_horario = horario
@@ -17,10 +17,33 @@ export function Horario() {
     console.log("Elegiste el día "+ dia + " en el horario "+ hora +" hrs. Quedó en "+estado);
   }
 
+  const sacarDato = (dato) => {
+    console.log("dato es -> "+dato);
+    setDatosRecibidos(dato);
+    console.log("datosRecibidos es -> "+datosRecibidos);
+  }
+
   return (
-    <div className="container">
+    <div style={{height: '80vh'}}>
+      <div className="container">
       <h1>Horario de Clases</h1>
-      <div >
+      <div className="row justify-content-end">
+        <div className="d-flex mr-4">
+          <div className='rounded-circle' style={{ width: '20px', height: '20px', marginRight: '10px', background:'white', border: '2px solid'}}/>
+          <span className="p">No seleccionado</span>
+        </div>
+        <div className="d-flex mr-4">
+          <div className='rounded-circle' style={{ width: '20px', height: '20px', marginRight: '10px', background:'green', border: '2px solid'}}/>
+          <span className="p">Presencial</span>
+        </div>
+        <div className="d-flex mr-4">
+          <div className='rounded-circle' style={{ width: '20px', height: '20px', marginRight: '10px', background:'blue', border: '2px solid'}}/>
+          <span className="p">En línea</span>
+        </div>
+      </div>
+      </div>
+      
+      <div className="container p-0" style={{borderCollapse: 'collapse', height: '70%', overflowY: 'auto'}}>
         <table className="table-fixed table table-bordered">
             <thead className="sticky-top">
             <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -38,17 +61,20 @@ export function Horario() {
                 <tr key={index}>
                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
                 {/*<td onClick={e => elegirHora(fila.lunes, "Lunes", fila.hora)} style={{cursor: "pointer"}}>{fila.lunes}</td>*/}
-                <td className="p-1 "><BotonHorario onDatosEnviados={() => {manejarDatosBoton(), elegirHora()}}/></td>
-                <td onClick={e => elegirHora(fila.martes, "Martes", fila.hora)} style={{cursor: "pointer"}}>{fila.martes}</td>
-                <td onClick={e => elegirHora(fila.miercoles, "Miércoles", fila.hora)} style={{cursor: "pointer"}}>{fila.miercoles}</td>
-                <td onClick={e => elegirHora(fila.jueves, "Jueves", fila.hora)} style={{cursor: "pointer"}}>{fila.jueves}</td>
-                <td onClick={e => elegirHora(fila.viernes, "Viernes", fila.hora)} style={{cursor: "pointer"}}>{fila.viernes}</td>
-                <td onClick={e => elegirHora(fila.sabado, "Sábado", fila.hora)} style={{cursor: "pointer"}}>{fila.sabado}</td>
+                <td className="p-1"><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
                 </tr>
             ))}
             </tbody>
         </table>
-        </div>
+      </div>
     </div>
+    
+      
+
     );
   }
