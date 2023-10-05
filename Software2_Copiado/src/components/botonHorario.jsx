@@ -1,28 +1,38 @@
-import React, { useState } from "react"
-import { Horario } from "./Horario";
+import React, { useEffect, useState } from "react"
 
 export const BotonHorario = (props) => {
 
-    const [color, setColor] = useState('');
-    const [estado, setEstado] = useState(0);
+    const [color, setColor] = useState(() => {
+        if (props.estado === 0){
+            return 'white'
+        }
+        if (props.estado === 1){
+            return 'green'
+        }
+        if (props.estado === 2){
+            return 'blue'
+        }
+    });
+
+    const [estado, setEstado] = useState(props.estado);
 
     const cambiarColor = (e) => {
         if(estado == 0){
             setEstado(1)
-            setColor('green')
+            setColor('white')
         }  
         if(estado == 1){
             setEstado(2)
-            setColor('blue')
+            setColor('green')
         }
         if(estado == 2){
             setEstado(0)
-            setColor('white')
+            setColor('blue')
         }
     };
 
     const enviarDatosAlHorario = () => {
-        props.onDatosEnviados(estado)
+        props.onDatosEnviados([estado, props.fila, props.columna])
       }
 
     const ambasFunciones = () => {

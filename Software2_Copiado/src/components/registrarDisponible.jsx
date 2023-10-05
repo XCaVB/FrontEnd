@@ -1,12 +1,13 @@
 import { Header } from "./header"
 import { Horario } from "./Horario"
+import horarioBase from "../data/horarioBase"
 
 export function RegistrarDisponible(){
 
     return(
         <>
             <Header/>
-            <Horario/>
+            <Horario matriz={horarioBase}/>
         </>
             
     )

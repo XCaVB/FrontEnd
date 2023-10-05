@@ -1,30 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../data/horarioCalendario"
 import "../css/styles.css"
 
-export function Horario(props) {
+export function Horario({matriz}) {
     
     // Datos horario
   const armar_horario = horario
-  const [datosRecibidos, setDatosRecibidos] = useState(null)
-  
-  const manejarDatosBoton = (datos) => {
-    setDatosRecibidos(datos)
+  const [datosRecibidos, setDatosRecibidos] = useState([])
+  const [matrizNueva, setMatrizNueva] = useState(matriz)
+
+  useEffect(() => {
+    console.log(datosRecibidos[0]);
+  })
+
+  const sacarDato = (lista) => {
+    setDatosRecibidos(lista)
+    matrizNueva[lista[1]][lista[2]] = lista[0]
+
   }
 
-  const elegirHora = (estado, dia, hora) => {
-    console.log("Elegiste el día "+ dia + " en el horario "+ hora +" hrs. Quedó en "+estado);
+  function matrizString(mat) {
+    let resultado = '[';
+    
+    for (let i = 0; i < mat.length; i++) {
+      for (let j = 0; j < mat[i].length; j++) {
+        resultado += mat[i][j] + ' ';
+      }
+      resultado += '\n';
+    }
+    
+    console.log(resultado);
+    return resultado;
   }
 
-  const sacarDato = (dato) => {
-    console.log("dato es -> "+dato);
-    setDatosRecibidos(dato);
-    console.log("datosRecibidos es -> "+datosRecibidos);
+  function convertirAString(listaDeListas) {
+    let resultado = JSON.stringify(listaDeListas);
+    console.log(resultado);
+    return resultado
   }
 
   return (
-    <div style={{height: '80vh'}}>
+    <div>
       <div className="container">
       <h1>Horario de Clases</h1>
       <div className="row justify-content-end">
@@ -43,7 +60,7 @@ export function Horario(props) {
       </div>
       </div>
       
-      <div className="container p-0" style={{borderCollapse: 'collapse', height: '70%', overflowY: 'auto'}}>
+      <div className="container p-0" style={{border: '2px solid', borderCollapse: 'collapse', height: '60vh', overflowY: 'auto'}}>
         <table className="table-fixed table table-bordered">
             <thead className="sticky-top">
             <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -60,21 +77,20 @@ export function Horario(props) {
             {armar_horario.map((fila, index) => (
                 <tr key={index}>
                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                {/*<td onClick={e => elegirHora(fila.lunes, "Lunes", fila.hora)} style={{cursor: "pointer"}}>{fila.lunes}</td>*/}
-                <td className="p-1"><BotonHorario onDatosEnviados={sacarDato}/></td>
-                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
-                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
-                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
-                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
-                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato}/></td>
+                <td className="p-1"><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={0} estado={matrizNueva[index][0]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={1} estado={matrizNueva[index][1]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={2} estado={matrizNueva[index][2]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={3} estado={matrizNueva[index][3]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={4} estado={matrizNueva[index][4]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={5} estado={matrizNueva[index][5]}/></td>
                 </tr>
             ))}
             </tbody>
         </table>
       </div>
+      <div className="row mt-4 mr-4 justify-content-end">
+        <div className="btn rounded border justify-content-end" onClick={() => convertirAString(matrizNueva)} style={{background:'black', color:'white'}}>Aplicar Cambios</div>
+      </div>
     </div>
-    
-      
-
     );
   }
