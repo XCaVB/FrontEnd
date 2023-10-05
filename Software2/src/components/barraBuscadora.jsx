@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import "../css/barraBuscadora.css"
 import axios from "axios";
 
+
 export function BarraBuscadora(){
 
     const [usuarios, setUsuarios]= useState([]);
@@ -10,7 +11,7 @@ export function BarraBuscadora(){
     const [busqueda, setBusqueda]= useState('');
 
     const peticionGet=async()=>{
-        await axios.get('https://my-json-server.typicode.com/doncornejo27/probarAPI/contenido')
+        await axios.get('https://my-json-server.typicode.com/XCaVB/APIProfesores/contenido')
         .then(response=>{
             setUsuarios(response.data);
             setTablaUsuarios(response.data);
@@ -54,7 +55,7 @@ export function BarraBuscadora(){
             <div className="table-responsive">
                 <table className="table table-sm table-bordered">
                     <thead>
-                        <tr>
+                        <tr className="fondoBarra">
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Rut</th>

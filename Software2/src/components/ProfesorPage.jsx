@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import "../css/Pages.css";
 
 const ProfesorPage = () => {
-  const [userData, setUserData] = useState({}); // Cambiado a un objeto vacío
+  const [userData, setUserData] = useState({});
 
   const { id } = useParams();
   const usuarioId = parseInt(id);
 
   const peticionGet = async () => {
     try {
-      const response = await axios.get(`https://my-json-server.typicode.com/doncornejo27/probarAPI/contenido/${usuarioId}`);
+      const response = await axios.get(`https://my-json-server.typicode.com/XCaVB/APIProfesores/contenido/${usuarioId}`);
       setUserData(response.data);
     } catch (error) {
       console.error('Error:', error);
   
-      // Verificar si el error es un error 404 (Not Found)
       if (error.response && error.response.status === 404) {
-        // Redirigir al usuario a la URL deseada
         window.location.href = '/Administrativos/buscar-profesor';
       }
     }
@@ -27,15 +26,24 @@ const ProfesorPage = () => {
     peticionGet();
   }, [id]);
 
-  console.log(userData);
-
-  // Renderiza la información del usuario
   return (
-    <div>
-      <h1>Perfil de Usuario</h1>
-      <p>ID del usuario: {userData.id}</p>
-      <p>Nombre: {userData.name}</p>
-      {/* Agrega más información específica del usuario aquí */}
+    <div className='contenedorPrincipal'>
+      <div className='horarioProfesor'>
+          <h1>Horario profesor {userData.name}</h1>
+          <h3>Contacto: {userData.correo}</h3>
+      </div>
+      <div className='bloqueBoton'>
+        <button><Link to={"/Administrativos/buscar-profesor"}>Regresar</Link></button>
+        <hr/>
+        <button>Agregar Cursos</button>
+        <button>XDD</button>
+        <button>Pan Con Pan</button>
+        <button>Queso y Jamon</button>
+      </div>
+      <div className='bloqueBoton'>
+        <hr/>
+        <button>Descargar Horario</button>
+      </div>
     </div>
   );
 };
