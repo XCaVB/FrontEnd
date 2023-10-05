@@ -1,0 +1,41 @@
+/* Estilos para el contenedor principal */
+.contenedorPrincipal {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+  }
+  
+  /* Estilos para el encabezado (horarioProfesor) en el medio */
+  .horarioProfesor {
+    text-align: center;
+    background-color: #03102C;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  /* Estilos para los encabezados h1 y h3 dentro de horarioProfesor */
+  .horarioProfesor h1 {
+    margin: 0;
+  }
+  
+  .horarioProfesor h3 {
+    margin: 5px 0;
+  }
+  
+  /* Estilos para el bloque de botones (bloqueBoton) a la orilla izquierda con 6 cm de ancho */
+  .bloqueBoton {
+    display: flex;
+    flex-direction: column; /* Cambiamos la dirección a column */
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 4cm; /* Establecemos el ancho máximo */
+  }
+  
+  .bloqueBoton button {
+    background-color: #A90429;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%; /* Hacemos que los botones ocupen todo el ancho disponible */
+  }
