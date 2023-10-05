@@ -1,148 +1,69 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { BotonHorario } from "./botonHorario";
+import horario from "../data/horarioCalendario"
 import "../css/styles.css"
 
-export function Horario() {
-    // Datos de ejemplo para el horario
-  const horario = [
-    {
-      hora: '8:30 - 9:15',
-      lunes: '',
-      martes: '',
-      miercoles: '',
-      jueves: '',
-      viernes: '',
-      sabado: ''
-    },
-    {
-      hora: '9:25 - 10:10',
-      lunes: '',
-      martes: '',
-      miercoles: '',
-      jueves: '',
-      viernes: '',
-      sabado: ''
-    },
-    {
-        hora: '10:20 - 11:05',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '11:15 - 12:00',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '12:10 - 12:55',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '13:05 - 13:50',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '14:00 - 14:45',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '14:55 - 15:50',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '15:50 - 16:35',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '16:45 - 17:30',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '17:40 - 18:25',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '18:35 - 19:20',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '19:30 - 20:15',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    },
-    {
-        hora: '20:25 - 21:10',
-        lunes: '',
-        martes: '',
-        miercoles: '',
-        jueves: '',
-        viernes: '',
-        sabado: ''
-    }
-  ];
+export function Horario({matriz}) {
+    
+    // Datos horario
+  const armar_horario = horario
+  const [datosRecibidos, setDatosRecibidos] = useState([])
+  const [matrizNueva, setMatrizNueva] = useState(matriz)
 
-  const elegirHora = (dia, hora) => {
-    console.log("Elegiste el día "+ dia + " en el horario "+ hora +" hrs.");
+  useEffect(() => {
+    console.log(datosRecibidos[0]);
+  })
+
+  const sacarDato = (lista) => {
+    setDatosRecibidos(lista)
+    matrizNueva[lista[1]][lista[2]] = lista[0]
+
+  }
+
+  function matrizString(mat) {
+    let resultado = '[';
+    
+    for (let i = 0; i < mat.length; i++) {
+      for (let j = 0; j < mat[i].length; j++) {
+        resultado += mat[i][j] + ' ';
+      }
+      resultado += '\n';
+    }
+    
+    console.log(resultado);
+    return resultado;
+  }
+
+  function convertirAString(listaDeListas) {
+    let resultado = JSON.stringify(listaDeListas);
+    console.log(resultado);
+    return resultado
   }
 
   return (
-    <div className="container">
+    <div>
+      <div className="container">
       <h1>Horario de Clases</h1>
-      <div >
+      <div className="row justify-content-end">
+        <div className="d-flex mr-4">
+          <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'white', border: '2px solid'}}/>
+          <span className="p">No seleccionado</span>
+        </div>
+        <div className="d-flex mr-4">
+          <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'green', border: '2px solid'}}/>
+          <span className="p">Presencial</span>
+        </div>
+        <div className="d-flex mr-4">
+          <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'blue', border: '2px solid'}}/>
+          <span className="p">En línea</span>
+        </div>
+      </div>
+      </div>
+      
+      <div className="container p-0" style={{border: '2px solid', borderCollapse: 'collapse', height: '60vh', overflowY: 'auto'}}>
         <table className="table-fixed table table-bordered">
             <thead className="sticky-top">
-            <tr style={{background: 'gray', color:'white'}}>
+            <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                 <th scope="col" style={{ width: '16%' }}>Hora</th>
                 <th scope="col" style={{ width: '14%' }}>Lunes</th>
                 <th scope="col" style={{ width: '14%' }}>Martes</th>
@@ -153,20 +74,23 @@ export function Horario() {
             </tr>
             </thead>
             <tbody>
-            {horario.map((fila, index) => (
+            {armar_horario.map((fila, index) => (
                 <tr key={index}>
-                <td style={{background:'gray', color:'white'}}>{fila.hora}</td>
-                <td onClick={e => elegirHora("Lunes", fila.hora)} style={{cursor: "pointer"}}>{fila.lunes}</td>
-                <td onClick={e => elegirHora("Martes", fila.hora)} style={{cursor: "pointer"}}>{fila.martes}</td>
-                <td onClick={e => elegirHora("Miércoles", fila.hora)} style={{cursor: "pointer"}}>{fila.miercoles}</td>
-                <td onClick={e => elegirHora("Jueves", fila.hora)} style={{cursor: "pointer"}}>{fila.jueves}</td>
-                <td onClick={e => elegirHora("Viernes", fila.hora)} style={{cursor: "pointer"}}>{fila.viernes}</td>
-                <td onClick={e => elegirHora("Sábado", fila.hora)} style={{cursor: "pointer"}}>{fila.sabado}</td>
+                <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
+                <td className="p-1"><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={0} estado={matrizNueva[index][0]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={1} estado={matrizNueva[index][1]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={2} estado={matrizNueva[index][2]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={3} estado={matrizNueva[index][3]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={4} estado={matrizNueva[index][4]}/></td>
+                <td className="p-1 "><BotonHorario onDatosEnviados={sacarDato} fila={index} columna={5} estado={matrizNueva[index][5]}/></td>
                 </tr>
             ))}
             </tbody>
         </table>
-        </div>
+      </div>
+      <div className="row mt-4 mr-4 justify-content-end">
+        <div className="btn rounded border justify-content-end" onClick={() => convertirAString(matrizNueva)} style={{background:'black', color:'white'}}>Aplicar Cambios</div>
+      </div>
     </div>
     );
   }
