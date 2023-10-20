@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import "../css/styles.css"
-import { HeaderHome } from "./HeaderHome"
+import "../../../css/styles.css"
+import { HeaderHome } from "../../Headers/HeaderHome"
 
 export function Home(){
     const handleSubmit = (e) => {

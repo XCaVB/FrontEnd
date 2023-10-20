@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from "react-router-dom";
-import "../css/Pages.css";
+import "../../../css/Pages.css";
 
 const ProfesorPage = () => {
   const [userData, setUserData] = useState({});

@@ -1,7 +1,7 @@
 import { useState } from "react"
-import './ingreso.css'
+import '../../../css/ingreso.css'
 import { Link } from "react-router-dom"
-import { HeaderOut } from "./HeaderOut"
+import { HeaderOut } from "../../Headers/HeaderOut"
 
 export function Docentes(){
     const [nombre, setNombre] = useState('')

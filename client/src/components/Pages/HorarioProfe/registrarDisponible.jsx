@@ -1,7 +1,7 @@
-import { Header } from "./header"
+import { Header } from '../../Headers/Header'
 import { Horario } from "./Horario"
-import { getHorario} from '../api/horario.api'
-import horarioBase from "../data/horarioBase"
+import { getHorario} from '../../../api/horario.api'
+import horarioBase from "../../../data/horarioBase"
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from "react"
 

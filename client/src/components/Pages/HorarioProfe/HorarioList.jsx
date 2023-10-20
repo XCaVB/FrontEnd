@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAllHorarios } from "../api/horario.api"
+import { getAllHorarios } from "../../../api/horario.api"
 import { HorarioCard } from "./HorarioCard";
 
 export function HorarioList() {

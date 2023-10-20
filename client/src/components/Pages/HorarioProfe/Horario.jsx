@@ -1,8 +1,8 @@
-import { updateHorario} from '../api/horario.api'
-import React, { useEffect, useState } from "react";
+import { updateHorario} from '../../../api/horario.api'
+import React, { useState } from "react";
 import { BotonHorario } from "./botonHorario";
-import horario from "../data/horarioCalendario"
-import "../css/styles.css"
+import horario from "../../../data/horarioCalendario"
+import "../../../css/styles.css"
 import { useParams } from 'react-router-dom';
 
 export function Horario({matrizD, matrizV, data}) {

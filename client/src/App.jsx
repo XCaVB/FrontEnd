@@ -1,12 +1,10 @@
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import {HorariosPage} from './pages/HorariosPage'
-import { HorariosFormPage } from './pages/HorariosFormPage';
-import { Administrativos } from './components/Administrativos';
-import { Docentes } from './components/Docentes';
-import { Home } from './components/Home';
-import { RegistrarDisponible } from './components/registrarDisponible';
-import { BuscarProfesor } from './components/Header+buscarProfesor';
-import { ProfesorHeader } from './components/Header+ProfesorPage';
+import { Administrativos } from './components/Pages/Principal/Administrativos';
+import { Docentes } from './components/Pages/Principal/Docentes';
+import { Home } from './components/Pages/Principal/Home';
+import { RegistrarDisponible } from './components/Pages/HorarioProfe/registrarDisponible';
+import { BuscarProfesor } from './components/Routes/Header+buscarProfesor';
+import { ProfesorHeader } from './components/Routes/Header+ProfesorPage';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
-import "../css/barraBuscadora.css"
+import "../../../css/barraBuscadora.css"
 import axios from "axios";
 
 export function BarraBuscadora(){

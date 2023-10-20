@@ -1,8 +1,9 @@
 import { useState } from "react"
-import './ingreso.css'
+import '../../../css/ingreso.css'
 import { Link } from "react-router-dom"
+import { HeaderOut } from "../../Headers/HeaderOut"
 
-export function Local(){
+export function Administrativos(){
     const [nombre, setNombre] = useState('')
     const [contraseña, setContraseña] = useState('')
     const [error, setError] = useState(false)
@@ -18,8 +19,9 @@ export function Local(){
 
     return(
         <div>
-            <h1>Ingresa tus credenciales local</h1>
-
+            <HeaderOut/>
+            <h1 className="ingreso">Ingresa tus credenciales administrativo</h1>
+            <hr />
             <form 
                 className="ingreso"
                 onSubmit={handleSubmit}
@@ -36,11 +38,12 @@ export function Local(){
                     onChange={e => setContraseña(e.target.value)}
                     placeholder="Contraseña"
                 />
-                <button>Iniciar sesion</button>
+                {nombre.length === 0|| contraseña.length === 0
+                    ?<button>Iniciar sesión</button>
+                    :<button><Link to={"/Administrativos/buscar-profesor"}>Iniciar sesion</Link></button>}
             </form>
-            {error && <p>Todos los campos son obligatorios</p>}
+            {error && <p className="ingreso">Todos los campos son obligatorios</p>}
             <hr />
-            <button><Link to={'/'}>SALIR</Link></button>
         </div>
     )
 }
