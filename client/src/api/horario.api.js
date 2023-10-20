@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+//---HORARIO---//
 const horariosApi = axios.create({
     baseURL: 'http://localhost:8000/api/profesor/'
 })
@@ -13,3 +14,10 @@ export const createHorario = (horario) => horariosApi.post('/', horario)
 export const deleteHorario = (id) => horariosApi.delete(`/${id}`)
 
 export const updateHorario = (id, horario) => horariosApi.put(`/${id}/`, horario)
+
+//---USUARIOS---//
+const usuariosApi = axios.create({
+    baseURL: 'http://localhost:8000/api/user/'
+})
+
+export const getAllUsuarios = () => usuariosApi.get('/')

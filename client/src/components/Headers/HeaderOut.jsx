@@ -6,7 +6,7 @@ export function HeaderOut(){
 
     return(
         <header className="header">
-                <div className="row align-items-center">
+                <div className="row align-items-center mr-0">
                     <div className="col-2 logo">
                         {/*Logo UNAB*/}
                         <img src={logo} alt="Logo UNAB" className="img-fluid"/>  
