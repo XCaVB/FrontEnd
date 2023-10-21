@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Header } from "../../Headers/Header"
+import { ModalUsuario } from "./modalUsuario"
 import { getAllUsuarios } from "../../../api/horario.api"
 
 export function Usuarios() {
 
   const [usuarios, setUsuarios] = useState(null)
+
+  const [datoModal, setDatoModal] = useState(null)
 
   useEffect(() => async function loadUsuario() {
     try {
@@ -27,11 +30,14 @@ export function Usuarios() {
             DB Management
           </div>
           <div className="form-group col-2">
-            <label htmlFor="sel1">[REVISAR SI VA ESTO]Filtrar por:</label>
+            <label htmlFor="sel1">Mostrar</label>
             <select className="form-control" id="sel1">
-              <option>No filtrar</option>
               <option>Usuario</option>
-              <option>Clase</option>
+              <option disabled>Profesor</option>
+              <option disabled>Clase</option>
+              <option disabled>Otra opcion</option>
+              <option disabled>Opcion 5</option>
+              <option disabled>Opcion 6</option>
             </select>
           </div>
 
@@ -52,16 +58,24 @@ export function Usuarios() {
                     <td>{usuario.name}</td>
                     <td>{usuario.rut}</td>
                     <td>{usuario.correo}</td>
-                    <td><div className="btn btn-secondary">+</div></td>
+                    <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={() => setDatoModal(usuario)} data-toggle="modal" data-target="#entrar">Modificar</div></td>
                   </tr>
+                  
                 ))}
+                {/* Agregar otro a la BBDD */}
+                <tr style={{textAlign: 'center'}}> 
+                  <td>
+                    <div className="btn btn-success" onClick={() => setDatoModal(null)} data-toggle="modal" data-target="#agregar">+</div>
+                  </td>
+                </tr>
               </tbody>
             </table>
-            </div>  
+          </div>  
         </div>
       </div>
+      <ModalUsuario id={"entrar"} data={datoModal}/>
+      <ModalUsuario id={"agregar"} />
     </div>
-      
-        
+  
     )
 }
