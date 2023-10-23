@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
 import { createUsuario, updateUsuario, deleteUsuario } from "../../../api/horario.api"
 
-export function ModalUsuario( {onDatosEnviados, id, data} ) {
-
-  console.log(data)
-
+export function ModalUsuario( {onDatosEnviados, identificador, data} ) {
+  
+  const [id] = useState(data.id)
   const [nombre, setNombre] = useState(data.name)
   const [rut, setRut] = useState(data.rut)
   const [correo, setCorreo] = useState(data.correo)
@@ -13,14 +12,41 @@ export function ModalUsuario( {onDatosEnviados, id, data} ) {
     onDatosEnviados(false)
   }
 
+  const enviarAlerta = () => {
+    alertaEnviada(true)
+  }
+
+  window.closeModal = function(){
+    $(identificador).modal('hide');
+  };
+
+  $(function() {
+    $("[data-toggle=popover]").popover({
+      title: "¿Estás seguro?",
+      html: true,
+      placement:"bottom",
+      sanitize: false,
+      content: "<button class='btn btn-danger' id ='confirmar'>Confirmar</button>"
+    });
+  });
+
+  $(document).on("click", "#confirmar", async function () {
+    try {
+      await deleteUsuario(id);
+      
+    } catch {
+      window.alert("ERROR!!!")
+    }
+});
+
   return(
-  <div className="modal fade" id={id} data-backdrop='static'>
+  <div className="modal fade" id={identificador} data-backdrop='static'>
     <div className="modal-dialog">
       <div className="modal-content">
     
         <div className="modal-header">
-          {id==="agregar" && <h4 className="modal-title">Agregando usuario</h4>}
-          {id==="entrar" && <h4 className="modal-title">Modificando usuario</h4>}
+          {identificador==="agregar" && <h4 className="modal-title">Agregando usuario</h4>}
+          {identificador==="entrar" && <h4 className="modal-title">Modificando usuario</h4>}
             <button type="button" className="close" data-dismiss="modal" onClick={enviarDatosAPadre}>&times;</button>
         </div>
       
@@ -49,8 +75,9 @@ export function ModalUsuario( {onDatosEnviados, id, data} ) {
               </label>
             </div>
             <div className="d-flex justify-content-between mb-2">
-              <button type="submit" className="btn btn-green">Enviar</button>
-              {id==="entrar" && <button type="button" className="btn btn-danger m-0" data-bs-toggle="popover" title="¿Estás seguro que quieres eliminar esto?" data-bs-content="<a className='btn btn-danger'>Confimar</button>" data-bs-html="true">Eliminar usuario</button>}
+              {identificador === "agregar" && <button type="submit" className="btn btn-green">Enviar</button>}
+              {identificador === "entrar" && <button type="submit" className="btn btn-green">Enviar</button>}
+              {identificador==="entrar" && <button type="button" className="btn btn-danger" data-toggle="popover" data-html="true">Eliminar usuario</button>}
             </div> 
           </form>
         </div>

@@ -20,6 +20,7 @@ export function Usuarios() {
 
   const [elementoSeleccionado, setElementoSeleccionado] = useState(null)
   const [visible, setVisible] = useState(false)
+  const [alerta, setAlerta] = useState(false)
 
   function manejarModal(datoModal){
     setElementoSeleccionado(datoModal)
@@ -27,15 +28,23 @@ export function Usuarios() {
   }
 
   const sacarDato = (estado) => {
-    console.log(estado);
     setVisible(estado)
+  }
+
+  const sacarAlerta = (estado) => {
+    setAlerta(estado)
   }
 
   return(
     <div>
       <Header/>
       <button className="btn btn-grey m-3" style={{borderStyle: 'solid', borderColor: 'black'}}>Volver</button>
-
+      
+      {alerta && <div className="alert alert-success alert-dismissible fade show">
+        <button type="button" className="close" data-dismiss="alert">&times;</button>
+        <strong>¡Exito!</strong> El usuario fue eliminado exitosamente.
+        </div>}
+      
       <div className="row justify-content-center">
         <div className="container border m-2 col-10">
           <div className="row justify-content-center border p-2">
@@ -87,8 +96,8 @@ export function Usuarios() {
       </div>
 
    
-      {visible && <ModalUsuario id={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato}/>}
-      {ID==="agregar" && <ModalUsuario id="agregar" data={{name:'', rut:'', correo:''}} onDatosEnviados={sacarDato}/>}
+      {visible && <ModalUsuario identificador={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato}/>}
+      {ID==="agregar" && <ModalUsuario id="agregar" data={{id: null, name:'', rut:'', correo:''}} onDatosEnviados={sacarDato}/>}
      
     </div>
   
