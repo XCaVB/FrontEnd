@@ -21,3 +21,9 @@ const usuariosApi = axios.create({
 })
 
 export const getAllUsuarios = () => usuariosApi.get('/')
+
+export const createUsuario = (usuario) => usuariosApi.post('/', usuario)
+
+export const updateUsuario = (id, usuario) => horariosApi.put(`${id}`, usuario)
+
+export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)

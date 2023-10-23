@@ -7,8 +7,7 @@ import { getAllUsuarios } from "../../../api/horario.api"
 export function Usuarios() {
 
   const [usuarios, setUsuarios] = useState(null)
-
-  const [datoModal, setDatoModal] = useState(null)
+  const [ID, setID] = useState('')
 
   useEffect(() => async function loadUsuario() {
     try {
@@ -18,6 +17,19 @@ export function Usuarios() {
       window.alert("ERROR. INTENTA DE NUEVO.")
     }
   }, [])
+
+  const [elementoSeleccionado, setElementoSeleccionado] = useState(null)
+  const [visible, setVisible] = useState(false)
+
+  function manejarModal(datoModal){
+    setElementoSeleccionado(datoModal)
+    setVisible(true)
+  }
+
+  const sacarDato = (estado) => {
+    console.log(estado);
+    setVisible(estado)
+  }
 
   return(
     <div>
@@ -58,14 +70,14 @@ export function Usuarios() {
                     <td>{usuario.name}</td>
                     <td>{usuario.rut}</td>
                     <td>{usuario.correo}</td>
-                    <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={() => setDatoModal(usuario)} data-toggle="modal" data-target="#entrar">Modificar</div></td>
+                    <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={ ( () => {manejarModal(usuario); setID('entrar');} ) } data-toggle="modal" data-target="#entrar">Modificar</div></td>
                   </tr>
                   
                 ))}
                 {/* Agregar otro a la BBDD */}
                 <tr style={{textAlign: 'center'}}> 
                   <td>
-                    <div className="btn btn-success" onClick={() => setDatoModal(null)} data-toggle="modal" data-target="#agregar">+</div>
+                    <div className="btn btn-success" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
                   </td>
                 </tr>
               </tbody>
@@ -73,8 +85,11 @@ export function Usuarios() {
           </div>  
         </div>
       </div>
-      <ModalUsuario id={"entrar"} data={datoModal}/>
-      <ModalUsuario id={"agregar"} />
+
+   
+      {visible && <ModalUsuario id={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato}/>}
+      {ID==="agregar" && <ModalUsuario id="agregar" data={{name:'', rut:'', correo:''}} onDatosEnviados={sacarDato}/>}
+     
     </div>
   
     )
