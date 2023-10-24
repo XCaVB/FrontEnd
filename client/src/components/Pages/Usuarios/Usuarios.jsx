@@ -14,13 +14,22 @@ export function Usuarios() {
       const {data} = await getAllUsuarios();
       setUsuarios(data)
     } catch {
-      window.alert("ERROR. INTENTA DE NUEVO.")
+      setAlerta(2)
     }
   }, [])
 
+  async function loadUsuarios(){
+    try {
+      const {data} = await getAllUsuarios();
+      setUsuarios(data)
+    } catch {
+      setAlerta(2)
+    }
+  }
+
   const [elementoSeleccionado, setElementoSeleccionado] = useState(null)
   const [visible, setVisible] = useState(false)
-  const [alerta, setAlerta] = useState(false)
+  const [alerta, setAlerta] = useState(0)
 
   function manejarModal(datoModal){
     setElementoSeleccionado(datoModal)
@@ -38,29 +47,43 @@ export function Usuarios() {
   return(
     <div>
       <Header/>
-      <button className="btn btn-grey m-3" style={{borderStyle: 'solid', borderColor: 'black'}}>Volver</button>
       
-      {alerta && <div className="alert alert-success alert-dismissible fade show">
-        <button type="button" className="close" data-dismiss="alert">&times;</button>
-        <strong>¡Exito!</strong> El usuario fue eliminado exitosamente.
+      {/*---ALERTAS---*/}
+      <div className="row justify-content-center m-5">
+
+      {/* EXITO */}
+      {alerta===1 && <div className="alert alert-success alert-dismissible fade show col-5">
+        <button type="button" className="close" data-dismiss="alert" onClick={() => setAlerta(0)}>&times;</button>
+        <strong>¡Exito!</strong> Operación realizada exitosamente.
         </div>}
-      
-      <div className="row justify-content-center">
+
+      {/* ERROR */}
+      {alerta===2 && <div className="alert alert-danger alert-dismissible fade show col-5">
+        <button type="button" className="close" data-dismiss="alert" onClick={() => setAlerta(0)}>&times;</button>
+        <strong>¡Error!</strong> Ha ocurrido un error inesperado, intentalo de nuevo.
+        </div>}
+      </div>
+
+      <div className="row justify-content-center mr-0">
         <div className="container border m-2 col-10">
-          <div className="row justify-content-center border p-2">
+          <div className="row justify-content-center border p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
             DB Management
           </div>
-          <div className="form-group col-2">
-            <label htmlFor="sel1">Mostrar</label>
-            <select className="form-control" id="sel1">
-              <option>Usuario</option>
-              <option disabled>Profesor</option>
-              <option disabled>Clase</option>
-              <option disabled>Otra opcion</option>
-              <option disabled>Opcion 5</option>
-              <option disabled>Opcion 6</option>
-            </select>
+          <div className="row">
+            <div className="form-group col-2">
+              <label htmlFor="sel1">Mostrar</label>
+              <select className="form-control" id="sel1">
+                <option>Usuario</option>
+                <option disabled>Profesor</option>
+                <option disabled>Clase</option>
+                <option disabled>Otra opcion</option>
+                <option disabled>Opcion 5</option>
+                <option disabled>Opcion 6</option>
+              </select>
+            </div>
+            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={loadUsuarios}>&#8635;</div>
           </div>
+          
 
           <div className="table-responsive">
             <table className="table table-sm table-bordered">
@@ -96,8 +119,8 @@ export function Usuarios() {
       </div>
 
    
-      {visible && <ModalUsuario identificador={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato}/>}
-      {ID==="agregar" && <ModalUsuario id="agregar" data={{id: null, name:'', rut:'', correo:''}} onDatosEnviados={sacarDato}/>}
+      {visible && <ModalUsuario identificador={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato} alertaEnviada={sacarAlerta}/>}
+      {ID==="agregar" && <ModalUsuario identificador={ID} data={{id: null, name:'', rut:'', correo:''}} onDatosEnviados={sacarDato} alertaEnviada={sacarAlerta}/>}
      
     </div>
   

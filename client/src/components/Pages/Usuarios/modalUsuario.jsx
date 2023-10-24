@@ -1,43 +1,47 @@
 import { useEffect, useState } from "react"
 import { createUsuario, updateUsuario, deleteUsuario } from "../../../api/horario.api"
 
-export function ModalUsuario( {onDatosEnviados, identificador, data} ) {
+export function ModalUsuario( {onDatosEnviados, alertaEnviada, identificador, data} ) {
   
   const [id] = useState(data.id)
   const [nombre, setNombre] = useState(data.name)
   const [rut, setRut] = useState(data.rut)
   const [correo, setCorreo] = useState(data.correo)
+  const [eliminar, setEliminar] = useState(true)
+  const [enviar, setEnviar] = useState(true)
 
   const enviarDatosAPadre = () => {
     onDatosEnviados(false)
   }
 
-  const enviarAlerta = () => {
-    alertaEnviada(true)
+  async function enviarAgregar(){
+    const data = {name: nombre, rut: rut, correo: correo}
+    try {
+      await createUsuario(data)
+      alertaEnviada(1)
+    } catch {
+      alertaEnviada(2)
+    }
   }
 
-  window.closeModal = function(){
-    $(identificador).modal('hide');
-  };
-
-  $(function() {
-    $("[data-toggle=popover]").popover({
-      title: "¿Estás seguro?",
-      html: true,
-      placement:"bottom",
-      sanitize: false,
-      content: "<button class='btn btn-danger' id ='confirmar'>Confirmar</button>"
-    });
-  });
-
-  $(document).on("click", "#confirmar", async function () {
+  async function enviarActualizar(){
+    const data = {name: nombre, rut: rut, correo: correo}
     try {
-      await deleteUsuario(id);
-      
+      await updateUsuario(id,data)
+      alertaEnviada(1)
     } catch {
-      window.alert("ERROR!!!")
+      alertaEnviada(2)
     }
-});
+  }
+
+  async function enviarEliminar(){
+    try {
+      await deleteUsuario(id)
+      alertaEnviada(1)
+    } catch {
+      alertaEnviada(2)
+    }
+  }
 
   return(
   <div className="modal fade" id={identificador} data-backdrop='static'>
@@ -69,15 +73,20 @@ export function ModalUsuario( {onDatosEnviados, identificador, data} ) {
             </div>
             <div className="form-group form-check">
               <label className="form-check-label">
-                <input className="form-check-input" type="checkbox" name="remember" required/>
+                <input className="form-check-input" type="checkbox" name="remember" onChange={() => {enviar?setEnviar(false):setEnviar(true)}} required/>
                 <div className="valid-feedback">Correcto</div>
                 <div className="invalid-feedback">Marca esta casilla para confirmar los cambios</div>
               </label>
             </div>
             <div className="d-flex justify-content-between mb-2">
-              {identificador === "agregar" && <button type="submit" className="btn btn-green">Enviar</button>}
-              {identificador === "entrar" && <button type="submit" className="btn btn-green">Enviar</button>}
-              {identificador==="entrar" && <button type="button" className="btn btn-danger" data-toggle="popover" data-html="true">Eliminar usuario</button>}
+              {identificador === "agregar" && <button type="button" className="btn" data-dismiss="modal" onClick={enviarAgregar} disabled={enviar}>Enviar</button>}
+              {identificador === "entrar" && <button type="button" className="btn" data-dismiss="modal" onClick={enviarActualizar} disabled={enviar}>Enviar</button>}
+              {identificador === "entrar" && <div className="input-group justify-content-end">
+                <div className="input-group-prepend border rounded">
+                  <input type="checkbox" className="m-1" style={{cursor:'pointer'}} onChange={() => {eliminar?setEliminar(false):setEliminar(true)}}></input>
+                </div>
+                <button type="button" className="btn btn-danger rounded-0" data-dismiss="modal" onClick={enviarEliminar} disabled={eliminar}>Eliminar usuario</button>
+              </div>}
             </div> 
           </form>
         </div>
@@ -85,4 +94,4 @@ export function ModalUsuario( {onDatosEnviados, identificador, data} ) {
     </div>
   </div>
   )
-}
+};

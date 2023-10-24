@@ -17,7 +17,7 @@ function App() {
         <Route path="/Administrativos" element={<Administrativos />} />
         <Route path="/Administrativos/buscar-profesor" element={<BuscarProfesor />} />
         <Route path="/Administrativos/buscar-profesor/:id" element={<ProfesorHeader />} />
-        <Route path="/Usuarios" element={<Usuarios />} />
+        <Route path="/bd-management" element={<Usuarios />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
