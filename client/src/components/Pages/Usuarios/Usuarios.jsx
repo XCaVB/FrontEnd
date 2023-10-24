@@ -44,6 +44,8 @@ export function Usuarios() {
     setAlerta(estado)
   }
 
+
+  console.log(usuarios);
   return(
     <div>
       <Header/>
@@ -69,6 +71,7 @@ export function Usuarios() {
           <div className="row justify-content-center border p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
             DB Management
           </div>
+
           <div className="row">
             <div className="form-group col-2">
               <label htmlFor="sel1">Mostrar</label>
@@ -81,12 +84,29 @@ export function Usuarios() {
                 <option disabled>Opcion 6</option>
               </select>
             </div>
-            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={loadUsuarios}>&#8635;</div>
+            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={loadUsuarios}>&#8635; Actualizar tabla</div>
+            
+            <p className="align-self-center ml-5 mr-2 mb-0">Ordenar por: </p>
+            <div className="form-check-inline">
+              <label className="form-check-label">
+                <input type="radio" className="form-check-input" name="optradio" defaultChecked onClick={() => setUsuarios(usuarios.sort((a, b) => a.id - b.id))}></input>ID
+              </label>
+            </div>
+            <div className="form-check-inline">
+              <label className="form-check-label">
+                <input type="radio" className="form-check-input" name="optradio" onChange={() => setUsuarios(usuarios.sort((a, b) => a.name.localeCompare(b.name)))}></input>Nombre
+              </label>
+            </div>
+            <div className="form-check-inline">
+              <label className="form-check-label">
+                <input type="radio" className="form-check-input" name="optradio" onChange={() => setUsuarios(usuarios.sort((a, b) => a.rut - b.rut))}></input>Rut
+              </label>
+            </div>
           </div>
           
 
           <div className="table-responsive">
-            <table className="table table-sm table-bordered">
+            <table className="table table-sm table-striped table-bordered">
               <thead>
                 <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                   <th style={{width: '4%'}}>ID</th>
