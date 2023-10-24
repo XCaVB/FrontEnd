@@ -103,7 +103,6 @@ export function EdicionHoraria() {
                 console.error('Profesor no encontrado.');
                 return;
             }
-
     
             // Filtra el profesor-curso para encontrar el registro correspondiente
             const profesorCursoActual = profesorCursos.find(item => item.profesor === usuarioId);
@@ -113,20 +112,24 @@ export function EdicionHoraria() {
                 return;
             }
     
-            // Crea una lista de cursos seleccionados como una matriz de IDs
-            const cursosSeleccionadosIDs = cursosSeleccionados.map(curso => curso.id);
+            // Asegúrate de que haya exactamente un curso seleccionado
+            if (cursosSeleccionados.length < 1) {
+                console.error('Debes seleccionar exactamente un curso como clave primaria.');
+                return;
+            }
     
-            // Actualiza el registro de profesor-curso con los cursos seleccionados
-            profesorCursoActual.curso = cursosSeleccionadosIDs;
+            // Toma el ID del curso seleccionado como clave primaria
+            const cursoSeleccionadoID = cursosSeleccionados[0].id;
+    
+            // Actualiza el registro de profesor-curso con el curso seleccionado como clave primaria
+            profesorCursoActual.curso = cursoSeleccionadoID;
     
             // Llama a la función de actualización
-            //await updateCursosHorario(profesorCursoActual.id, profesorCursoActual);
-            console.log(profesorCursoActual.id);
-            console.log(profesorCursoActual);
-            console.log('Cursos actualizados con éxito.');
+            await updateCursosHorario(profesorCursoActual.id, profesorCursoActual);
+            console.log('Clave primaria actualizada con éxito.');
     
         } catch (error) {
-            console.error('Error al guardar los cursos:', error);
+            console.error('Error al guardar la clave primaria:', error);
         }
     };
     
@@ -210,7 +213,6 @@ export function EdicionHoraria() {
                         </div>
                     </div>
                     <div className='text-center'>
-                        <button onClick={()=>(console.log(cursosSeleccionadosIDs))}>Guardar Cambios</button>
                         <button onClick={handleGuardarCambios}>Guardar Cambios</button>
                     </div>
                     <hr/>

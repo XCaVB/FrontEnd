@@ -54,4 +54,6 @@ export const getProfesorCurso = () => EdicionHorariaAPI.get('/profesor-curso/')
 
 export const getProfesorCursoID = (profesor) => EdicionHorariaAPI.get(`/profesor-curso/${profesor}`)
 
-export const updateCursosHorario = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}`, curso)
+export const createCursosHorario = (curso) => EdicionHorariaAPI.post("/profesor-curso/", curso)
+
+export const updateCursosHorario = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}/`, curso)
