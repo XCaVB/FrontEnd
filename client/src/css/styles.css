@@ -22,6 +22,26 @@
     font-weight: bold;
 }
 
+.paginaSecretario {
+    background-color: #A90429;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.paginaSecretarioDerecha {
+    background-color: #A90429;
+    color: white;
+    border: none;
+    padding: 15px 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 5px;
+}
+
 .login {
     text-align: center;
     justify-content: center;

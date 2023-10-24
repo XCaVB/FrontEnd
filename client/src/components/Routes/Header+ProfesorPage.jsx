@@ -1,11 +1,11 @@
 import { Header } from "../Headers/Header"
-import ProfesorPage from "../Pages/Secretaria/ProfesorPage"
+import { RegistrarHorario } from "../Pages/Secretaria/registrarHorario"
 
 export function ProfesorHeader(){
     return(
         <div>
             <Header/>
-            <ProfesorPage/>
+            <RegistrarHorario/>
         </div>
     )
 }

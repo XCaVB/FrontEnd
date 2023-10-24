@@ -27,3 +27,16 @@ export const createUsuario = (usuario) => usuariosApi.post('/', usuario)
 export const updateUsuario = (id, usuario) => horariosApi.put(`${id}`, usuario)
 
 export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
+
+//---BarraBuscadora---//
+const barraBuscadoraApi = axios.create({
+    baseURL: 'http://localhost:8000/api/'
+})
+
+export const getUsuarios = () => barraBuscadoraApi.get('/user/')
+
+export const getUsuariosID = (id) => barraBuscadoraApi.get(`/user/${id}`)
+
+export const getProfesores = () => barraBuscadoraApi.get('/profesor/')
+
+export const getProfesoresID = (id) => barraBuscadoraApi.get(`/profesor/${id}`)
