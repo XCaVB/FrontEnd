@@ -6,6 +6,7 @@ import { Usuarios } from './components/Pages/Usuarios/Usuarios';
 import { RegistrarDisponible } from './components/Pages/HorarioProfe/registrarDisponible';
 import { BuscarProfesor } from './components/Routes/Header+buscarProfesor';
 import { ProfesorHeader } from './components/Routes/Header+ProfesorPage';
+import { EdicionHeader } from './components/Routes/Header+edicionHoraria';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/Administrativos" element={<Administrativos />} />
         <Route path="/Administrativos/buscar-profesor" element={<BuscarProfesor />} />
         <Route path="/Administrativos/buscar-profesor/:id" element={<ProfesorHeader />} />
-        <Route path="/bd-management" element={<Usuarios />} />
+        <Route path="/Administrativos/buscar-profesor/:id/editar-horario" element={<EdicionHeader />} />
+        <Route path="/Usuarios" element={<Usuarios />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </BrowserRouter>

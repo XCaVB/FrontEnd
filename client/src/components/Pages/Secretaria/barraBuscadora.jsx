@@ -54,7 +54,7 @@ export function BarraBuscadora(){
             <hr />
           <div className="containerInput">
             <input
-              className="form-control inputBuscar"
+              className="form-control inputBuscar text-center"
               value={busqueda}
               placeholder="Búsqueda por Nombre o Rut"
               onChange={handleChange}

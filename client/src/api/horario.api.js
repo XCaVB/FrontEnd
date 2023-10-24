@@ -40,3 +40,18 @@ export const getUsuariosID = (id) => barraBuscadoraApi.get(`/user/${id}`)
 export const getProfesores = () => barraBuscadoraApi.get('/profesor/')
 
 export const getProfesoresID = (id) => barraBuscadoraApi.get(`/profesor/${id}`)
+
+//---BarraBuscadora---//
+const EdicionHorariaAPI = axios.create({
+    baseURL: 'http://localhost:8000/api/'
+})
+
+export const getCurso = () => EdicionHorariaAPI.get('/curso/')
+
+export const getCursoID = (id) => EdicionHorariaAPI.get(`/curso/${id}`)
+
+export const getProfesorCurso = () => EdicionHorariaAPI.get('/profesor-curso/')
+
+export const getProfesorCursoID = (profesor) => EdicionHorariaAPI.get(`/profesor-curso/${profesor}`)
+
+export const updateCursosHorario = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}`, curso)

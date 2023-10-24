@@ -30,8 +30,6 @@ export function ProfesorPage({matrizD, matrizV, data}) {
           break; // Puedes salir del bucle una vez que encuentres una coincidencia
         }
       }
-      
-
     } catch (error) {
       console.error('Error:', error);
   
@@ -51,12 +49,14 @@ export function ProfesorPage({matrizD, matrizV, data}) {
           <h1 className='col-11'>Horario profesor {usuarios.name}</h1>
           <div className='d-flex'>
             <h3 className='col-11'>Contacto: {usuarios.correo}</h3>
-            <button className="btn paginaSecretarioDerecha col-1"><Link to={"/"} style={{color:"white"} }>Volver Atras</Link></button> 
+            <button className="btn paginaSecretarioDerecha col-1"><Link to={"/Administrativos/buscar-profesor"} style={{color:"white"} }>Volver Atras</Link></button> 
           </div>
       </div>
       <div className='row'>
         <div className='d-flex flex-column align-content-around'>
-          <button className="btn paginaSecretario">Editar</button>
+          <button className="btn paginaSecretario">
+          <Link to={`/Administrativos/buscar-profesor/${id}/editar-horario`} style={{ color: "white" }}>Crear o Editar Horario</Link>
+          </button> 
           <button className="btn paginaSecretario">Descargar</button>
         </div>
         <div id="accordion" className='col-10'>
