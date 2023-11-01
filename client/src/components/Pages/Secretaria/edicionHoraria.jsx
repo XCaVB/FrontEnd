@@ -126,7 +126,7 @@ export function EdicionHoraria() {
     
             // Llama a la función de actualización
             await updateCursosHorario(profesorCursoActual.id, profesorCursoActual);
-            console.log('Clave primaria actualizada con éxito.');
+            window.alert("Cursos actualizados con éxito :)")
     
         } catch (error) {
             console.error('Error al guardar la clave primaria:', error);
