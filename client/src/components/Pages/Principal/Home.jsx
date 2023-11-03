@@ -14,9 +14,9 @@ export function Home(){
             <div className="container text-white text-center rounded p-0" onSubmit={handleSubmit} style={{border: 'solid 3px #03102C', marginTop:'25vh', width: '420px'}}>
                 <h1 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Iniciar Sesión</h1>  
                 <form className='ingreso' style={{justifyContent: "center", padding: 10}}>
-                    <button className="btn" style={{background: '#A90429'}}><Link to={'/docentes'} style={{color:'white'}}>DOCENTES</Link></button>
-                    <button className="btn" style={{background: '#A90429'}}><Link to={'/administrativos'} style={{color:'white'}}>ADMINISTRATIVOS</Link></button>
-                    <button className="btn" style={{background: '#A90429'}}><Link to={'/bd-management'} style={{color:'white'}}>BD MANAGEMENT</Link></button>
+                    <Link className="btn" to={'/docentes'} style={{background: '#A90429', color:'white'}}>DOCENTES</Link>
+                    <Link className="btn" to={'/administrativos'} style={{background: '#A90429', color:'white'}}>ADMINISTRATIVOS</Link>
+                    <Link className="btn" to={'/bd-management'} style={{background: '#A90429', color:'white'}}>BD MANAGEMENT</Link>
                 </form>
             </div>
         </div>

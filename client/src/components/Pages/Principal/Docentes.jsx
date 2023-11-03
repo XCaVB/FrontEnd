@@ -22,7 +22,7 @@ export function Docentes(){
         <div style={{height:'100vh',backgroundImage: `url(${fondo1})`, backgroundSize: 'cover'}}>
             <Header estado={"salir"}/>
             <div className="container text-white text-center rounded p-0" onSubmit={handleSubmit} style={{border: 'solid 3px #03102C', marginTop:'25vh', width: '420px'}}>
-            <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Ingresa tus credenciales docente</h4>  
+            <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Ingresa tus credenciales</h4>  
                 <form className="ingreso" onSubmit={handleSubmit} style={{justifyContent: "center", padding: 10}}>
                     <input 
                         type="text"
