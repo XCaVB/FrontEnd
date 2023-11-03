@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { Header } from "../../Headers/Header"
 import { ModalUsuario } from "./modalUsuario"
 import { getAllUsuarios } from "../../../api/horario.api"
@@ -94,7 +93,7 @@ export function Usuarios() {
             </div>
             <div className="form-check-inline">
               <label className="form-check-label">
-                <input type="radio" className="form-check-input" name="optradio" onChange={() => setUsuarios(usuarios.sort((a, b) => a.name.localeCompare(b.name)))}></input>Nombre
+                <input type="radio" className="form-check-input" name="optradio" onChange={() => {const porNombre = usuarios.sort((a, b) => a.first_name.localeCompare(b.first_name)); setUsuarios(porNombre)}}></input>Nombre
               </label>
             </div>
             <div className="form-check-inline">
@@ -111,34 +110,28 @@ export function Usuarios() {
                 <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                   <th style={{width: '4%'}}>ID</th>
                   <th style={{width: '32%'}}>Nombre</th>
-                  <th style={{width: '32%'}}>Rut</th>
                   <th style={{width: '32%'}}>Correo</th>
+                  <th style={{width: '32%'}}>Grupos</th>
                 </tr>
               </thead>
               <tbody>
                 {usuarios && usuarios.map((usuario) => (
-                  <tr key={usuario.id} style={{textAlign: 'center'}}>
+                   usuario.username !== "admin" && <tr key={usuario.id} style={{textAlign: 'center'}}>
                     <td>{usuario.id}</td>
-                    <td>{usuario.name}</td>
-                    <td>{usuario.rut}</td>
-                    <td>{usuario.correo}</td>
+                    <td>{usuario.first_name +" "+ usuario.last_name}</td>
+                    <td>{usuario.email}</td>
+                    <td>{usuario.groups}</td>
                     <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={ ( () => {manejarModal(usuario); setID('entrar');} ) } data-toggle="modal" data-target="#entrar">Modificar</div></td>
                   </tr>
-                  
                 ))}
-                {/* Agregar otro a la BBDD */}
-                <tr style={{textAlign: 'center'}}> 
-                  <td>
-                    <div className="btn btn-success" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
-                  </td>
-                </tr>
               </tbody>
             </table>
+            {/* Agregar otro a la BBDD */}
+            <div className="btn btn-success mb-2" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
           </div>  
         </div>
       </div>
 
-   
       {visible && <ModalUsuario identificador={ID} data={elementoSeleccionado} onDatosEnviados={sacarDato} alertaEnviada={sacarAlerta}/>}
       {ID==="agregar" && <ModalUsuario identificador={ID} data={{id: null, name:'', rut:'', correo:''}} onDatosEnviados={sacarDato} alertaEnviada={sacarAlerta}/>}
      

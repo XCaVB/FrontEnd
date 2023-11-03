@@ -1,8 +1,14 @@
 import axios from 'axios'
 
+//...Direcciones...// 
+//Core: Usuario 
+//Planificacion: Secretario academico
+//Disponibilidad: profesor
+//Auditoria: auditoria
+
 //---HORARIO---//
 const horariosApi = axios.create({
-    baseURL: 'http://localhost:8000/api/profesor/'
+    baseURL: 'http://localhost:8000/disponibilidad/profesor/'
 })
 
 export const getAllHorarios = () => horariosApi.get('/')
@@ -17,7 +23,7 @@ export const updateHorario = (id, horario) => horariosApi.put(`/${id}/`, horario
 
 //---USUARIOS---//
 const usuariosApi = axios.create({
-    baseURL: 'http://localhost:8000/api/user/'
+    baseURL: 'http://localhost:8000/core/user/'
 })
 
 export const getAllUsuarios = () => usuariosApi.get('/')
