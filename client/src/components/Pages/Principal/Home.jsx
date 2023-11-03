@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import "../../../css/styles.css"
-import { HeaderHome } from "../../Headers/HeaderHome"
+import fondo1 from "../../../images/fondo1.jpg"
+import { Header } from "../../Headers/Header"
 
 export function Home(){
     const handleSubmit = (e) => {
@@ -8,17 +9,15 @@ export function Home(){
     }
 
     return(
-        <div>
-            <HeaderHome />
-            <div className="login" onSubmit={handleSubmit}>
-                <h1>Login</h1>  
-                <hr />
-                <form className='ingreso' style={{justifyContent: "center"}}>
-                    <button className="btn" style={{background: 'gray'}}><Link to={'/docentes'} style={{color:'white'}}>DOCENTES</Link></button>
-                    <button className="btn" style={{background: 'gray'}}><Link to={'/administrativos'} style={{color:'white'}}>ADMINISTRATIVOS</Link></button>
-                    <button className="btn" style={{background: 'gray'}}><Link to={'/bd-management'} style={{color:'white'}}>BD MANAGEMENT</Link></button>
+        <div style={{height:'100vh',backgroundImage: `url(${fondo1})`, backgroundSize: 'cover'}}>
+            <Header estado={"home"}/>
+            <div className="container text-white text-center rounded p-0" onSubmit={handleSubmit} style={{border: 'solid 3px #03102C', marginTop:'25vh', width: '420px'}}>
+                <h1 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Iniciar Sesión</h1>  
+                <form className='ingreso' style={{justifyContent: "center", padding: 10}}>
+                    <button className="btn" style={{background: '#A90429'}}><Link to={'/docentes'} style={{color:'white'}}>DOCENTES</Link></button>
+                    <button className="btn" style={{background: '#A90429'}}><Link to={'/administrativos'} style={{color:'white'}}>ADMINISTRATIVOS</Link></button>
+                    <button className="btn" style={{background: '#A90429'}}><Link to={'/bd-management'} style={{color:'white'}}>BD MANAGEMENT</Link></button>
                 </form>
-                <hr />
             </div>
         </div>
     )

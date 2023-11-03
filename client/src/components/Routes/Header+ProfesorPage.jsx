@@ -4,7 +4,7 @@ import { RegistrarHorario } from "../Pages/Secretaria/registrarHorario"
 export function ProfesorHeader(){
     return(
         <div>
-            <Header/>
+            <Header estado={"cerrar"}/>
             <RegistrarHorario/>
         </div>
     )

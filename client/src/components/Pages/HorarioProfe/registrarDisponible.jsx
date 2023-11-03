@@ -29,7 +29,7 @@ export function RegistrarDisponible(){
 
     return(
         <>
-            <Header/>
+            <Header estado={"cerrar"}/>
             {(horarioDiurno !== null) && (horarioVespertino !== null) && <Horario matrizD={horarioDiurno} matrizV={horarioVespertino} data={data}/>}
         </>
             

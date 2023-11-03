@@ -5,7 +5,7 @@ export function BuscarProfesor(){
 
     return(
         <>
-            <Header/>
+            <Header estado={"cerrar"}/>
             <BarraBuscadora/>
         </>
     )

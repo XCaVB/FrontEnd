@@ -47,7 +47,7 @@ export function Usuarios() {
   console.log(usuarios);
   return(
     <div>
-      <Header/>
+      <Header estado={"cerrar"}/>
       
       {/*---ALERTAS---*/}
       <div className="row justify-content-center m-5">

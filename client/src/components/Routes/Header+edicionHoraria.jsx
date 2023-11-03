@@ -4,7 +4,7 @@ import { EdicionHoraria } from "../Pages/Secretaria/edicionHoraria"
 export function EdicionHeader(){
     return(
         <div>
-            <Header/>
+            <Header estado={"cerrar"}/>
             <EdicionHoraria/>
         </div>
     )
