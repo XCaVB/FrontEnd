@@ -7,7 +7,6 @@ import { useState, useEffect } from "react"
 
 export function RegistrarDisponible(){
 
-
     const [horarioDiurno, setHorarioDiurno] = useState(null)
     const [horarioVespertino, setHorarioVespertino] = useState(null)
     const [data, setData] = useState(null)
@@ -15,7 +14,7 @@ export function RegistrarDisponible(){
     
     useEffect(() => async function loadHorario() {
         console.log(params);
-        try {
+        try { /* Cambiar esta funcion cuando se pueda hacer los logins de los usuarios */
             
             const {data} = await getHorario(params.id);
             setData(data)

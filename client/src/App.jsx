@@ -19,7 +19,7 @@ function App() {
         <Route path="/Administrativos/buscar-profesor" element={<BuscarProfesor />} />
         <Route path="/Administrativos/buscar-profesor/:id" element={<ProfesorHeader />} />
         <Route path="/Administrativos/buscar-profesor/:id/editar-horario" element={<EdicionHeader />} />
-        <Route path="/bd-management" element={<Usuarios />} />
+        <Route path="/db-management" element={<Usuarios />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
