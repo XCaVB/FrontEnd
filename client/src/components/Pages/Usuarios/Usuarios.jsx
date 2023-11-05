@@ -83,7 +83,7 @@ export function Usuarios() {
                 <option disabled>Opcion 6</option>
               </select>
             </div>
-            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={loadUsuarios}>&#8635; Actualizar tabla</div>
+            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={loadUsuarios}><i className="fa fa-refresh m-1"></i>Actualizar tabla</div>
             
             <p className="align-self-center ml-5 mr-2 mb-0">Ordenar por: </p>
             <div className="form-check-inline">

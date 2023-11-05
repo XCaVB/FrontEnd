@@ -1,6 +1,6 @@
 import { useState } from "react"
 import '../../../css/ingreso.css'
-import fondo1 from "../../../images/fondo1.jpg"
+import fondo from "../../../images/fondo2.jpg"
 import { Link } from "react-router-dom"
 import { Header } from "../../Headers/Header"
 
@@ -19,7 +19,7 @@ export function Administrativos(){
     }
 
     return(
-        <div style={{height:'100vh',backgroundImage: `url(${fondo1})`, backgroundSize: 'cover'}}>
+        <div style={{height:'100vh',backgroundImage: `url(${fondo})`, backgroundSize: 'cover'}}>
             <Header estado={"salir"}/>
             <div className="container text-white text-center rounded p-0" onSubmit={handleSubmit} style={{border: 'solid 3px #03102C', marginTop:'25vh', width: '420px'}}>
             <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Ingresa tus credenciales</h4>  

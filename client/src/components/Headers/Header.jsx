@@ -16,7 +16,7 @@ export function Header( {estado} ){
                         <h1 className="text-center">Planificación Académica</h1>
                     </div>
                     <div className="col-1 p-0">
-                        {estado === "salir" && <Link className="btn" style={{background: 'gray', color:'white'}} to={"/"}>Volver al menú</Link>}
+                        {estado === "salir" && <Link className="btn" style={{background: 'gray', color:'white'}} to={"/"}>Volver</Link>}
                         {estado === "cerrar" && <Link className="btn" style={{background: '#A90429', color:'white'}} to={"/"}>Cerrar sesión</Link>}
                     </div>
                 </div>
