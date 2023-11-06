@@ -38,7 +38,7 @@ export function Docentes(){
                     />
                     {nombre.length === 0|| contraseña.length === 0
                         ?<button className="btn" style={{background:'#A90429', color:'white'}}>Iniciar sesión</button>
-                        :<Link className="btn" style={{background: '#A90429', color:'white'}} to={`/Docentes/${nombre}`}>Iniciar sesion</Link>}
+                        :<Link className="btn" style={{background: '#A90429', color:'white'}} to={`/Docentes/${nombre}`}>Iniciar sesión</Link>}
                 </form>
                 {error && <p className="bg-white text-danger m-0">Todos los campos son obligatorios</p>}
             </div>

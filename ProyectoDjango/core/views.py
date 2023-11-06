@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from . serializer import *
 from django.contrib.auth.models import User
-from .models import Usuario
+from .models import *
 
 # Create your views here.
 class UserSeri(viewsets.ModelViewSet):
@@ -11,4 +11,8 @@ class UserSeri(viewsets.ModelViewSet):
 
 class UsuarioSeri(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
-    queryset = Usuario.objects.all()
+    queryset = UserData.objects.all()
+
+class AdminSeri(viewsets.ModelViewSet):
+    serializer_class = AdminSerializer
+    queryset = Admin.objects.all()

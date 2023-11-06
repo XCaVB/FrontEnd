@@ -41,7 +41,7 @@ const barraBuscadoraApi = axios.create({
 
 export const getUsuarios = () => barraBuscadoraApi.get('/core/user')
 
-export const getUsuariosRut = () => barraBuscadoraApi.get('/core/rut')
+export const getUsuariosRut = () => barraBuscadoraApi.get('/core/user_data')
 
 export const getUsuariosID = (id) => barraBuscadoraApi.get(`/core/user/${id}`)
 
