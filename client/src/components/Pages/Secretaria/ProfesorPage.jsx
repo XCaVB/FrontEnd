@@ -46,9 +46,9 @@ export function ProfesorPage({matrizD, matrizV, data}) {
   return (
     <div className='contenedorPrincipal'>
       <div className='horarioProfesor'>
-          <h1 className='col-11'>Horario profesor {usuarios.name}</h1>
+          <h1 className='col-11'>Horario profesor {usuarios.username}</h1>
           <div className='d-flex'>
-            <h3 className='col-11'>Contacto: {usuarios.correo}</h3>
+            <h3 className='col-11'>Contacto: {usuarios.email}</h3>
             <button className="btn paginaSecretarioDerecha col-1"><Link to={"/Administrativos/buscar-profesor"} style={{color:"white"} }>Volver Atras</Link></button> 
           </div>
       </div>

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 //...Direcciones...// 
-//Core: Usuario 
-//Planificacion: Secretario academico
-//Disponibilidad: profesor
-//Auditoria: auditoria
+//Core: Usuario, rut
+//Planificacion: Secretario academico, planificacion academica, curso.
+//Disponibilidad: profesor, profesor-curso
+//Auditoria: auditoria, admin
 
 //---HORARIO---//
 const horariosApi = axios.create({
@@ -36,20 +36,22 @@ export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
 
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({
-    baseURL: 'http://localhost:8000/api/'
+    baseURL: 'http://localhost:8000/'
 })
 
-export const getUsuarios = () => barraBuscadoraApi.get('/user/')
+export const getUsuarios = () => barraBuscadoraApi.get('/core/user')
 
-export const getUsuariosID = (id) => barraBuscadoraApi.get(`/user/${id}`)
+export const getUsuariosRut = () => barraBuscadoraApi.get('/core/rut')
 
-export const getProfesores = () => barraBuscadoraApi.get('/profesor/')
+export const getUsuariosID = (id) => barraBuscadoraApi.get(`/core/user/${id}`)
 
-export const getProfesoresID = (id) => barraBuscadoraApi.get(`/profesor/${id}`)
+export const getProfesores = () => barraBuscadoraApi.get('/disponibilidad/profesor/')
+
+export const getProfesoresID = (id) => barraBuscadoraApi.get(`/disponibilidad/profesor/${id}`)
 
 //---BarraBuscadora---//
 const EdicionHorariaAPI = axios.create({
-    baseURL: 'http://localhost:8000/api/'
+    baseURL: 'http://localhost:8000/'
 })
 
 export const getCurso = () => EdicionHorariaAPI.get('/curso/')
