@@ -6,7 +6,3 @@ class ProfesorSerializer(serializers.ModelSerializer):
         model = Profesor
         fields = '__all__'
 
-class ProfesorCursoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProfesorCurso
-        fields = '__all__'
