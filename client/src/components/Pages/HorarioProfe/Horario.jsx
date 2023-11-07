@@ -1,4 +1,4 @@
-import { updateHorario} from '../../../api/horario.api'
+import { updateProfesor } from '../../../api/horario.api'
 import React, { useState } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
@@ -36,7 +36,7 @@ export function Horario({matrizD, matrizV, data}) {
   }
 
     try {
-      await updateHorario(params.id, nuevosDatos);
+      await updateProfesor(params.id, nuevosDatos);
       window.alert("Horario actualizado con éxito :)")
     } catch {
       window.alert("Ocurrió un error. Intentalo de nuevo.")

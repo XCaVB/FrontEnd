@@ -6,20 +6,20 @@ import axios from 'axios'
 //Disponibilidad: profesor, profesor-curso
 //Auditoria: auditoria, admin
 
-//---HORARIO---//
-const horariosApi = axios.create({
+//---PROFESOR---//
+const profesoresApi = axios.create({
     baseURL: 'http://localhost:8000/disponibilidad/profesor/'
 })
 
-export const getAllHorarios = () => horariosApi.get('/')
+export const getAllProfesores = () => profesoresApi.get('/')
 
-export const getHorario = (id) => horariosApi.get(`/${id}/`)
+export const getProfesor = (id) => profesoresApi.get(`/${id}/`)
 
-export const createHorario = (horario) => horariosApi.post('/', horario)
+export const createProfesor = (profesor) => profesoresApi.post('/', profesor)
 
-export const deleteHorario = (id) => horariosApi.delete(`/${id}`)
+export const deleteProfesor = (id) => profesoresApi.delete(`/${id}`)
 
-export const updateHorario = (id, horario) => horariosApi.put(`/${id}/`, horario)
+export const updateProfesor = (id, profesor) => profesoresApi.put(`/${id}/`, profesor)
 
 //---USUARIOS---//
 const usuariosApi = axios.create({
@@ -33,6 +33,12 @@ export const createUsuario = (usuario) => usuariosApi.post('/', usuario)
 export const updateUsuario = (id, usuario) => usuariosApi.put(`/${id}/`, usuario)
 
 export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
+
+//---HORARIO---//
+export const getHorario = (correo) => {
+    const {usuarios} = getAllUsuarios();
+    
+}
 
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({

@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { getAllUsuarios, getAllProfesores } from "../../../api/horario.api"
 import '../../../css/ingreso.css'
 import fondo from "../../../images/fondo2.jpg"
 import { Link } from "react-router-dom"
@@ -15,6 +17,27 @@ export function Docentes(){
         if(nombre === '' || contraseña === ''){
             setError(true)
             return
+        }
+    }
+
+    const navigate = useNavigate();
+
+    async function verificaUsuario(){
+        try {
+            const {data} = await getAllUsuarios();
+            data.forEach(async usuario => {
+                if (usuario.email === nombre) {
+                    const {data} = await getAllProfesores();
+                    data.forEach(profesor => {
+                        if (usuario.id === profesor.user) {
+                            navigate(`/docentes/${profesor.id}`)
+                        }
+                    })
+                }
+            })
+
+        } catch {
+            window.alert("todo mal")
         }
     }
 
@@ -38,7 +61,7 @@ export function Docentes(){
                     />
                     {nombre.length === 0|| contraseña.length === 0
                         ?<button className="btn" style={{background:'#A90429', color:'white'}}>Iniciar sesión</button>
-                        :<Link className="btn" style={{background: '#A90429', color:'white'}} to={`/Docentes/${nombre}`}>Iniciar sesión</Link>}
+                        :<button className="btn" style={{background:'#A90429', color:'white'}} onClick={verificaUsuario}>Iniciar sesión</button>}
                 </form>
                 {error && <p className="bg-white text-danger m-0">Todos los campos son obligatorios</p>}
             </div>
