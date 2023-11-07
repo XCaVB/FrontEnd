@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 //...Direcciones...// 
-//Core: Usuario, rut
+//Core: Usuario, user_data
 //Planificacion: Secretario academico, planificacion academica, curso.
-//Disponibilidad: profesor, profesor-curso
+//Disponibilidad: profesor
 //Auditoria: auditoria, admin
 
 //---PROFESOR---//
@@ -55,19 +55,17 @@ export const getProfesores = () => barraBuscadoraApi.get('/disponibilidad/profes
 
 export const getProfesoresID = (id) => barraBuscadoraApi.get(`/disponibilidad/profesor/${id}`)
 
-//---BarraBuscadora---//
+//---EDICION HORARIA---//
 const EdicionHorariaAPI = axios.create({
     baseURL: 'http://localhost:8000/'
 })
 
-export const getCurso = () => EdicionHorariaAPI.get('/curso/')
+export const getCurso = () => EdicionHorariaAPI.get('planificacion/curso/')
 
-export const getCursoID = (id) => EdicionHorariaAPI.get(`/curso/${id}`)
+export const getPlanificacionAcad = () => EdicionHorariaAPI.get('planificacion/planificaion-academica/')
 
-export const getProfesorCurso = () => EdicionHorariaAPI.get('/profesor-curso/')
+export const createAsignaturas = (curso) => EdicionHorariaAPI.post('/profesor-curso/', curso)
 
-export const getProfesorCursoID = (profesor) => EdicionHorariaAPI.get(`/profesor-curso/${profesor}`)
+export const updateAsignaturas = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}/`, curso)
 
-export const createCursosHorario = (curso) => EdicionHorariaAPI.post("/profesor-curso/", curso)
-
-export const updateCursosHorario = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}/`, curso)
+export const deleteAsignaturas = (id, curso) => EdicionHorariaAPI.delete(`/profesor-curso/${id}/`, curso)
