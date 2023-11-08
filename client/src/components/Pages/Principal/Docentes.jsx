@@ -10,6 +10,7 @@ export function Docentes(){
     const [nombre, setNombre] = useState('')
     const [contraseña, setContraseña] = useState('')
     const [error, setError] = useState(false)
+    const [existe, setExiste] = useState(null)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -25,17 +26,19 @@ export function Docentes(){
     async function verificaUsuario(){
         try {
             const {data} = await getAllUsuarios();
-            data.forEach(async usuario => {
-                if (usuario.email === nombre) {
+            for (const usuario of data) {
+                if (usuario.email.includes(nombre)) {
+                    setExiste(true)
                     const {data} = await getAllProfesores();
-                    data.forEach(profesor => {
+                    for (const profesor of data) {
                         if (usuario.id === profesor.user) {
                             navigate(`/docentes/${profesor.id}`)
+                            break;
                         }
-                    })
-                }
-            })
-
+                    }
+                break;}
+            } setExiste(false)
+            console.log("No existe jaja");
         } catch {
             window.alert("todo mal")
         }
@@ -48,12 +51,14 @@ export function Docentes(){
             <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Ingresa tus credenciales</h4>  
                 <form className="ingreso" onSubmit={handleSubmit} style={{justifyContent: "center", padding: 10}}>
                     <input 
+                        id="correo"
                         type="text"
                         value={nombre}
                         onChange={e => setNombre(e.target.value)}
                         placeholder="Correo Electronico"
                     />
                     <input 
+                        id="password"
                         type="password"
                         value={contraseña}
                         onChange={e => setContraseña(e.target.value)}

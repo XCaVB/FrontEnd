@@ -10,7 +10,7 @@ export const BotonHorario = (props) => {
             return 'green'
         }
         if (props.estado === 2){
-            return 'blue'
+            return 'red'
         }
     });
 
@@ -18,13 +18,9 @@ export const BotonHorario = (props) => {
     
     const cambiarColor = () => {
         if(estado == 1){
-            setEstado(2)
-            setColor('red')
-        }  
-        if(estado == 2){
             setEstado(0)
             setColor('white')
-        }
+        }  
         if(estado == 0){
             setEstado(1)
             setColor('green')
@@ -44,8 +40,10 @@ export const BotonHorario = (props) => {
         enviarDatosAlHorario();
     }
         return(
-        <div className="p-4 w-90 h-90" onClick={ambasFunciones} style={{cursor: "pointer", background: color}}>
-
-        </div>
+            <div>
+                {(estado != 2) && <div className="p-4 w-90 h-90" onClick={ambasFunciones} style={{cursor: "pointer", background: color}}/>}
+                {(estado == 2) && <div className="p-4 w-90 h-90" style={{background: color}}/>}
+            </div>
+            
     )
 };

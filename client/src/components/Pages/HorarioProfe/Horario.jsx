@@ -1,5 +1,5 @@
 import { updateProfesor } from '../../../api/horario.api'
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
 import "../../../css/styles.css"
@@ -19,6 +19,12 @@ export function Horario({matrizD, matrizV, data}) {
   const sacarDatoV = (lista) => {
     matrizVespertino[lista[1]][lista[2]] = lista[0]
   }
+
+  useEffect(() => {
+    for (const cuadro in matrizDiurno) {
+      console.log(cuadro);
+    }
+  },[]);
 
   const params = useParams();
 
@@ -57,8 +63,8 @@ export function Horario({matrizD, matrizV, data}) {
           <span className="p">Presencial</span>
         </div>
         <div className="d-flex mr-4">
-          <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'blue', border: '2px solid'}}/>
-          <span className="p">En línea</span>
+          <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'red', border: '2px solid'}}/>
+          <span className="p">No disponible/Tope horario</span>
         </div>
       </div>
       </div>
