@@ -68,8 +68,8 @@ export const getCurso = () => EdicionHorariaAPI.get('planificacion/curso/')
 
 export const getPlanificacionAcad = () => EdicionHorariaAPI.get('planificacion/planificaion-academica/')
 
-export const createAsignaturas = (curso) => EdicionHorariaAPI.post('/profesor-curso/', curso)
+export const createPlanificacionAcad = (planificacion) => EdicionHorariaAPI.post('planificacion/planificaion-academica/', planificacion)
 
-export const updateAsignaturas = (id, curso) => EdicionHorariaAPI.put(`/profesor-curso/${id}/`, curso)
+export const updatePlanificacionAcad = (id, planificacion) => EdicionHorariaAPI.put(`planificacion/planificaion-academica/${id}/`, planificacion)
 
-export const deleteAsignaturas = (id, curso) => EdicionHorariaAPI.delete(`/profesor-curso/${id}/`, curso)
+export const deletePlanificacionAcad = (id) => EdicionHorariaAPI.delete(`planificacion/planificaion-academica/${id}/`)
