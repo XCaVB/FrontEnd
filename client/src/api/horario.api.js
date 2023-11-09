@@ -15,6 +15,8 @@ export const getAllProfesores = () => profesoresApi.get('/')
 
 export const getProfesor = (id) => profesoresApi.get(`/${id}/`)
 
+export const getProfesorUser = (user) => profesoresApi.get(`/?search=${user}`)
+
 export const createProfesor = (profesor) => profesoresApi.post('/', profesor)
 
 export const deleteProfesor = (id) => profesoresApi.delete(`/${id}`)
@@ -27,6 +29,8 @@ const usuariosApi = axios.create({
 })
 
 export const getAllUsuarios = () => usuariosApi.get('/')
+
+export const getUsuarioCorreo = (correo) => usuariosApi.get(`/?search=${correo}`)
 
 export const createUsuario = (usuario) => usuariosApi.post('/', usuario)
 

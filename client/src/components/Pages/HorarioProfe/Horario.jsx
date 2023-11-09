@@ -6,28 +6,48 @@ import "../../../css/styles.css"
 import { useParams } from 'react-router-dom';
 
 export function Horario({matrizD, matrizV, data}) {
-    
+
   // Datos horario
   const armar_horario = horario
-  const [matrizDiurno, setMatrizDiurno] = useState(matrizD)
-  const [matrizVespertino, setMatrizVespertino] = useState(matrizV)
+  const matrizDiurno = matrizD
+  const matrizVespertino = matrizV
 
   const sacarDatoD = (lista) => {
     matrizDiurno[lista[1]][lista[2]] = lista[0]
+    topeHorario()
   }
 
   const sacarDatoV = (lista) => {
     matrizVespertino[lista[1]][lista[2]] = lista[0]
+    topeHorario()
   }
 
-  useEffect(() => {
-    for (const cuadro in matrizDiurno) {
-      console.log(cuadro);
+  const topeHorario = () => {
+    for (let fila = 11; fila < 14; fila++) {
+      for (let columna = 0; columna < 6; columna ++) {
+        if (matrizDiurno[fila][columna] === 1){
+          matrizVespertino[fila-11][columna] = 2
+        }
+        if (matrizDiurno[fila][columna] === 0){
+          if (matrizVespertino[fila-11][columna] === 2){
+            matrizVespertino[fila-11][columna] = 0
+          }  
+        }
+        if (matrizVespertino[fila-11][columna] === 1) {
+          matrizDiurno[fila][columna] = 2
+        }
+        if (matrizVespertino[fila-11][columna] === 0) {
+          if (matrizDiurno[fila][columna] === 2){
+            matrizDiurno[fila][columna] = 0
+          }
+        }
+      }
     }
-  },[]);
+  }
 
   const params = useParams();
 
+  {/* Preparar matrices y enviarlas a la base de datos */}
   async function convertirAString(listaDeListas1, listaDeListas2) {
     let resultado1 = JSON.stringify(listaDeListas1);
     let resultado2 = JSON.stringify(listaDeListas2);
@@ -49,10 +69,19 @@ export function Horario({matrizD, matrizV, data}) {
     }
   }
 
+  const [render, setRender] = useState(false)
+  const reRender = () => {
+    if (render){
+      setRender(false)
+    } else {
+      setRender(true)
+    }
+  }
+
   return (
     <div>
-      <div className="container">
-      <h1>Horario de Clases</h1>
+      <div className="container-flex">
+      <h2 className='h2 text-center' style={{background: '#03102C', color:'white'}}>Horario de Clases</h2>
       <div className="row justify-content-end">
         <div className="d-flex mr-4">
           <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'white', border: '2px solid'}}/>
@@ -75,7 +104,7 @@ export function Horario({matrizD, matrizV, data}) {
         {/* HORARIO DIURNO */}
         <div className="card">
           <div className="card-header">
-            <div className="card-link" data-toggle="collapse" data-target="#collapseOne" style={{cursor: 'pointer'}}>
+            <div className="card-link" onClick={reRender} data-toggle="collapse" data-target="#collapseOne" style={{cursor: 'pointer'}}>
             Jornada Diurna
             </div>
           </div>
@@ -116,7 +145,7 @@ export function Horario({matrizD, matrizV, data}) {
       {/* HORARIO VESPERTINO */}
       <div className="card">
         <div className="card-header">
-          <div className="collapsed card-link" data-toggle="collapse" data-target="#collapseTwo" style={{cursor: 'pointer'}}>
+          <div className="collapsed card-link" onClick={reRender} data-toggle="collapse" data-target="#collapseTwo" style={{cursor: 'pointer'}}>
             Jornada Vespertina
           </div>
         </div>
