@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
-import { createUsuario, updateUsuario, deleteUsuario } from "../../../api/horario.api"
+import { useState } from "react"
+import { createUsuario, updateUsuario, deleteUsuario } from "../../../../api/horario.api"
 
-export function ModalUsuario( {onDatosEnviados, alertaEnviada, identificador, data} ) {
+export function ModalUsuario( {alertaEnviada, identificador, data} ) {
   
   const [id] = useState(data.id)
   const [nombre, setNombre] = useState(data.name)
@@ -9,10 +9,6 @@ export function ModalUsuario( {onDatosEnviados, alertaEnviada, identificador, da
   const [correo, setCorreo] = useState(data.correo)
   const [eliminar, setEliminar] = useState(true)
   const [enviar, setEnviar] = useState(true)
-
-  const enviarDatosAPadre = () => {
-    onDatosEnviados(false)
-  }
 
   async function enviarAgregar(){
     const data = {name: nombre, rut: rut, correo: correo}
@@ -44,21 +40,21 @@ export function ModalUsuario( {onDatosEnviados, alertaEnviada, identificador, da
   }
 
   return(
-  <div className="modal fade" id={identificador} data-backdrop='static'>
+  <div className="modal fade" id={toString(identificador)} data-backdrop='static'>
     <div className="modal-dialog">
       <div className="modal-content">
     
         <div className="modal-header">
-          {identificador==="agregar" && <h4 className="modal-title">Agregando usuario</h4>}
-          {identificador==="entrar" && <h4 className="modal-title">Modificando usuario</h4>}
-            <button type="button" className="close" data-dismiss="modal" onClick={enviarDatosAPadre}>&times;</button>
+          {identificador === "agregar" && <h4 className="modal-title">Agregando usuario</h4>}
+          {!isNaN(identificador) && <h4 className="modal-title">Modificando usuario</h4>}
+            <button type="button" className="close" data-dismiss="modal">&times;</button>
         </div>
       
         <div className="modal-body pb-0">
           <form className="was-validated" >
             <div className="form-group">
               <label htmlFor="nombre">Nombre</label>
-              <input type="text" className="form-control" id="nombre" placeholder="Ingresar Nombre Apellido" name="nombre" defaultValue={nombre} onChange={e => setNombre(e.target.value)} required/>
+              <input type="text" className="form-control" id="nombre" placeholder="Ingresar Nombre Apellido" name="nombre" defaultValue={data.first_name} onChange={e => setNombre(e.target.value)} required/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group">
@@ -79,11 +75,11 @@ export function ModalUsuario( {onDatosEnviados, alertaEnviada, identificador, da
               </label>
             </div>
             <div className="d-flex justify-content-between mb-2">
-              {identificador === "agregar" && <button type="button" className="btn" data-dismiss="modal" onClick={enviarAgregar} disabled={enviar}>Enviar</button>}
-              {identificador === "entrar" && <button type="button" className="btn" data-dismiss="modal" onClick={enviarActualizar} disabled={enviar}>Enviar</button>}
-              {identificador === "entrar" && <div className="input-group justify-content-end">
+              {identificador === "agregar" && <button type="button" className="btn btn-success" data-dismiss="modal" onClick={enviarAgregar} disabled={enviar}>Enviar</button>}
+              {!isNaN(identificador) === "entrar" && <button type="button" className="btn btn-success" data-dismiss="modal" onClick={enviarActualizar} disabled={enviar}>Enviar</button>}
+              {!isNaN(identificador) === "entrar" && <div className="input-group justify-content-end">
                 <div className="input-group-prepend border rounded">
-                  <input type="checkbox" className="m-1" style={{cursor:'pointer'}} onChange={() => {eliminar?setEliminar(false):setEliminar(true)}}></input>
+                  <input type="checkbox" id="eliminar" className="m-1" style={{cursor:'pointer'}} onChange={() => {eliminar?setEliminar(false):setEliminar(true)}}></input>
                 </div>
                 <button type="button" className="btn btn-danger rounded-0" data-dismiss="modal" onClick={enviarEliminar} disabled={eliminar}>Eliminar usuario</button>
               </div>}

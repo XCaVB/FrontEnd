@@ -58,8 +58,9 @@ export const BotonHorario = (props) => {
     }
         return(
             <div>
-                {(estado != 2) && <div className="p-4 w-90 h-90" onClick={ambasFunciones} style={{cursor: "pointer", background: color}}/>}
-                {(estado == 2) && <div className="p-4 w-90 h-90" style={{background: color}}/>}
+                {(!props.modificar ) && <div className="p-4 w-90 h-90" style={{background: color}}/>}
+                {(estado != 2 && props.modificar) && <div className="p-4 w-90 h-90" onClick={ambasFunciones} style={{cursor: "pointer", background: color}}/>}
+                {(estado == 2 && props.modificar) && <div className="p-4 w-90 h-90" style={{background: color}}/>}
             </div>
             
     )

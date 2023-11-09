@@ -31,7 +31,7 @@ export function Docentes(){
                 setExiste(true)
                 const user = response.data[0].id
                 const {data} = await getProfesorUser(user)
-                navigate(`/docentes/${data[0].id}`)
+                navigate(`/docentes/${data[0].id}`, {state: {userInfo: response.data[0], profesorInfo: data[0]}})
             } else {
                 setExiste(false)
             }

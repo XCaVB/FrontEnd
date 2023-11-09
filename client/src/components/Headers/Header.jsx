@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 export function Header( {estado} ){
 
     return(
-        <header className="header" style={{padding: 9}}>
+        <header className="header shadow" style={{padding: 9}}>
                 <div className="row justify-content-between align-items-center m-0">
                     <div className="logo">
                         {/*Logo UNAB*/}

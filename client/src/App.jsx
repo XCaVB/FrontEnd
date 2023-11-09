@@ -2,7 +2,7 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { Administrativos } from './components/Pages/Principal/Administrativos';
 import { Docentes } from './components/Pages/Principal/Docentes';
 import { Home } from './components/Pages/Principal/Home';
-import { Usuarios } from './components/Pages/Usuarios/Usuarios';
+import { DB_Management } from './components/Pages/DDBB/DB-Management';
 import { RegistrarDisponible } from './components/Pages/HorarioProfe/registrarDisponible';
 import { BuscarProfesor } from './components/Routes/Header+buscarProfesor';
 import { ProfesorHeader } from './components/Routes/Header+ProfesorPage';
@@ -19,7 +19,7 @@ function App() {
         <Route path="/Administrativos/buscar-profesor" element={<BuscarProfesor />} />
         <Route path="/Administrativos/buscar-profesor/:id" element={<ProfesorHeader />} />
         <Route path="/Administrativos/buscar-profesor/:id/editar-horario" element={<EdicionHeader />} />
-        <Route path="/db-management" element={<Usuarios />} />
+        <Route path="/db-management" element={<DB_Management />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
