@@ -18,12 +18,19 @@ class Curso(models.Model):
     def __str__ (self):
         return self.nombreAsignatura
 
+class Modulo(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nombre
+
 class PlanificacionAcademica(models.Model):
     profesor = models.ForeignKey(Profesor, on_delete=models.CASCADE, default='')
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, default='')
     periodo = models.CharField(max_length=255)
-    campus = models.CharField(max_length=255)
+    actividad = models.CharField(max_length=255, default='')
     jornada = models.CharField(max_length=255)
+    modulos = models.CharField(max_length=255, default='')
 
 """
 class HorarioCurso(models.Model):

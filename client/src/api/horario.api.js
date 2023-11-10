@@ -66,10 +66,10 @@ const EdicionHorariaAPI = axios.create({
 
 export const getCurso = () => EdicionHorariaAPI.get('planificacion/curso/')
 
-export const getPlanificacionAcad = () => EdicionHorariaAPI.get('planificacion/planificaion-academica/')
+export const getPlanificacionAcad = () => EdicionHorariaAPI.get('planificacion/planificacion-academica/')
 
-export const createPlanificacionAcad = (planificacion) => EdicionHorariaAPI.post('planificacion/planificaion-academica/', planificacion)
+export const createPlanificacionAcad = (planificacion) => EdicionHorariaAPI.post('planificacion/planificacion-academica/', planificacion)
 
-export const updatePlanificacionAcad = (id, planificacion) => EdicionHorariaAPI.put(`planificacion/planificaion-academica/${id}/`, planificacion)
+export const updatePlanificacionAcad = (id, planificacion) => EdicionHorariaAPI.put(`planificacion/planificacion-academica/${id}/`, planificacion)
 
-export const deletePlanificacionAcad = (id) => EdicionHorariaAPI.delete(`planificacion/planificaion-academica/${id}/`)
+export const deletePlanificacionAcad = (id) => EdicionHorariaAPI.delete(`planificacion/planificacion-academica/${id}/`)

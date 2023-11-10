@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'secretario-academico', views.SecretarioAcademicoSeri, 'SecretarioAcademico')
-router.register(r'planificaion-academica', views.PlanificacionAcademicaSeri, 'Planificacion Academica')
+router.register(r'planificacion-academica', views.PlanificacionAcademicaSeri, 'Planificacion Academica')
 router.register(r'curso', views.CursoSeri, 'Curso')
 
 urlpatterns = [
