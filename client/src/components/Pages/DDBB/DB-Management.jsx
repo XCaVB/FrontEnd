@@ -17,16 +17,16 @@ export function DB_Management() {
       <Header estado={"cerrar"}/>
       
       {/*---ALERTAS---*/}
-      <div className="row justify-content-center m-5">
+      <div className="row justify-content-center m-2">
 
       {/* EXITO */}
-      {alerta===1 && <div className="alert alert-success alert-dismissible fade show col-5">
+      {alerta===1 && <div className="alert alert-success alert-dismissible fade show col-5 m-2">
         <button type="button" className="close" data-dismiss="alert" onClick={() => setAlerta(0)}>&times;</button>
         <strong>¡Exito!</strong> Operación realizada exitosamente.
         </div>}
 
       {/* ERROR */}
-      {alerta===2 && <div className="alert alert-danger alert-dismissible fade show col-5">
+      {alerta===2 && <div className="alert alert-danger alert-dismissible fade show col-5 m-2">
         <button type="button" className="close" data-dismiss="alert" onClick={() => setAlerta(0)}>&times;</button>
         <strong>¡Error!</strong> Ha ocurrido un error inesperado, intentalo de nuevo.
         </div>}

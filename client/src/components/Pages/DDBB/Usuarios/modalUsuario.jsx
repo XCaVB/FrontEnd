@@ -4,14 +4,14 @@ import { createUsuario, updateUsuario, deleteUsuario } from "../../../../api/hor
 export function ModalUsuario( {alertaEnviada, identificador, data} ) {
   
   const [id] = useState(data.id)
-  const [nombre, setNombre] = useState(data.name)
-  const [rut, setRut] = useState(data.rut)
-  const [correo, setCorreo] = useState(data.correo)
+  const [nombre, setNombre] = useState(data.first_name)
+  const [username, setUsername] = useState(data.username)
+  const [correo, setCorreo] = useState(data.email)
   const [eliminar, setEliminar] = useState(true)
   const [enviar, setEnviar] = useState(true)
 
   async function enviarAgregar(){
-    const data = {name: nombre, rut: rut, correo: correo}
+    const data = {first_name: nombre, last_name:'', username: username, correo: correo}
     try {
       await createUsuario(data)
       alertaEnviada(1)
@@ -21,7 +21,7 @@ export function ModalUsuario( {alertaEnviada, identificador, data} ) {
   }
 
   async function enviarActualizar(){
-    const data = {name: nombre, rut: rut, correo: correo}
+    const data = {name: nombre, username: username, correo: correo}
     try {
       await updateUsuario(id,data)
       alertaEnviada(1)
@@ -39,32 +39,36 @@ export function ModalUsuario( {alertaEnviada, identificador, data} ) {
     }
   }
 
+  const cerrarModal = () => {
+    
+  }
+
   return(
-  <div className="modal fade" id={toString(identificador)} data-backdrop='static'>
+  <div className="modal fade" id={identificador} data-backdrop='static'>
     <div className="modal-dialog">
       <div className="modal-content">
     
         <div className="modal-header">
           {identificador === "agregar" && <h4 className="modal-title">Agregando usuario</h4>}
-          {!isNaN(identificador) && <h4 className="modal-title">Modificando usuario</h4>}
-            <button type="button" className="close" data-dismiss="modal">&times;</button>
+          {identificador === `entrar${data.id}` && <h4 className="modal-title">Modificando usuario</h4>}
+            <button type="button" className="close" data-dismiss="modal" onClick={() => alertaEnviada(0)}>&times;</button>
         </div>
       
         <div className="modal-body pb-0">
           <form className="was-validated" >
+            <div className="form-group">
+              <label htmlFor="username">Nombre de usuario</label>
+              <input type="text" className="form-control" id="username" placeholder="Ingresar nombre de usuario (nombre antes de @)" name="username" defaultValue={data.username.split('@')[0]} onChange={e => setUsername(e.target.value)} required/>
+              <div className="invalid-feedback">Se requiere llenar este campo.</div>
+            </div>
             <div className="form-group">
               <label htmlFor="nombre">Nombre</label>
               <input type="text" className="form-control" id="nombre" placeholder="Ingresar Nombre Apellido" name="nombre" defaultValue={data.first_name} onChange={e => setNombre(e.target.value)} required/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group">
-              <label htmlFor="rut">Rut</label>
-              <input type="text" className="form-control" id="rut" placeholder="Ingresar 12.345.678-9" name="rut" defaultValue={rut} onChange={e => setRut(e.target.value)} required/>
-              <div className="invalid-feedback">Se requiere llenar este campo.</div>
-            </div>
-            <div className="form-group">
               <label htmlFor="correo">Correo</label>
-              <input type="text" className="form-control" id="correo" placeholder="Ingresar correo@direccion.com" name="correo" defaultValue={correo} onChange={e => setCorreo(e.target.value)} required/>
+              <input type="text" className="form-control" id="correo" placeholder="Ingresar correo@direccion.com" name="correo" defaultValue={data.email} onChange={e => setCorreo(e.target.value)} required/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group form-check">
@@ -76,8 +80,8 @@ export function ModalUsuario( {alertaEnviada, identificador, data} ) {
             </div>
             <div className="d-flex justify-content-between mb-2">
               {identificador === "agregar" && <button type="button" className="btn btn-success" data-dismiss="modal" onClick={enviarAgregar} disabled={enviar}>Enviar</button>}
-              {!isNaN(identificador) === "entrar" && <button type="button" className="btn btn-success" data-dismiss="modal" onClick={enviarActualizar} disabled={enviar}>Enviar</button>}
-              {!isNaN(identificador) === "entrar" && <div className="input-group justify-content-end">
+              {identificador === `entrar${data.id}` && <button type="button" className="btn btn-success" data-dismiss="modal" onClick={enviarActualizar} disabled={enviar}>Enviar</button>}
+              {identificador === `entrar${data.id}` && <div className="input-group justify-content-end">
                 <div className="input-group-prepend border rounded">
                   <input type="checkbox" id="eliminar" className="m-1" style={{cursor:'pointer'}} onChange={() => {eliminar?setEliminar(false):setEliminar(true)}}></input>
                 </div>

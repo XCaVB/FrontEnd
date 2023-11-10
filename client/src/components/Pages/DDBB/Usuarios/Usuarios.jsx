@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
-import { Header } from "../../../Headers/Header"
 import { ModalUsuario } from "./modalUsuario"
 import { getAllUsuarios } from "../../../../api/horario.api"
 
 export function Usuarios( {alerta} ) {
 
   const [usuarios, setUsuarios] = useState(null)
-  const [ID, setID] = useState('')
+  const [ID, setID] = useState(null)
 
   useEffect(() => async function loadUsuario() {
     try {
@@ -21,16 +20,18 @@ export function Usuarios( {alerta} ) {
 
   function manejarModal(datoModal){
     setElementoSeleccionado(datoModal)
+    setID('entrar')
   }
 
   const sacarAlerta = (estado) => {
     alerta(estado)
+    setID(null)
   }
 
-  console.log(elementoSeleccionado);
+  console.log(elementoSeleccionado, ID);
   return(
     <div>
-      <div className="table-responsive">
+      <div className="table-responsive" style={{height: '60vh'}}>
         <table className="table table-sm table-striped table-bordered">
           <thead>
             <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -47,16 +48,16 @@ export function Usuarios( {alerta} ) {
                 <td>{usuario.first_name +" "+ usuario.last_name}</td>
                 <td>{usuario.email}</td>
                 <td>{usuario.groups}</td>
-                <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={ ( () => {manejarModal(usuario); setID('entrar');} ) } data-toggle="modal" data-target="#entrar">Modificar</div></td>
+                <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={ () => manejarModal(usuario) } data-toggle="modal" data-target={`#entrar${usuario.id}`}>Modificar</div></td>
               </tr>
             ))}
           </tbody>
         </table>
-        {/* Agregar otro a la BBDD */}
-        <div className="btn btn-success mb-2" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
       </div>  
-      {ID === "entrar" && <ModalUsuario identificador={elementoSeleccionado.id} data={elementoSeleccionado} alertaEnviada={sacarAlerta}/>}
-      {ID === "agregar" && <ModalUsuario identificador={ID} data={{id: null, name:'', rut:'', correo:''}} alertaEnviada={sacarAlerta}/>}
+        {/* Agregar otro a la BBDD */}
+        <div className="btn btn-success m-2" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
+      {ID === "entrar" && <ModalUsuario identificador={ID+String(elementoSeleccionado.id)} data={elementoSeleccionado} alertaEnviada={sacarAlerta}/>}
+      {ID === "agregar" && <ModalUsuario identificador={ID} data={{id: null, username:'', first_name:'', email:''}} alertaEnviada={sacarAlerta}/>}
     </div>
   )
 }
