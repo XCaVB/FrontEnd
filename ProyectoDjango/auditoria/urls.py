@@ -8,6 +8,6 @@ router.register(r'auditoria', views.AuditoriaSeri, 'Auditoria')
 
 urlpatterns = [
     path('auditoria/', include(router.urls)),
-    path('docs/', include_docs_urls(title='Auditoria API'))
+    path('docs/', include_docs_urls(title='Auditoria API')),
 ]
 
