@@ -30,7 +30,6 @@ class PlanificacionAcademica(models.Model):
     periodo = models.CharField(max_length=255)
     actividad = models.CharField(max_length=255, default='')
     jornada = models.CharField(max_length=255)
-    modulos = models.CharField(max_length=255, default='')
 
 """
 class HorarioCurso(models.Model):

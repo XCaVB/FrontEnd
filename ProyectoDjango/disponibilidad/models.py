@@ -20,6 +20,8 @@ class Profesor(models.Model):
     bloqueoTrimestral = models.BooleanField(default=1)
     horarioDiurno = models.CharField(max_length=250, default=diurno)
     horarioVespertino = models.CharField(max_length=250, default=vespertino)
+    modulosDiurno = models.CharField(max_length=255, default=diurno)
+    modulosVespertino = models.CharField(max_length=255, default=vespertino)
 
     def __str__ (self):
         return str(self.user)

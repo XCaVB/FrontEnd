@@ -9,3 +9,4 @@ class ProfesorSeri(viewsets.ModelViewSet):
     queryset = Profesor.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['user__id']
+
