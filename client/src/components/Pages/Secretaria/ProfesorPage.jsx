@@ -5,7 +5,7 @@ import { getUsuariosID, getProfesores } from '../../../api/horario.api';
 import horario from "../../../data/horarioCalendario"
 import { ColorHorario } from './colorHorario';
 
-export function ProfesorPage({matrizD, matrizV, data}) {
+export function ProfesorPage({matrizD, matrizV}) {
   const { id } = useParams();
   const usuarioId = parseInt(id);
   const armar_horario = horario

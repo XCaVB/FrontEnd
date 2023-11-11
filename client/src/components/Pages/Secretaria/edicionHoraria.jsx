@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
 import "../../../css/Pages.css";
-import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad} from '../../../api/horario.api';
+import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad} from '../../../api/horario.api';
 
 export function EdicionHoraria() {
     const { id } = useParams();
@@ -19,6 +19,8 @@ export function EdicionHoraria() {
 
     const [planificacionAcad, setPlanificacionAcad] = useState([]);
     const [cursoPeriodos, setCursoPeriodos] = useState({});
+    const [cursoJornada, setCursoJornada] = useState({});
+    const [cursoActividad, setCursoActividad] = useState({});
 
     const peticionGet = async () => {
         try {
@@ -66,13 +68,14 @@ export function EdicionHoraria() {
         filtrar(e.target.value);
     };
 
-    const agregarCurso = (curso, tipo) => {
-        const cursoConTipo = { ...curso, tipo };
+    const agregarCurso = (curso, periodo, jornada, actividad) => {
+        const cursoConTipo = { ...curso, periodo, jornada, actividad };
         setCursosSeleccionados([...cursosSeleccionados, cursoConTipo]);
       
         const cursosRestantes = cursosDisponibles.filter((c) => c.id !== curso.id);
         setCursosDisponibles(cursosRestantes);
       };
+      
 
     const eliminarCurso = (curso) => {
         // Filtra la lista de cursos seleccionados para mantener todos los cursos excepto el que se va a eliminar.
@@ -88,29 +91,36 @@ export function EdicionHoraria() {
         return cursoEncontrado || {};
     };
 
-    const handleRadioChange = (cursoId, tipo) => {
-        setCursoPeriodos({ ...cursoPeriodos, [cursoId]: tipo });
+    const handlePeriodoChange = (cursoId, periodo) => {
+        setCursoPeriodos({ ...cursoPeriodos, [cursoId]: periodo });
       };
-
-    const guardarCambios = async () => {
-        for (const cursoSeleccionado of cursosSeleccionados) {
-            const { id, tipo } = cursoSeleccionado;
+    const handleJornadaChange = (cursoId, jornada) => {
+        setCursoJornada({ ...cursoJornada, [cursoId]: jornada });
+    };
+    const handleActividadChange = (cursoId, actividad) => {
+        setCursoActividad({ ...cursoActividad, [cursoId]: actividad });
+    };
     
-            // Verificar si ya existe una planificación académica para el profesor, curso y período seleccionados
+
+    const guardarCambiosAPI = async () => {
+        for (const cursoSeleccionado of cursosSeleccionados) {
+            const { id, periodo, actividad, jornada } = cursoSeleccionado;
+    
+            // Verificar si ya existe una planificación académica para el profesor, curso, período, actividad y jornada seleccionados.
             const planificacionExistente = planificacionAcad.find(item => {
-                return item.profesor === usuarioId && item.curso === id && item.periodo === tipo;
+                return item.profesor === usuarioId && item.curso === id && item.periodo === periodo && item.actividad === actividad && item.jornada === jornada;
             });
 
-            console.log(id)
-            console.log(tipo)
-    
+            console.log(planificacionExistente)
+
             if (!planificacionExistente) {
                 // Si no existe una planificación, crear una nueva utilizando la función createPlanificacionAcad
                 try {
                     await createPlanificacionAcad({
-                        periodo: tipo,
-                        campus: 'Null', // Reemplaza esto con el valor correcto
-                        jornada: 'Null', // Reemplaza esto con el valor correcto
+                        periodo: periodo,
+                        actividad: actividad, // Reemplaza esto con el valor correcto
+                        jornada: jornada, // Reemplaza esto con el valor correcto
+                        modulos: 'Null',
                         profesor: usuarioId,
                         curso: id,
                     });
@@ -125,6 +135,24 @@ export function EdicionHoraria() {
             }
         }
     };
+
+    const eliminarCursoAPI = async (planificacionId) => {
+        try {
+            // Llamada a la API para eliminar la planificación académica por su ID
+            await deletePlanificacionAcad(planificacionId);
+    
+            // Actualizar la lista de planificaciones académicas después de eliminar
+            const responsePlanificacionAcad = await getPlanificacionAcad();
+            setPlanificacionAcad(responsePlanificacionAcad.data);
+    
+            // Mostrar un mensaje o realizar otras acciones necesarias después de eliminar
+            alert("Curso eliminado exitosamente");
+        } catch (error) {
+            // Manejar el error, mostrar un mensaje de error, etc.
+            console.error('Error al eliminar la planificación académica:', error);
+        }
+    };
+    
 
     useEffect(() => {
         peticionGet();
@@ -165,9 +193,11 @@ export function EdicionHoraria() {
                             <thead className='text-center'>
                                 <tr>
                                     <th>Materia</th>
-                                    <th>N° Curso</th>
+                                    <th>Curso</th>
                                     <th>Asignatura</th>
-                                    <th>Período</th>
+                                    <th>Periodo</th>
+                                    <th>Jornada</th>
+                                    <th>Actividad</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -183,35 +213,80 @@ export function EdicionHoraria() {
                                     <td className="text-justify">
                                         <label>
                                             <input
-                                            type="radio"
-                                            name={`optradio-${curso.id}`}
-                                            value="Semestral"
-                                            checked={cursoPeriodos[curso.id] === "Semestral"}
-                                            onChange={() => handleRadioChange(curso.id, "Semestral")}
+                                                type="radio"
+                                                name={`periodo-${curso.id}`}
+                                                value="Semestral"
+                                                checked={cursoPeriodos[curso.id]?.includes("Semestral")}
+                                                onChange={() => handlePeriodoChange(curso.id, "Semestral")}
                                             />
                                             Semestral
                                         </label>
                                         <label>
                                             <input
-                                            type="radio"
-                                            name={`optradio-${curso.id}`}
-                                            value="Trimestral"
-                                            checked={cursoPeriodos[curso.id] === "Trimestral"}
-                                            onChange={() => handleRadioChange(curso.id, "Trimestral")}
+                                                type="radio"
+                                                name={`periodo-${curso.id}`}
+                                                value="Trimestral"
+                                                checked={cursoPeriodos[curso.id]?.includes("Trimestral")}
+                                                onChange={() => handlePeriodoChange(curso.id, "Trimestral")}
                                             />
                                             Trimestral
                                         </label>
                                     </td>
+                                    <td className="text-justify">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`jornada-${curso.id}`}
+                                                value="Diurno"
+                                                checked={cursoJornada[curso.id]?.includes("Diurno")}
+                                                onChange={() => handleJornadaChange(curso.id, "Diurno")}
+                                            />
+                                            Diurno
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`jornada-${curso.id}`}
+                                                value="Vespertino"
+                                                checked={cursoJornada[curso.id]?.includes("Vespertino")}
+                                                onChange={() => handleJornadaChange(curso.id, "Vespertino")}
+                                            />
+                                            Vespertino
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <select
+                                            className="form-control"
+                                            id="sel1"
+                                            onChange={(e) => handleActividadChange(curso.id, e.target.value)}
+                                            value={cursoActividad[curso.id] || 'Selecciona'}
+                                        >
+                                            <option disabled>Selecciona</option>
+                                            <option value={"Teoría"}>Teoría</option>
+                                            <option value={"Taller"}>Taller</option>
+                                            <option value={"Laboratorio"}>Laboratorio</option>
+                                            <option value={"Ayudantía"}>Ayudantía</option>
+                                            <option value={"Terreno"}>Terreno</option>
+                                            <option value={"Apoyo Docente"}>Apoyo Docente</option>
+                                        </select>
+                                    </td>
                                     <td className="text-center">
-                                        <button onClick={() => {
-                                            if (!cursoPeriodos[curso.id]) {
-                                                alert("Selecciona un período");
-                                            } else {
-                                                agregarCurso(curso, cursoPeriodos[curso.id]);
-                                            }
-                                        }}>
-                                            Agregar
-                                        </button>
+                                    <button onClick={() => {
+                                        if (!cursoPeriodos[curso.id]) {
+                                            alert("Selecciona un Periodo");
+                                        } else if (!cursoJornada[curso.id]) {
+                                            alert("Selecciona una Jornada");
+                                        } else if (!cursoActividad[curso.id]) {
+                                            alert("Selecciona una Actividad");
+                                        } else {
+                                            const periodo = cursoPeriodos[curso.id];
+                                            const jornada = cursoJornada[curso.id];
+                                            const actividad = cursoActividad[curso.id];
+                                            agregarCurso(curso, periodo, jornada, actividad);
+                                        }
+                                    }}>
+                                        Agregar
+                                    </button>
                                     </td>
                                 </tr>
                                 ))
@@ -235,9 +310,11 @@ export function EdicionHoraria() {
                                 <thead className='text-center'>
                                     <tr>
                                         <th>Materia</th>
-                                        <th>N° Curso</th>
+                                        <th>Curso</th>
                                         <th>Asignaturas Inscritas</th>
-                                        <th>Período</th>
+                                        <th>Periodo</th>
+                                        <th>Jornada</th>
+                                        <th>Actividad</th>
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
@@ -247,7 +324,9 @@ export function EdicionHoraria() {
                                             <td className='text-center'>{curso.materia}</td>
                                             <td className='text-center'>{curso.Curso}</td>
                                             <td className='text-center'>{curso.nombreAsignatura}</td>
-                                            <td className='text-center'>{curso.tipo}</td>
+                                            <td className='text-center'>{curso.periodo}</td>
+                                            <td className='text-center'>{curso.jornada}</td>
+                                            <td className='text-center'>{curso.actividad}</td>
                                             <td className='text-center'>
                                                 <button onClick={() => eliminarCurso(curso)}>
                                                     Eliminar
@@ -260,7 +339,7 @@ export function EdicionHoraria() {
                         </div>
                     </div>
                     <div className='text-center'>
-                        <button onClick={guardarCambios}>Guardar Cambios</button>
+                        <button onClick={guardarCambiosAPI}>Guardar Cambios</button> 
                     </div>
                     <hr/>
                     <div className='container'>
@@ -269,9 +348,11 @@ export function EdicionHoraria() {
                                 <thead className='text-center'>
                                     <tr>
                                         <th>Materia</th>
-                                        <th>N° Curso</th>
-                                        <th>Asignaturas Previamente Inscritas</th>
-                                        <th>Período</th>
+                                        <th>Curso</th>
+                                        <th>Asignaturas Previas</th>
+                                        <th>Periodo</th>
+                                        <th>Jornada</th>
+                                        <th>Actividad</th>
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
@@ -285,11 +366,14 @@ export function EdicionHoraria() {
                                         <td className='text-center'>{cursoDetails.Curso}</td>
                                         <td className='text-center'>{cursoDetails.nombreAsignatura}</td>
                                         <td className='text-center'>{item.periodo}</td>
+                                        <td className='text-center'>{item.jornada}</td>
+                                        <td className='text-center'>{item.actividad}</td>
                                         <td className='text-center'>
-                                        <button>
-                                            Quitar
-                                        </button>
+                                            <button onClick={() => eliminarCursoAPI(item.id)}>
+                                                Eliminar
+                                            </button>
                                         </td>
+
                                     </tr>
                                     );
                                 } else {

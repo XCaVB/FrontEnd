@@ -1,5 +1,5 @@
 import { ProfesorPage } from './ProfesorPage'
-import { getHorario} from '../../../api/horario.api'
+import { getProfesor } from '../../../api/horario.api'
 import horarioBase from "../../../data/horarioBase"
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from "react"
@@ -15,7 +15,7 @@ export function RegistrarHorario(){
     useEffect(() => async function loadHorario() {
         console.log(params);
         try {
-            const {data} = await getHorario(params.id);
+            const {data} = await getProfesor(params.id);
             setData(data)
             setHorarioDiurno(JSON.parse(data.horarioDiurno))
             setHorarioVespertino(JSON.parse(data.horarioVespertino))
