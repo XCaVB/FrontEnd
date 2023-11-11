@@ -39,10 +39,6 @@ export function ModalUsuario( {alertaEnviada, identificador, data} ) {
     }
   }
 
-  const cerrarModal = () => {
-    
-  }
-
   return(
   <div className="modal fade" id={identificador} data-backdrop='static'>
     <div className="modal-dialog">

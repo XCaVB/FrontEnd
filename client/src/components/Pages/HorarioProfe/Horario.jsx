@@ -82,17 +82,17 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     <div>
       <div className="container-flex">
       <h2 className='h2 text-center' style={{background: '#03102C', color:'white'}}>Horario de Clases</h2>
-      <div className="row justify-content-end m-0">
-      {modificar && <div className='alert alert-warning justify-self-start mb-1 mr-5 p-0'><strong><i className='fa fa-exclamation-triangle'></i> Alerta -</strong> Estás modificando el horario.</div>}
-        <div className="d-flex mr-4">
+      <div className="row justify-content-center m-0">
+        {modificar && <div className='alert alert-warning justify-self-start mb-1 mr-5 p-0'><strong><i className='fa fa-exclamation-triangle'></i> Alerta -</strong> Estás modificando el horario.</div>}
+        <div className="d-flex mr-4 align-items-center">
           <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'white', border: '2px solid'}}/>
           <span className="p">No seleccionado</span>
         </div>
-        <div className="d-flex mr-4">
+        <div className="d-flex mr-4 align-items-center">
           <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'green', border: '2px solid'}}/>
-          <span className="p">Presencial</span>
+          <span className="p">Disponible</span>
         </div>
-        <div className="d-flex mr-4">
+        <div className="d-flex mr-4 align-items-center ">
           <div className='rounded-circle mr-1' style={{ width: '20px', height: '20px', marginRight: '10px', background:'red', border: '2px solid'}}/>
           <span className="p">No disponible/Tope horario</span>
         </div>

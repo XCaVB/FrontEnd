@@ -30,6 +30,8 @@ const usuariosApi = axios.create({
 
 export const getAllUsuarios = () => usuariosApi.get('/')
 
+export const getUsuario = (id) => usuariosApi.get(`/${id}/`)
+
 export const getUsuarioCorreo = (correo) => usuariosApi.get(`/?search=${correo}`)
 
 export const createUsuario = (usuario) => usuariosApi.post('/', usuario)

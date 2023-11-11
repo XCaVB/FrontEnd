@@ -28,12 +28,11 @@ export function Usuarios( {alerta} ) {
     setID(null)
   }
 
-  console.log(elementoSeleccionado, ID);
   return(
     <div>
       <div className="table-responsive" style={{height: '60vh'}}>
-        <table className="table table-sm table-striped table-bordered">
-          <thead>
+        <table className="table table-sm table-striped table-bordered table-hover">
+          <thead className="sticky-top">
             <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
               <th style={{width: '4%'}}>ID</th>
               <th style={{width: '32%'}}>Nombre</th>
@@ -48,7 +47,7 @@ export function Usuarios( {alerta} ) {
                 <td>{usuario.first_name +" "+ usuario.last_name}</td>
                 <td>{usuario.email}</td>
                 <td>{usuario.groups}</td>
-                <td><div className="btn btn-secondary" style={{height:'3vh'}} onClick={ () => manejarModal(usuario) } data-toggle="modal" data-target={`#entrar${usuario.id}`}>Modificar</div></td>
+                <td className="btn btn-dark align-content-center|" onClick={ () => manejarModal(usuario) } data-toggle="modal" data-target={`#entrar${usuario.id}`}><i className="fa fa-gear"></i></td>
               </tr>
             ))}
           </tbody>

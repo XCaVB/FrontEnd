@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Header } from "../../Headers/Header"
 import { getAllUsuarios } from "../../../api/horario.api"
 import { Usuarios } from "./Usuarios/Usuarios"
+import { Profesores } from "./Profesores/Profesores"
 
 export function DB_Management() {
 
@@ -33,17 +34,17 @@ export function DB_Management() {
       </div>
 
       <div className="row justify-content-center mr-0">
-        <div className="container border m-2 col-10">
-          <div className="row justify-content-center border p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
+        <div className="container rounded-lg m-2 shadow col-10" style={{border: 'solid 3px #A90429'}}>
+          <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
             DB Management
           </div>
 
           <div className="row">
             <div className="form-group col-2">
               <label htmlFor="sel1">Mostrar</label>
-              <select className="form-control" id="sel1">
-                <option>Usuario</option>
-                <option disabled>Profesor</option>
+              <select className="form-control" id="sel1" onChange={e => setMostrar(e.target.value)}>
+                <option value={"usuarios"}>Usuarios</option>
+                <option value={"docentes"}>Docentes</option>
                 <option disabled>Clase</option>
                 <option disabled>Otra opcion</option>
                 <option disabled>Opcion 5</option>
@@ -72,6 +73,7 @@ export function DB_Management() {
           
           {/*-- TABLAS --*/}
           {mostrar === "usuarios" && <Usuarios alerta={sacarAlerta}/>}
+          {mostrar === "docentes" && <Profesores alerta={sacarAlerta}/>}
         </div>
       </div>
     </div>
