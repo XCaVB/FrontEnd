@@ -40,11 +40,20 @@ export const updateUsuario = (id, usuario) => usuariosApi.put(`/${id}/`, usuario
 
 export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
 
-//---HORARIO---//
-export const getHorario = (correo) => {
-    const {usuarios} = getAllUsuarios();
-    
-}
+//---CURSOS---//
+const cursosApi = axios.create({
+    baseURL: 'http://localhost:8000/planificacion/curso/'
+})
+
+export const getAllCursos = () => cursosApi.get('/')
+
+export const getCursoID = (id) => cursosApi.get(`/${id}/`)
+
+export const createCurso = (curso) => cursosApi.post('/', curso)
+
+export const updateCurso = (id, curso) => cursosApi.put(`/${id}`, curso)
+
+export const deleteCurso = (id) => cursosApi.delete(`/${id}`)
 
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({

@@ -3,6 +3,7 @@ import { Header } from "../../Headers/Header"
 import { getAllUsuarios } from "../../../api/horario.api"
 import { Usuarios } from "./Usuarios/Usuarios"
 import { Profesores } from "./Profesores/Profesores"
+import { Cursos } from "./Cursos/Cursos"
 
 export function DB_Management() {
 
@@ -45,10 +46,9 @@ export function DB_Management() {
               <select className="form-control" id="sel1" onChange={e => setMostrar(e.target.value)}>
                 <option value={"usuarios"}>Usuarios</option>
                 <option value={"docentes"}>Docentes</option>
-                <option disabled>Clase</option>
-                <option disabled>Otra opcion</option>
+                <option value={"cursos"}>Clase</option>
+                <option disabled>Opción 4</option>
                 <option disabled>Opcion 5</option>
-                <option disabled>Opcion 6</option>
               </select>
             </div>
             <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} ><i className="fa fa-refresh m-1"></i>Actualizar tabla</div>
@@ -74,6 +74,7 @@ export function DB_Management() {
           {/*-- TABLAS --*/}
           {mostrar === "usuarios" && <Usuarios alerta={sacarAlerta}/>}
           {mostrar === "docentes" && <Profesores alerta={sacarAlerta}/>}
+          {mostrar === "cursos" && <Cursos alerta={sacarAlerta}/>}
         </div>
       </div>
     </div>
