@@ -10,6 +10,9 @@ class UserData(models.Model):
     #adjunto o regular
     tipo_cargo = models.CharField(max_length=45, default="")
 
+    def __str__ (self):
+        return self.user
+
 class Admin(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

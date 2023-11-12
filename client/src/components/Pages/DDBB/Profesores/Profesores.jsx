@@ -26,7 +26,7 @@ export function Profesores( {alerta} ) {
     let nombre = ""
     usuarios.forEach((usuario) => {
       if (usuario.id == cosa){
-        nombre = usuario.first_name
+        nombre = usuario.email
       }
     })
     return <td>{nombre}</td>
@@ -72,8 +72,8 @@ export function Profesores( {alerta} ) {
       </div>  
         {/* Agregar otro a la BBDD */}
         <div className="btn btn-success m-2" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
-      {ID === "entrar" && <ModalProfesor identificador={ID+String(elementoSeleccionado.id)} data={elementoSeleccionado} alertaEnviada={sacarAlerta}/>}
-      {ID === "agregar" && <ModalProfesor identificador={ID} data={{id: null, carrera:'', jornada:'', user:''}} alertaEnviada={sacarAlerta}/>}
+      {ID === "entrar" && <ModalProfesor identificador={ID+String(elementoSeleccionado.id)} data1={elementoSeleccionado} data2={usuarios} alertaEnviada={sacarAlerta}/>}
+      {ID === "agregar" && <ModalProfesor identificador={ID} data1={{id: null, carrera:'', jornada:'', user:''}} data2={usuarios} alertaEnviada={sacarAlerta}/>}
     </div>
   )
 }
