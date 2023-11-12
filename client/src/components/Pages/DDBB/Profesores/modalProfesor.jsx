@@ -66,18 +66,30 @@ export function ModalProfesor( {alertaEnviada, identificador, data1, data2} ) {
         <div className="modal-body pb-0">
           <form className="was-validated" >
             <div className="form-group">
-              <label htmlFor="username">Nombre de usuario</label>
-              <input type="text" className="form-control" id="username" placeholder="Ingresar nombre de usuario (nombre antes de @)" name="username" defaultValue={data} onChange={e => set(e.target.value)} required/>
+              <label htmlFor="usuario">Usuario asociado</label>
+                <select className="custom-select" id="usuario" defaultValue={data1.user} onChange={e => {setUser(e.target.value)}} required>
+                  <option key="-1" disabled>--Elegir un usuario--</option>
+                  {data2.map(usuario => {
+                    if (usuario.id != 1) {
+                      return <option key={usuario.id} value={usuario.id}> {usuario.email} </option>
+                    }
+                  })}
+                </select>
+              <div className="invalid-feedback">Elige un usuario.</div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="carrera">Carrera</label>
+              <input type="text" className="form-control" id="carrera" placeholder="Ingresar una carrera" name="carrera" defaultValue={data1.carrera} onChange={e => setCarrera(e.target.value)}/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group">
-              <label htmlFor="nombre">Nombre</label>
-              <input type="text" className="form-control" id="nombre" placeholder="Ingresar Nombre Apellido" name="nombre" defaultValue={data1.first_name} onChange={e => setNombre(e.target.value)} required/>
+              <label htmlFor="departamento">Departamento</label>
+              <input type="text" className="form-control" id="departamento" placeholder="Ingresar departamento" name="departamento" defaultValue={data1.departamento} onChange={e => setDepartamento(e.target.value)} required/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group">
-              <label htmlFor="correo">Correo</label>
-              <input type="text" className="form-control" id="correo" placeholder="Ingresar correo@direccion.com" name="correo" defaultValue={data1.email} onChange={e => setCorreo(e.target.value)} required/>
+              <label htmlFor="jornada">Jornada</label>
+              <input type="text" className="form-control" id="jornada" placeholder="Ingresar jornada" name="jornada" defaultValue={data1.jornada} onChange={e => setJornada(e.target.value)}/>
               <div className="invalid-feedback">Se requiere llenar este campo.</div>
             </div>
             <div className="form-group form-check">
@@ -94,7 +106,7 @@ export function ModalProfesor( {alertaEnviada, identificador, data1, data2} ) {
                 <div className="input-group-prepend border rounded">
                   <input type="checkbox" id="eliminar" className="m-1" style={{cursor:'pointer'}} onChange={() => {eliminar?setEliminar(false):setEliminar(true)}}></input>
                 </div>
-                <button type="button" className="btn btn-danger rounded-0" data-dismiss="modal" onClick={enviarEliminar} disabled={eliminar}>Eliminar profesor</button>
+                <button type="button" className="btn btn-danger rounded-0" data-dismiss="modal" onClick={enviarEliminar} disabled={eliminar}>Eliminar docente</button>
               </div>}
             </div> 
           </form>
