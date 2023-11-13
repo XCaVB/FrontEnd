@@ -21,7 +21,7 @@ export const createProfesor = (profesor) => profesoresApi.post('/', profesor)
 
 export const deleteProfesor = (id) => profesoresApi.delete(`/${id}`)
 
-export const updateProfesor = (id, profesor) => profesoresApi.put(`/${id}/`, profesor)
+export const updateProfesor = (id, profesor) => profesoresApi.put(`/${id}`, profesor)
 
 //---USUARIOS---//
 const usuariosApi = axios.create({

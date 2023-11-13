@@ -108,16 +108,18 @@ export function EdicionHoraria() {
     
             // Verificar si ya existe una planificación académica para el profesor, curso, período, actividad y jornada seleccionados.
             const planificacionExistente = planificacionAcad.find(item => {
-                return item.profesor === usuarioId && item.curso === id && item.periodo === periodo && item.actividad === actividad && item.jornada === jornada;
+                return item.profesor === usuarioId && item.curso === id && item.periodo === "202310" && item.periodo === "202305" && item.actividad === actividad && item.jornada === jornada;
             });
-
-            console.log(planificacionExistente)
-
+    
+            console.log(planificacionExistente);
+    
             if (!planificacionExistente) {
                 // Si no existe una planificación, crear una nueva utilizando la función createPlanificacionAcad
                 try {
+                    const periodoNuevo = periodo === "Semestral" ? 202310 : periodo === "Trimestral" ? 202305 : periodo;
+    
                     await createPlanificacionAcad({
-                        periodo: periodo,
+                        periodo: periodoNuevo,
                         actividad: actividad, // Reemplaza esto con el valor correcto
                         jornada: jornada, // Reemplaza esto con el valor correcto
                         modulos: 'Null',
@@ -128,7 +130,7 @@ export function EdicionHoraria() {
                     // Refrescar la lista de planificaciones académicas después de crear una nueva
                     const responsePlanificacionAcad = await getPlanificacionAcad();
                     setPlanificacionAcad(responsePlanificacionAcad.data);
-                    alert("Cambios guardados")
+                    alert("Cambios guardados");
                 } catch (error) {
                     alert('Error al crear la planificación académica:', error);
                 }

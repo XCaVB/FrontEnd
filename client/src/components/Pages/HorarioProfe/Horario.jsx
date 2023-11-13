@@ -58,6 +58,8 @@ export function Horario({matrizD, matrizV, data, modificar}) {
       jornada: data.jornada,
       horarioDiurno: resultado1,
       horarioVespertino: resultado2,
+      modulosDiurno: data.modulosDiurno,
+      modulosVespertino: data.modulosVespertino,
       user: data.user
   }
 
