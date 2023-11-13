@@ -55,6 +55,21 @@ export const updateCurso = (id, curso) => cursosApi.put(`/${id}`, curso)
 
 export const deleteCurso = (id) => cursosApi.delete(`/${id}`)
 
+//---PLANIFICACION ACADEMICA---//
+const planApi = axios.create({
+    baseURL: 'http://localhost:8000/planificacion/planificacion-academica/'
+})
+
+export const getAllPlanificacion = () => planApi.get('/')
+
+export const getPlanificacion = (id) => planApi.get(`/${id}/`)
+
+export const createPlanificacion = (curso) => planApi.post('/', curso)
+
+export const updatePlanificacion = (id, curso) => planApi.put(`/${id}`, curso)
+
+export const deletePlanificacion = (id) => planApi.delete(`/${id}`)
+
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({
     baseURL: 'http://localhost:8000/'
