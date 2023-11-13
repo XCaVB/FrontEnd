@@ -169,7 +169,7 @@ export function EdicionHoraria() {
                             {profesor.map((item) => {
                                 if (item.id === usuarioId) {
                                     const usuarioAsociado = usuarios.find(usuario => usuario.id === item.user);
-                                    return usuarioAsociado ? usuarioAsociado.username : '';
+                                    return usuarioAsociado ? usuarioAsociado.first_name : '';
                                 }
                                 return null;
                             })}

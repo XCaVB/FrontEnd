@@ -101,7 +101,7 @@ export function BarraBuscadora(){
                       <td>{profesor.id}</td>
                       <td>
                         <Link to={`/Administrativos/buscar-profesor/${profesor.id}`}>
-                          {usuarioCorrespondiente ? usuarioCorrespondiente.username : 'N/A'}
+                          {usuarioCorrespondiente ? usuarioCorrespondiente.first_name : 'N/A'}
                         </Link>
                       </td>
                       <td>{usuarioRutCorrespondiente ? usuarioRutCorrespondiente.rut : 'N/A'}</td>
