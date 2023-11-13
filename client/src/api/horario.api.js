@@ -40,6 +40,13 @@ export const updateUsuario = (id, usuario) => usuariosApi.put(`/${id}/`, usuario
 
 export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
 
+//--DATA USUARIOS--//
+const usuario_dataApi = axios.create({
+    baseURL: 'http://localhost:8000/core/user_data/'
+})
+
+export const getAllUserData = () => usuario_dataApi.get('/')
+
 //---CURSOS---//
 const cursosApi = axios.create({
     baseURL: 'http://localhost:8000/planificacion/curso/'

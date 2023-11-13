@@ -48,7 +48,7 @@ export function Cursos( {alerta} ) {
                 <td>{curso.materia}</td>
                 <td>{curso.Curso}</td>
                 <td>{curso.nombreAsignatura}</td>
-                <td className="btn btn-dark align-content-center|" onClick={ () => manejarModal(curso) } data-toggle="modal" data-target={`#entrar${curso.id}`}><i className="fa fa-gear"></i></td>
+                <td className="btn btn-dark align-content-center" onClick={ () => manejarModal(curso) } data-toggle="modal" data-target={`#entrar${curso.id}`}><i className="fa fa-gear"></i></td>
               </tr>
             ))}
           </tbody>

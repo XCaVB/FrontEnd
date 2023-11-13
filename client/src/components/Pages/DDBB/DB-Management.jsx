@@ -4,6 +4,7 @@ import { getAllUsuarios } from "../../../api/horario.api"
 import { Usuarios } from "./Usuarios/Usuarios"
 import { Profesores } from "./Profesores/Profesores"
 import { Cursos } from "./Cursos/Cursos"
+import { BotonPlanificacion } from "./botonPlanificacion"
 
 export function DB_Management() {
 
@@ -47,7 +48,7 @@ export function DB_Management() {
                 <option value={"usuarios"}>Usuarios</option>
                 <option value={"docentes"}>Docentes</option>
                 <option value={"cursos"}>Clase</option>
-                <option disabled>Opción 4</option>
+                <option value={"planificacion"}>Planificación académica</option>
                 <option disabled>Opcion 5</option>
               </select>
             </div>
@@ -75,6 +76,7 @@ export function DB_Management() {
           {mostrar === "usuarios" && <Usuarios alerta={sacarAlerta}/>}
           {mostrar === "docentes" && <Profesores alerta={sacarAlerta}/>}
           {mostrar === "cursos" && <Cursos alerta={sacarAlerta}/>}
+          {mostrar === "planificacion" && <BotonPlanificacion alerta={sacarAlerta}/>}
         </div>
       </div>
     </div>
