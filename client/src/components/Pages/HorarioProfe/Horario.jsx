@@ -1,13 +1,15 @@
 import { updateProfesor } from '../../../api/horario.api'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
 import "../../../css/styles.css"
+import exito from "../../../images/exito.gif"
 import { useParams } from 'react-router-dom';
 
 export function Horario({matrizD, matrizV, data, modificar}) {
 
   // Datos horario
+  const [alerta, setAlerta] = useState(0)
   const armar_horario = horario
   const matrizDiurno = matrizD
   const matrizVespertino = matrizV
@@ -58,16 +60,15 @@ export function Horario({matrizD, matrizV, data, modificar}) {
       jornada: data.jornada,
       horarioDiurno: resultado1,
       horarioVespertino: resultado2,
-      modulosDiurno: data.modulosDiurno,
-      modulosVespertino: data.modulosVespertino,
       user: data.user
   }
 
     try {
-      await updateProfesor(params.id, nuevosDatos);
-      window.alert("Horario actualizado con éxito :)")
+      await updateProfesor(params.id, nuevosDatos)
+      setAlerta(1)
     } catch {
-      window.alert("Ocurrió un error. Intentalo de nuevo.")
+      setAlerta(2)
+      console.log("F");
     }
   }
 
@@ -80,6 +81,12 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     }
   }
 
+  $(document).ready(function() {
+		$('#algo').on('hidden.bs.modal', function() {
+		  window.location.reload()
+		});
+	  });
+  
   return (
     <div>
       <div className="container-flex">
@@ -154,7 +161,7 @@ export function Horario({matrizD, matrizV, data, modificar}) {
         </div>
         <div id="collapseTwo" className="collapse" data-parent="#accordion">
           <div className="card-body shadow">
-            <div className="container p-0 col-10" style={{border: '10px solid #03102C', borderCollapse: 'collapse', height: '60vh', overflowY: 'auto'}}>
+            <div className="d-flex p-0 col-10 mx-auto" style={{border: '10px solid #03102C', borderCollapse: 'collapse', height: '60vh', overflowY: 'auto'}}>
               <table className="table-fixed table table-bordered">
                 <thead className="sticky-top">
                   <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -187,10 +194,26 @@ export function Horario({matrizD, matrizV, data, modificar}) {
       </div>
     </div>
         <div className='col-2 mt-2 p-0'>
-          {!modificar && <button className="btn rounded border justify-content-end" style={{background:'black', color:'white'}} disabled>Aplicar Cambios</button>}
-          {modificar && <button className="btn rounded border justify-content-end" onClick={() => convertirAString(matrizDiurno, matrizVespertino)} style={{background:'black', color:'white'}}>Aplicar Cambios</button>}
+          {!modificar && <button className="btn rounded border shrink" style={{background:'black', color:'white'}} disabled>Aplicar Cambios</button>}
+          {modificar && <button className="btn rounded border" onClick={() => convertirAString(matrizDiurno, matrizVespertino)} style={{background:'black', color:'white'}} data-toggle="modal" data-target="#exito">Aplicar Cambios</button>}
         </div>
       </div>
+      {alerta == 1 && 
+					<div className="modal" id="exito">
+						<div className="modal-dialog modal-dialog-centered">
+							<div className="modal-content rounded shadow">
+
+							<div className="modal-body">
+								<img className="img-fluid ml-5" src={exito}/>
+								<p className='h2 text-success text-center font-weight-bold'>¡Disponibilidad actualizada con éxito!</p>
+							</div>
+
+							<div className="modal-footer bg-success">
+								<button type="button" className="btn text-light" data-dismiss="modal">Cerrar</button>
+							</div>
+							</div>
+						</div>
+					</div>}
     </div>
     );
   }
