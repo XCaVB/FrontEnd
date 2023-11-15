@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
 import {utils, writeFile} from 'xlsx'
-import { getAllPlanificacion, getAllCursos, getAllProfesores, getAllUsuarios, getAllUserData } from "../../../api/horario.api";
+import { getAllPlanificacion, getAllCursos, getAllProfesores, getAllUsuarios, getAllUserData } from "../../../../api/horario.api";
+import { ModalPlanificacion } from "./modalPlanificacion";
 
-export function BotonPlanificacion () {
+export function Planificaciones ({alerta}) {
 
 	const [cursos, setCursos] = useState(null)
 	const [profesores, setProfesores] = useState(null)
@@ -27,7 +28,7 @@ export function BotonPlanificacion () {
 			window.alert("¡Error!")
 		}
 	}, [])
-
+	
 	const [elementoSeleccionado, setElementoSeleccionado] = useState(null)
 
 	const mostrarDepartamento = (fk, modo) => {
@@ -184,8 +185,8 @@ export function BotonPlanificacion () {
 				<button className="btn btn-dark shadow" onClick={armarExcel}>
 					Descargar Planificación Académica
 				</button>
-		{ID === "entrar" && <ModalProfesor identificador={ID+String(elementoSeleccionado.id)} data1={elementoSeleccionado} data2={usuarios} alertaEnviada={sacarAlerta}/>}
-		{ID === "agregar" && <ModalProfesor identificador={ID} data1={{id: null, carrera:'', jornada:'', user:''}} data2={usuarios} alertaEnviada={sacarAlerta}/>}
+		{ID === "entrar" && <ModalPlanificacion identificador={ID+String(elementoSeleccionado.id)} data1={elementoSeleccionado} usuarios={usuarios} docentes={profesores} cursos={cursos} alertaEnviada={sacarAlerta}/>}
+		{ID === "agregar" && <ModalPlanificacion identificador={ID} data1={{id: null, periodo:'', actividad:'', jornada:'', profesor: null, curso: null}} usuarios={usuarios} docentes={profesores} cursos={cursos} alertaEnviada={sacarAlerta}/>}
 		</div>
 	)
 }

@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Header } from "../../Headers/Header"
-import { getAllUsuarios } from "../../../api/horario.api"
 import { Usuarios } from "./Usuarios/Usuarios"
 import { Profesores } from "./Profesores/Profesores"
 import { Cursos } from "./Cursos/Cursos"
-import { BotonPlanificacion } from "./botonPlanificacion"
+import { Planificaciones } from "./Planificacion/Planificaciones"
 
 export function DB_Management() {
 
@@ -15,6 +14,12 @@ export function DB_Management() {
     setAlerta(estado)
   }
 
+  const recargarTabla = (actual) => {
+    const aux = actual
+    setMostrar(null)
+    setTimeout(() => setMostrar(aux), 500)
+    
+  }
   return(
     <div>
       <Header estado={"cerrar"}/>
@@ -52,7 +57,7 @@ export function DB_Management() {
                 <option disabled>Opcion 5</option>
               </select>
             </div>
-            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} ><i className="fa fa-refresh m-1"></i>Actualizar tabla</div>
+            <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={() => recargarTabla(mostrar)}><i className="fa fa-refresh m-1"></i>Actualizar tabla</div>
             
             <p className="align-self-center ml-5 mr-2 mb-0">Ordenar por: </p>
             <div className="form-check-inline">
@@ -76,7 +81,7 @@ export function DB_Management() {
           {mostrar === "usuarios" && <Usuarios alerta={sacarAlerta}/>}
           {mostrar === "docentes" && <Profesores alerta={sacarAlerta}/>}
           {mostrar === "cursos" && <Cursos alerta={sacarAlerta}/>}
-          {mostrar === "planificacion" && <BotonPlanificacion alerta={sacarAlerta}/>}
+          {mostrar === "planificacion" && <Planificaciones alerta={sacarAlerta}/>}
         </div>
       </div>
     </div>

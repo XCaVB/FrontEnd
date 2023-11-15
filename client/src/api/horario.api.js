@@ -73,7 +73,7 @@ export const getPlanificacion = (id) => planApi.get(`/${id}/`)
 
 export const createPlanificacion = (curso) => planApi.post('/', curso)
 
-export const updatePlanificacion = (id, curso) => planApi.put(`/${id}`, curso)
+export const updatePlanificacion = (id, curso) => planApi.put(`/${id}/`, curso)
 
 export const deletePlanificacion = (id) => planApi.delete(`/${id}`)
 

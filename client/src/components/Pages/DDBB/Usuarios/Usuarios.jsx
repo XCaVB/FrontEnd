@@ -44,7 +44,7 @@ export function Usuarios( {alerta} ) {
             {usuarios && usuarios.map((usuario) => (
                 usuario.username !== "admin" && <tr key={usuario.id} style={{textAlign: 'center'}}>
                 <td>{usuario.id}</td>
-                <td>{usuario.first_name +" "+ usuario.last_name}</td>
+                <td>{usuario.first_name}</td>
                 <td>{usuario.email}</td>
                 <td>{usuario.groups}</td>
                 <td className="btn btn-dark align-content-center|" onClick={ () => manejarModal(usuario) } data-toggle="modal" data-target={`#entrar${usuario.id}`}><i className="fa fa-gear"></i></td>
