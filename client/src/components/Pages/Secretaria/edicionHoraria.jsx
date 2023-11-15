@@ -22,6 +22,9 @@ export function EdicionHoraria() {
     const [cursoJornada, setCursoJornada] = useState({});
     const [cursoActividad, setCursoActividad] = useState({});
 
+    const [modalTitle, setModalTitle] = useState('Modulo Diurno'); // Título inicial del modal
+    
+
     const peticionGet = async () => {
         try {
             const responseUser = await getUsuarios();
@@ -96,11 +99,30 @@ export function EdicionHoraria() {
       };
     const handleJornadaChange = (cursoId, jornada) => {
         setCursoJornada({ ...cursoJornada, [cursoId]: jornada });
+    
+        // Cambiar el título del modal según la jornada seleccionada
+        if (jornada === 'Diurno') {
+            setModalTitle('Modulo Diurno');
+        } else if (jornada === 'Vespertino') {
+            setModalTitle('Modulo Vespertino');
+        }
     };
     const handleActividadChange = (cursoId, actividad) => {
         setCursoActividad({ ...cursoActividad, [cursoId]: actividad });
     };
     
+    const [horarioD, setHorarioD] = useState();
+    const [horarioV, setHorarioV] = useState();
+
+    profesor.forEach((profesorItem) => {
+    if (profesorItem.id === usuarioId) {
+        setHorarioD(JSON.parse(profesorItem.horarioDiurno));
+        setHorarioV(JSON.parse(profesorItem.horarioVespertino));
+        return; // Puedes salir de la función forEach una vez que encuentres una coincidencia
+    }
+    });
+
+
 
     const guardarCambiosAPI = async () => {
         for (const cursoSeleccionado of cursosSeleccionados) {
@@ -200,6 +222,7 @@ export function EdicionHoraria() {
                                     <th>Periodo</th>
                                     <th>Jornada</th>
                                     <th>Actividad</th>
+                                    <th>Modulo</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -271,6 +294,33 @@ export function EdicionHoraria() {
                                             <option value={"Terreno"}>Terreno</option>
                                             <option value={"Apoyo Docente"}>Apoyo Docente</option>
                                         </select>
+                                    </td>
+                                    <td>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Ingreso Horario
+                                    </button>
+                                    <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h5 className="modal-title" id="exampleModalLabel">{modalTitle}</h5>
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    {/* Contenido del modal */}
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" className="btn btn-primary">Save changes</button>
+                                                    <button onClick={()=>(console.log(horarioD))}>d</button>
+                                                    <button onClick={()=>(console.log(horarioV))}>v</button>
+                                                    <button onClick={()=>(console.log(profesor[1].id))}>p</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </td>
                                     <td className="text-center">
                                     <button onClick={() => {

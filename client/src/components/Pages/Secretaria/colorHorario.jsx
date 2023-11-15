@@ -10,7 +10,7 @@ export const ColorHorario = (props) => {
             return 'green'
         }
         if (props.estado === 2){
-            return 'blue'
+            return 'red'
         }
     });
 
