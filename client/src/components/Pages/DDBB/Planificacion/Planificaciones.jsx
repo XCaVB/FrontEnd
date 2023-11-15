@@ -28,7 +28,7 @@ export function Planificaciones ({alerta}) {
 			window.alert("¡Error!")
 		}
 	}, [])
-	
+
 	const [elementoSeleccionado, setElementoSeleccionado] = useState(null)
 
 	const mostrarDepartamento = (fk, modo) => {
@@ -133,13 +133,25 @@ export function Planificaciones ({alerta}) {
 			asignatura: mostrarAsignatura(fila.curso, 1),
 			tipo: fila.actividad
 		}))
+		
+		const headers = [
+			"Campus", "Departamento", "Periodo", "Materia", "Curso", "Jornada", "RUT Docente", "Nombre Docente", "Asignatura", "Tipo"
+		]
 
-		const worksheet = utils.json_to_sheet(filas)
 		const workbook = utils.book_new()
-		utils.book_append_sheet(workbook, worksheet, "Varas 202310")
-		writeFile(workbook, "Programacion_2023.xlsx", {compression: true})
-	}
+		const worksheet = utils.json_to_sheet([])
+		
+		utils.sheet_add_aoa(worksheet, [headers])
+		utils.sheet_add_json(worksheet, filas, {skipHeader: true, origin: -1})
+		utils.book_append_sheet(workbook, worksheet, "VARAS 202310")
 
+		const range = utils.decode_range(worksheet["!ref"] ?? "")
+		const rowCount = range.e.r;
+		const columnCount = range.e.c
+
+		writeFile(workbook, "Programacion_2023.xlsx", {cellStyles: true})
+	}
+	console.log(elementoSeleccionado);
 	return (
 		<div>
 			<div className="table-responsive" style={{height: '60vh'}}>

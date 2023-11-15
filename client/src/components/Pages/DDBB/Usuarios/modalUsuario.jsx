@@ -21,7 +21,7 @@ export function ModalUsuario( {alertaEnviada, identificador, data} ) {
   }
 
   async function enviarActualizar(){
-    const data = {name: nombre, username: username, correo: correo}
+    const data = {username: username, first_name: nombre, email: correo}
     try {
       await updateUsuario(id,data)
       alertaEnviada(1)
