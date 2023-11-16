@@ -90,7 +90,7 @@ export function Planificaciones ({alerta}) {
     profesores.forEach((profesor) => {
      if (profesor.id == fk) {
 			usuarios.forEach((usuario) => {
-				if(usuario.id == profesor.id) {
+				if(usuario.id == profesor.user) {
 					nombre = usuario.first_name
 				}
 			})

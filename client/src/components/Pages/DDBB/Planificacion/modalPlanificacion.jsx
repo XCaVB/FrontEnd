@@ -73,14 +73,16 @@ export function ModalPlanificacion( {alertaEnviada, identificador, data1, docent
               <label htmlFor="docente">Docente asociado</label>
                 <select className="custom-select" id="docente" defaultValue={data1.profesor} onChange={e => {setProfesor(e.target.value)}} required>
                   <option key="-1" disabled>--Elegir un docente--</option>
-                  {usuarios.forEach((usuario) => {
-                    docentes.forEach((profesorD) => {
-                      if (usuario.id == profesorD.user) {
-                        return <option key={usuario.id} value={usuario.user}> {usuario.email} </option>
+                    {usuarios.map((usuario) => {
+                      const profesorEncontrado = docentes.find((profesorD) => profesorD.user === usuario.id);
+                      if (profesorEncontrado) {
+                        return (
+                          <option key={usuario.email} value={usuario.id}>
+                            {usuario.email}
+                          </option>
+                        );
                       }
-                    })
-                  })
-                  }
+                    })}
                 </select>
               <div className="invalid-feedback">Elige un docente.</div>
             </div>
