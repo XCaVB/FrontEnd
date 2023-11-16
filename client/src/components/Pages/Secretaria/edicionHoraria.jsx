@@ -30,6 +30,8 @@ export function EdicionHoraria() {
     const matrizDiurno = horarioBase.horarioDiurnoBase;
     const matrizVespertino = horarioBase.horarioVespertinoBase;
 
+    const [nombreAsignatura, setNombreAsignatura] = useState();
+
     const peticionGet = async () => {
         try {
             const responseUser = await getUsuarios();
@@ -120,9 +122,7 @@ export function EdicionHoraria() {
     
     const [horarioD, setHorarioD] = useState();
     const [horarioV, setHorarioV] = useState();
-    const [moduloDVacio, setModuloDVacio] = useState();
-    const [moduloVVacio, setModuloVVacio] = useState();
-    const [moduloDPlanificacion, setModuloDPlanificacion] = useState();
+    const [moduloDPlanificacion, setModuloDPlanificacion] = useState([]);
     const [moduloVPlanificacion, setModuloVPlanificacion] = useState();
     const [moduloDCompleto, setModuloDCompleto] = useState();
     const [moduloVCompleto, setModuloVCompleto] = useState();
@@ -133,10 +133,38 @@ export function EdicionHoraria() {
     if (profesorEncontrado) {
         setHorarioD(JSON.parse(profesorEncontrado.horarioDiurno));
         setHorarioV(JSON.parse(profesorEncontrado.horarioVespertino));
-        setModuloDVacio(horarioBase.horarioDiurnoBase);
-        setModuloVVacio(horarioBase.horarioVespertinoBase);
     }
     }, [profesor, usuarioId]);
+
+    // Función para cerrar el modal y restablecer los modelos
+    const cerrarModal = () => {
+        // Restablecer modelosVVacios y modelosDVacios
+        setModelosVVacios(horarioBase.horarioVespertinoBase);
+        setModelosDVacios(horarioBase.horarioDiurnoBase);
+    
+        // Actualizar horarioD y horarioV con los nuevos modelos
+        if (jornadita === 'Diurno') {
+            setHorarioD(horarioBase.horarioDiurnoBase);
+        } else if (jornadita === 'Vespertino') {
+            setHorarioV(horarioBase.horarioVespertinoBase);
+        }
+    };
+
+    const guardarEnModuloDPlanificacion = () => {
+        // Copia de modelosDVacios para su almacenamiento en moduloDPlanificacion
+        const nuevosModelosD = { ...modelosDVacios };
+    
+        // Agregar nuevos modelos en el estado `moduloDPlanificacion`
+        setModuloDPlanificacion(nuevosModelosD);
+        if (jornadita === 'Diurno') {
+            setHorarioD(horarioBase.horarioDiurnoBase);
+            console.log(nuevosModelosD)
+            console.log('asd')
+            console.log(modelosDVacios)
+        } else if (jornadita === 'Vespertino') {
+            setHorarioV(horarioBase.horarioVespertinoBase);
+        }
+    };
 
     // Estado para modelos diurnos y vespertinos
     const [modelosDVacios, setModelosDVacios] = useState({});
@@ -156,12 +184,6 @@ export function EdicionHoraria() {
             ...prevModelos,
             [cursoId]: nuevaMatriz
         }));
-    };
-    // Función para cerrar el modal y restablecer los modelos
-    const cerrarModal = () => {
-    // Restablecer modelosVVacios y modelosDVacios
-        setModelosVVacios(horarioBase.horarioVespertinoBase);
-        setModelosDVacios(horarioBase.horarioDiurnoBase);
     };
 
     const ColorHorario = (props) => {
@@ -184,27 +206,39 @@ export function EdicionHoraria() {
                 setColor('red');
             }
         }, [props.estado]);
+
+        const [presionado, setPresionado] = useState(()=>{
+            if (props.asignar > 0){
+                return ''
+            }
+        })
     
         const asignarCursoEnMatriz = () => {
-            if (props.jornadas === 'Vespertino') {
-                const nuevaMatrizVespertino = [...horarioV];
-                nuevaMatrizVespertino[props.fila][props.columna] = props.asignar;
-                asignarModeloVVacio(props.asignar, nuevaMatrizVespertino);
-            } else if (props.jornadas === 'Diurno') {
-                const nuevaMatrizDiurno = [...horarioD];
-                nuevaMatrizDiurno[props.fila][props.columna] = props.asignar;
-                asignarModeloDVacio(props.asignar, nuevaMatrizDiurno);
+            const cursoSeleccionado = cursos.find((curso) => curso.id === props.asignar);
+            if (cursoSeleccionado) {
+              setNombreAsignatura(cursoSeleccionado.nombreAsignatura);
             }
-        };
-    
-        return (
+        
+            if (props.jornadas === 'Vespertino') {
+              const nuevaMatrizVespertino = [...horarioV];
+              nuevaMatrizVespertino[props.fila][props.columna] = props.asignar;
+              asignarModeloVVacio(props.asignar, nuevaMatrizVespertino);
+            } else if (props.jornadas === 'Diurno') {
+              const nuevaMatrizDiurno = [...horarioD];
+              nuevaMatrizDiurno[props.fila][props.columna] = props.asignar;
+              asignarModeloDVacio(props.asignar, nuevaMatrizDiurno);
+            }
+          };
+        
+          return (
             <div
-                className="p-4 w-90 h-90"
-                onClick={asignarCursoEnMatriz}
-                style={{ background: color, cursor: 'pointer' }}
-            ></div>
-        );
-    };
+              className="p-4 w-90 h-90"
+              onClick={asignarCursoEnMatriz}
+              style={{ background: color, cursor: 'pointer' }}
+            >
+            </div>
+          );
+        };
     
 
     const guardarCambiosAPI = async () => {
@@ -227,7 +261,6 @@ export function EdicionHoraria() {
                         periodo: periodoNuevo,
                         actividad: actividad, // Reemplaza esto con el valor correcto
                         jornada: jornada, // Reemplaza esto con el valor correcto
-                        modulos: 'Null',
                         profesor: usuarioId,
                         curso: id,
                     });
@@ -339,7 +372,6 @@ export function EdicionHoraria() {
                                             />
                                             Trimestral
                                         </label>
-                                        <button onClick={()=>(console.log(curso.id))}></button>
                                     </td>
                                     <td className="text-justify">
                                         <label>
@@ -388,9 +420,6 @@ export function EdicionHoraria() {
                                             <div class="modal-content">
                                                 <div className="modal-header">
                                                     <h5 className="modal-title" id="exampleModalLabel">{modalTitle}</h5>
-                                                    <button type="button" className="close" onClick={cerrarModal} aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
                                                 </div>
                                                 <div className="modal-body">
                                                     {/* Contenido del modal */}
@@ -450,7 +479,6 @@ export function EdicionHoraria() {
                                                                 fila={index} columna={5}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
-                    <button onClick={()=>(console.log(curso.id))}></button>
                                                                 </tr>
                                                             ))
                                                         ) : (
@@ -494,7 +522,6 @@ export function EdicionHoraria() {
                                                                 fila={index} columna={5}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
-                                                                <button onClick={()=>(console.log(curso.id))}></button>
                                                                 </tr>
                                                             ))
                                                             )
@@ -509,7 +536,9 @@ export function EdicionHoraria() {
                                                     <button type="button" className="btn btn-secondary" onClick={cerrarModal} data-dismiss="modal">
                                                         Cancelar
                                                     </button>
-                                                    <button type="button" className="btn btn-primary">Guardar</button>
+                                                    <button type="button" className="btn btn-primary" data-dismiss="modal">
+                                                        Guardar
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -528,6 +557,8 @@ export function EdicionHoraria() {
                                             const jornada = cursoJornada[curso.id];
                                             const actividad = cursoActividad[curso.id];
                                             agregarCurso(curso, periodo, jornada, actividad);
+                                            guardarEnModuloDPlanificacion();
+                                            
                                         }
                                     }}>
                                         Agregar
