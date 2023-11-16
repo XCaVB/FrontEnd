@@ -13,7 +13,7 @@ export function RegistrarHorario(){
     const params = useParams()
     
     useEffect(() => async function loadHorario() {
-        console.log(params);
+       
         try {
             const {data} = await getProfesor(params.id);
             setData(data)
@@ -26,10 +26,9 @@ export function RegistrarHorario(){
     }, [])
 
     return(
-        <div>
-        <>
+        <div className='container rounded mt-4 mb-4 p-0 col-10' style={{border: 'solid 3px #A90429'}}>
             {(horarioDiurno !== null) && (horarioVespertino !== null) && <ProfesorPage matrizD={horarioDiurno} matrizV={horarioVespertino} data={data}/>}
-        </>
+
         </div>
     )
 }

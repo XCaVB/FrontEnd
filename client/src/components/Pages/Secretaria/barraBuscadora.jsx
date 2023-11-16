@@ -11,23 +11,20 @@ export function BarraBuscadora(){
     const [usuariosRut, setUsuariosRut]= useState([]);
 
     const [busqueda, setBusqueda]= useState('');
+    const [filtro, setFiltro] = useState("nombre")
     
     const peticionGet = async () => {
         try {
         // Realiza la solicitud para obtener profesores   
             const responseProfe = await getProfesores();
             setProfesor(responseProfe.data);
-            console.log(responseProfe.data);
-
             
             const responseUser = await getUsuarios();
             setUsuarios(responseUser.data);
             setTablaUsuarios(responseUser.data);
-            console.log(responseUser.data);
 
             const responseUserRut = await getUsuariosRut();
             setUsuariosRut(responseUserRut.data)
-            console.log(responseUserRut.data);
 
         } catch (error) {
             console.log(error);
@@ -41,12 +38,25 @@ export function BarraBuscadora(){
       }
 
     const filtrar=(terminoBusqueda)=>{
-        var resultadosBusqueda=tablaUsuarios.filter((elemento)=>{
-            if(elemento.username.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-            ){
-            return elemento;
-            }
+      let resultadosBusqueda = null
+      if (filtro == "nombre") {
+        resultadosBusqueda=tablaUsuarios.filter((elemento)=>{
+          if(elemento.first_name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())) {
+            return elemento
+            setUsuarios(resultadosBusqueda);
+          }   
         });
+      }
+
+      /*if (filtro == "rut") {
+        resultadosBusqueda = usuariosRut.filter((elemento)=>{
+          if(elemento.rut.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())) {
+            return elemento
+            setUsuariosRut(resultadosBusqueda)
+          }  
+        });
+      }*/ //AUN NO FUNCIONA, DEJENLO MORIR NOMAS
+
         setUsuarios(resultadosBusqueda);
     }
 
@@ -55,20 +65,26 @@ export function BarraBuscadora(){
     },[])
 
     return(
-        <div>
-            <hr />
-          <div className="containerInput">
-            <input
-              className="form-control inputBuscar text-center"
-              value={busqueda}
-              placeholder="Búsqueda por Nombre"
-              onChange={handleChange}
-            />
+        <div className="container rounded mt-4 shadow col-10" style={{border: 'solid 3px #A90429'}}>
+          <div className="row justify-content-center p-2 mb-3" style={{background:'#03102C', color:'white', fontSize: 22}}>
+            Planificar Horario a Docentes
           </div>
-          <div className="table-responsive">
-            <table className="table table-sm table-bordered">
-              <thead>
-                <tr>
+  
+            <div className="row m-2">
+              <div className="input-group-prepend">
+                <select className="form-control" id="sel1" style={{background: '#A90429', color:'white'}} onChange={e => setFiltro(e.target.value)}>
+                <option value={"nombre"}>Nombre</option>
+                {/*<option value={"rut"}>RUT</option>
+                <option value={"carrera"}>Carrera</option>*/}
+              </select>
+              </div>
+              <input className="form-control inputBuscar text-center flex-grow-1" value={busqueda} placeholder={`Buscar por ${filtro}`} onChange={handleChange}/>
+            </div>
+
+          <div className="table-responsive" style={{height:'70vh'}}>
+            <table className="table table-sm table-striped table-bordered table-hover">
+              <thead className="sticky-top">
+                <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Rut</th>
@@ -100,7 +116,7 @@ export function BarraBuscadora(){
                     <tr key={profesor.id}>
                       <td>{profesor.id}</td>
                       <td>
-                        <Link to={`/Administrativos/buscar-profesor/${profesor.id}`}>
+                        <Link to={`/Administrativos/buscar-profesor/${profesor.id}`} style={{color: 'black', fontWeight: 'bold'}}>
                           {usuarioCorrespondiente ? usuarioCorrespondiente.first_name : 'N/A'}
                         </Link>
                       </td>

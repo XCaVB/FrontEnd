@@ -74,17 +74,13 @@ export function ModalPlanificacion( {alertaEnviada, identificador, data1, docent
                 <select className="custom-select" id="docente" defaultValue={data1.profesor} onChange={e => {setProfesor(e.target.value)}} required>
                   <option key="-1" disabled>--Elegir un docente--</option>
                   {usuarios.forEach((usuario) => {
-										let valor = ''
-                    if (usuario.id != 1) {
-											docentes.forEach((profesorD) => {
-												if (usuario.id == profesorD.user) {
-													valor = profesorD.id
-                          
-												}
-                        return <option key={usuario.id} value={profesorD.id}> {usuario.email} </option>
-											})
-                    }
-                  })}
+                    docentes.forEach((profesorD) => {
+                      if (usuario.id == profesorD.user) {
+                        return <option key={usuario.id} value={usuario.user}> {usuario.email} </option>
+                      }
+                    })
+                  })
+                  }
                 </select>
               <div className="invalid-feedback">Elige un docente.</div>
             </div>

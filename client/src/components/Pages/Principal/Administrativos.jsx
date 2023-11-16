@@ -38,7 +38,7 @@ export function Administrativos(){
                     />
                     {nombre.length === 0|| contraseña.length === 0
                         ?<button className="btn" style={{background:'#A90429', color:'white'}}>Iniciar sesión</button>
-                        :<Link className="btn" style={{background: '#A90429', color:'white'}} to={'/Administrativos/buscar-profesor'}>Iniciar sesión</Link>}
+                        :<Link className="btn" style={{background: '#A90429', color:'white'}} to={'/administrativos/buscar-profesor'}>Iniciar sesión</Link>}
                 </form>
                 {error && <p className="bg-white text-danger m-0">Todos los campos son obligatorios</p>}
             </div>

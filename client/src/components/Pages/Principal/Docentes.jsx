@@ -21,8 +21,8 @@ export function Docentes(){
         }
     }
 
+    {/* Proceso de Login */}
     const navigate = useNavigate();
-
     async function verificaUsuario(){
         try {
             const response = await getUsuarioCorreo(correo);
