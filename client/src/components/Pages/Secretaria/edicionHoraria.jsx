@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
 import "../../../css/Pages.css";
+import horario from "../../../data/horarioCalendario"
+import horarioBase from '../../../data/horarioBase';
 import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad} from '../../../api/horario.api';
 
 export function EdicionHoraria() {
+    const armar_horario = horario
     const { id } = useParams();
     const usuarioId = parseInt(id);
     const [usuarios, setUsuarios] = useState([]);
@@ -22,8 +25,10 @@ export function EdicionHoraria() {
     const [cursoJornada, setCursoJornada] = useState({});
     const [cursoActividad, setCursoActividad] = useState({});
 
-    const [modalTitle, setModalTitle] = useState('Modulo Diurno'); // Título inicial del modal
-    
+    const [jornadita, setJornadita] = useState();
+    const [modalTitle, setModalTitle] = useState('Debes seleccionar una Jornada'); // Título inicial del modal
+    const matrizDiurno = horarioBase.horarioDiurnoBase;
+    const matrizVespertino = horarioBase.horarioVespertinoBase;
 
     const peticionGet = async () => {
         try {
@@ -103,8 +108,10 @@ export function EdicionHoraria() {
         // Cambiar el título del modal según la jornada seleccionada
         if (jornada === 'Diurno') {
             setModalTitle('Modulo Diurno');
+            setJornadita('Diurno');
         } else if (jornada === 'Vespertino') {
             setModalTitle('Modulo Vespertino');
+            setJornadita('Vespertino');
         }
     };
     const handleActividadChange = (cursoId, actividad) => {
@@ -113,16 +120,92 @@ export function EdicionHoraria() {
     
     const [horarioD, setHorarioD] = useState();
     const [horarioV, setHorarioV] = useState();
+    const [moduloDVacio, setModuloDVacio] = useState();
+    const [moduloVVacio, setModuloVVacio] = useState();
+    const [moduloDPlanificacion, setModuloDPlanificacion] = useState();
+    const [moduloVPlanificacion, setModuloVPlanificacion] = useState();
+    const [moduloDCompleto, setModuloDCompleto] = useState();
+    const [moduloVCompleto, setModuloVCompleto] = useState();
 
-    profesor.forEach((profesorItem) => {
-    if (profesorItem.id === usuarioId) {
-        setHorarioD(JSON.parse(profesorItem.horarioDiurno));
-        setHorarioV(JSON.parse(profesorItem.horarioVespertino));
-        return; // Puedes salir de la función forEach una vez que encuentres una coincidencia
+    useEffect(() => {
+    const profesorEncontrado = profesor.find((profesorItem) => profesorItem.id === usuarioId);
+
+    if (profesorEncontrado) {
+        setHorarioD(JSON.parse(profesorEncontrado.horarioDiurno));
+        setHorarioV(JSON.parse(profesorEncontrado.horarioVespertino));
+        setModuloDVacio(horarioBase.horarioDiurnoBase);
+        setModuloVVacio(horarioBase.horarioVespertinoBase);
     }
-    });
+    }, [profesor, usuarioId]);
 
+    // Estado para modelos diurnos y vespertinos
+    const [modelosDVacios, setModelosDVacios] = useState({});
+    const [modelosVVacios, setModelosVVacios] = useState({});
 
+    // Función para asignar modelo diurno
+    const asignarModeloDVacio = (cursoId, nuevaMatriz) => {
+        setModelosDVacios(prevModelos => ({
+            ...prevModelos,
+            [cursoId]: nuevaMatriz
+        }));
+    };
+
+    // Función para asignar modelo vespertino
+    const asignarModeloVVacio = (cursoId, nuevaMatriz) => {
+        setModelosVVacios(prevModelos => ({
+            ...prevModelos,
+            [cursoId]: nuevaMatriz
+        }));
+    };
+    // Función para cerrar el modal y restablecer los modelos
+    const cerrarModal = () => {
+    // Restablecer modelosVVacios y modelosDVacios
+        setModelosVVacios(horarioBase.horarioVespertinoBase);
+        setModelosDVacios(horarioBase.horarioDiurnoBase);
+    };
+
+    const ColorHorario = (props) => {
+        const [color, setColor] = useState(() => {
+            if (props.estado === 0) {
+                return 'white';
+            } else if (props.estado === 1) {
+                return 'green';
+            } else if (props.estado === 2) {
+                return 'red';
+            }
+        });
+    
+        useEffect(() => {
+            if (props.estado === 0) {
+                setColor('white');
+            } else if (props.estado === 1) {
+                setColor('green');
+            } else if (props.estado === 2) {
+                setColor('red');
+            }
+        }, [props.estado]);
+    
+        const asignarCursoEnMatriz = () => {
+            if (props.jornadas === 'Vespertino') {
+                const nuevaMatrizVespertino = [...horarioV];
+                nuevaMatrizVespertino[props.fila][props.columna] = props.asignar;
+                asignarModeloVVacio(props.asignar, nuevaMatrizVespertino);
+            } else if (props.jornadas === 'Diurno') {
+                const nuevaMatrizDiurno = [...horarioD];
+                nuevaMatrizDiurno[props.fila][props.columna] = props.asignar;
+                asignarModeloDVacio(props.asignar, nuevaMatrizDiurno);
+            }
+        };
+    
+        return (
+            <div
+                className="p-4 w-90 h-90"
+                onClick={asignarCursoEnMatriz}
+                style={{ background: color, cursor: 'pointer' }}
+            ></div>
+        );
+    };
+    
 
     const guardarCambiosAPI = async () => {
         for (const cursoSeleccionado of cursosSeleccionados) {
@@ -256,6 +339,7 @@ export function EdicionHoraria() {
                                             />
                                             Trimestral
                                         </label>
+                                        <button onClick={()=>(console.log(curso.id))}></button>
                                     </td>
                                     <td className="text-justify">
                                         <label>
@@ -296,27 +380,136 @@ export function EdicionHoraria() {
                                         </select>
                                     </td>
                                     <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target={`.modal-${curso.id}`}>
                                     Ingreso Horario
                                     </button>
-                                    <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div className="modal-dialog" role="document">
-                                            <div className="modal-content">
+                                    <div class={`modal fade modal-${curso.id}`} tabindex="-1" role="dialog" aria-labelledby={`modalLabel-${curso.id}`} aria-hidden="true">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
                                                 <div className="modal-header">
                                                     <h5 className="modal-title" id="exampleModalLabel">{modalTitle}</h5>
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                    <button type="button" className="close" onClick={cerrarModal} aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div className="modal-body">
                                                     {/* Contenido del modal */}
+                                                    <div id="collapseOne" className="collapse show" data-parent="#accordion">
+                                                    <div className="card-body">
+                                                    <div className="container p-0 col-10" style={{border: '10px solid #03102C', borderCollapse: 'collapse', height: '60vh', overflowY: 'auto'}}>
+                                                        <table className="table-fixed table table-bordered">
+                                                        <thead className="sticky-top">
+                                                            <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
+                                                            <th scope="col" style={{ width: '16%' }}>Hora</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Lunes</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Martes</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Miércoles</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Jueves</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Viernes</th>
+                                                            <th scope="col" style={{ width: '14%' }}>Sabado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {jornadita === 'Vespertino' ? (
+                                                            armar_horario.horarioV.map((fila, index) => (
+                                                                <tr key={index}>
+                                                                <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][0]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={0}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][1]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={1}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][2]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={2}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][3]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={3}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][4]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={4}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][5]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={5}
+                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                </td>
+                    <button onClick={()=>(console.log(curso.id))}></button>
+                                                                </tr>
+                                                            ))
+                                                        ) : (
+                                                            jornadita === 'Diurno' && (
+                                                            armar_horario.horarioD.map((fila, index) => (
+                                                                <tr key={index}>
+                                                                <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][0]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={0}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][1]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={1}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][2]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={2}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][3]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={3}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][4]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={4}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][5]}
+                                                                asignar={curso.id}
+                                                                jornadas={jornadita}
+                                                                fila={index} columna={5}
+                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                </td>
+                                                                <button onClick={()=>(console.log(curso.id))}></button>
+                                                                </tr>
+                                                            ))
+                                                            )
+                                                        )}
+                                                        </tbody>
+                                                        </table>
+                                                    </div>
+                                                    </div>
+                                                </div>
                                                 </div>
                                                 <div className="modal-footer">
-                                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" className="btn btn-primary">Save changes</button>
-                                                    <button onClick={()=>(console.log(horarioD))}>d</button>
-                                                    <button onClick={()=>(console.log(horarioV))}>v</button>
-                                                    <button onClick={()=>(console.log(profesor[1].id))}>p</button>
+                                                    <button type="button" className="btn btn-secondary" onClick={cerrarModal} data-dismiss="modal">
+                                                        Cancelar
+                                                    </button>
+                                                    <button type="button" className="btn btn-primary">Guardar</button>
                                                 </div>
                                             </div>
                                         </div>

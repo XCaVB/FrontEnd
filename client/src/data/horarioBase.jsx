@@ -13,7 +13,7 @@ const horarioDiurnoBase =[[0,0,0,0,0,0],
                         [0,0,0,0,0,0],
                         [0,0,0,0,0,0]]
 
-const horarioVespertinoBase = [[0,0,0,0,0,0],
+const horarioVespertinoBase =[[0,0,0,0,0,0],
                             [0,0,0,0,0,0],
                             [0,0,0,0,0,0],
                             [0,0,0,0,0,0],
