@@ -69,19 +69,15 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     fechaHora = fechaHora.split("T")
     fechaHora[1] = fechaHora[1].slice(0,5)
 
-    const auditoria = {
-      evento: "Modificó su horario",
-      fechaHora: fechaHora,
-      user: info.state.userInfo.id
+    const auditoria = {evento: "MODIFICÓ", objetivo: "HORARIO", fechaHora: fechaHora, user: info.state.userInfo.id
     }
     
     try {
       await updateProfesor(params.id, nuevosDatos)
-      //await createAuditoria()
+      await createAuditoria(auditoria)
       setAlerta(1)
     } catch {
       setAlerta(2)
-      console.log("F");
     }
   }
 
