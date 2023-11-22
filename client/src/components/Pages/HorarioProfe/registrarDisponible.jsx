@@ -48,8 +48,8 @@ export function RegistrarDisponible(){
 					{modificar && <button className='btn m-2' onClick={() => manejarModificacion(modificar)} style={{background: '#A90429', color: 'white'}}>Modificar horario</button>}
 					{!modificar && <button className='btn btn-outline-danger m-2' onClick={() => manejarModificacion(modificar)} style={{background:'gray', color: 'white'}}>Modificar horario</button>}
 					<div className='container rounded p-0' style={{background: 'white', height: '30%', width: '90%', border: 'solid 2px #A90429', marginTop: '30vh'}}>
-						<div className='h3 text-center ' style={{background: '#A90429', color: 'white'}}>Avisos</div>
-						<p className='p'> ¡Atención! Recuerda que la fecha límite para inscribír tus horas disponibles es [FECHA]. Despues de esa fecha no será posible realizar más cambios.</p>
+						<div className='h3 text-center  ' style={{background: '#A90429', color: 'white'}}>Avisos</div>
+						<p className='p p-1 text-justify'> ¡Atención! Recuerda que la fecha límite para inscribír tus horas disponibles es [FECHA]. Despues de esa fecha no será posible realizar más cambios.</p>
 					</div>
 				</div>
 				<div className='d-flex flex-column col-10 p-0 m-0'>

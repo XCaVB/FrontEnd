@@ -6,6 +6,13 @@ import axios from 'axios'
 //Disponibilidad: profesor
 //Auditoria: auditoria, admin
 
+//Hora-Chile//
+const timeApi = axios.create({
+    baseURL: 'https://worldtimeapi.org/api/timezone/America/Santiago',
+})
+
+export const getHoraChile = () => timeApi.get('/')
+
 //---PROFESOR---//
 const profesoresApi = axios.create({
     baseURL: 'http://localhost:8000/disponibilidad/profesor/'
@@ -76,6 +83,20 @@ export const createPlanificacion = (curso) => planApi.post('/', curso)
 export const updatePlanificacion = (id, curso) => planApi.put(`/${id}/`, curso)
 
 export const deletePlanificacion = (id) => planApi.delete(`/${id}`)
+
+//---AUDITORIA---//
+
+const auditoriaApi = axios.create({
+    baseURL: 'http://localhost:8000/auditoria/auditoria/'
+})
+
+export const getAllAuditorias = () => auditoriaApi.get('/')
+
+export const getAuditoria = (id) => auditoriaApi.get(`/${id}/`)
+
+export const createAuditoria = (auditoria) => auditoriaApi.post('/', auditoria)
+
+export const deleteAuditoria = (id) => auditoriaApi.delete(`/${id}`)
 
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({

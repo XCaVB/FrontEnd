@@ -1,10 +1,10 @@
-import { updateProfesor } from '../../../api/horario.api'
+import { updateProfesor, createAuditoria, getHoraChile } from '../../../api/horario.api'
 import { useState } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
 import "../../../css/styles.css"
 import exito from "../../../images/exito.gif"
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export function Horario({matrizD, matrizV, data, modificar}) {
 
@@ -48,12 +48,13 @@ export function Horario({matrizD, matrizV, data, modificar}) {
   }
 
   const params = useParams();
+  let info = useLocation();
 
   {/* Preparar matrices y enviarlas a la base de datos */}
   async function convertirAString(listaDeListas1, listaDeListas2) {
     let resultado1 = JSON.stringify(listaDeListas1);
     let resultado2 = JSON.stringify(listaDeListas2);
-
+    
     const nuevosDatos = {
       carrera: data.carrera,
       departamento: data.departamento,
@@ -61,10 +62,22 @@ export function Horario({matrizD, matrizV, data, modificar}) {
       horarioDiurno: resultado1,
       horarioVespertino: resultado2,
       user: data.user
-  }
+    }
 
+    //Guardar fecha y hora actual para notificaciones
+    let fechaHora = (await getHoraChile()).data.datetime
+    fechaHora = fechaHora.split("T")
+    fechaHora[1] = fechaHora[1].slice(0,5)
+
+    const auditoria = {
+      evento: "Modificó su horario",
+      fechaHora: fechaHora,
+      user: info.state.userInfo.id
+    }
+    
     try {
       await updateProfesor(params.id, nuevosDatos)
+      //await createAuditoria()
       setAlerta(1)
     } catch {
       setAlerta(2)
