@@ -206,12 +206,6 @@ export function EdicionHoraria() {
                 setColor('red');
             }
         }, [props.estado]);
-
-        const [presionado, setPresionado] = useState(()=>{
-            if (props.asignar > 0){
-                return ''
-            }
-        })
     
         const asignarCursoEnMatriz = () => {
             const cursoSeleccionado = cursos.find((curso) => curso.id === props.asignar);
@@ -236,6 +230,7 @@ export function EdicionHoraria() {
               onClick={asignarCursoEnMatriz}
               style={{ background: color, cursor: 'pointer' }}
             >
+                {props.nombreA === props.asignar && <p>{cursos[props.asignar-1].nombreAsignatura}</p>}
             </div>
           );
         };
@@ -444,36 +439,42 @@ export function EdicionHoraria() {
                                                                 <tr key={index}>
                                                                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][0]}
+                                                                nombreA={horarioV[index][0]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][1]}
+                                                                nombreA={horarioV[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][2]}
+                                                                nombreA={horarioV[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][3]}
+                                                                nombreA={horarioV[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][4]}
+                                                                nombreA={horarioV[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
                                                                 modulo={modelosVVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][5]}
+                                                                nombreA={horarioV[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
@@ -487,36 +488,42 @@ export function EdicionHoraria() {
                                                                 <tr key={index}>
                                                                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][0]}
+                                                                nombreA={horarioD[index][0]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][1]}
+                                                                nombreA={horarioD[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][2]}
+                                                                nombreA={horarioD[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][3]}
+                                                                nombreA={horarioD[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][4]}
+                                                                nombreA={horarioD[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
                                                                 modulo={modelosDVacios[curso.id]}/>
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][5]}
+                                                                nombreA={horarioD[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
