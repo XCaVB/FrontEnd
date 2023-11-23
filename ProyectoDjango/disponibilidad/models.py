@@ -7,9 +7,9 @@ vespertino = "[[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,
 # Create your models here.
 class Profesor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    carrera = models.CharField(max_length=45)
-    departamento = models.CharField(max_length=45)
-    jornada = models.CharField(max_length=45)
+    carrera = models.CharField(max_length=45, default="-")
+    departamento = models.CharField(max_length=45, default="-")
+    jornada = models.CharField(max_length=45, default="-")
     #false = 0, true = 1
     periodoSemestral = models.BooleanField(default=1)
     #false = 0, true = 1

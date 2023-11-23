@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             return l_lista
         except AttributeError:
             return None
-        
+
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
