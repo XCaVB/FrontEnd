@@ -4,6 +4,7 @@ import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
 import "../../../css/styles.css"
 import exito from "../../../images/exito.gif"
+import error from "../../../images/error.gif"
 import { useLocation, useParams } from 'react-router-dom';
 
 export function Horario({matrizD, matrizV, data, modificar}) {
@@ -69,13 +70,15 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     fechaHora = fechaHora.split("T")
     fechaHora[1] = fechaHora[1].slice(0,5)
 
-    const auditoria = {evento: "MODIFICÓ", objetivo: "HORARIO", fechaHora: fechaHora, user: info.state.userInfo.id
-    }
+    const auditoria = {evento: "MODIFICÓ", objetivo: "HORARIO", fechaHora: fechaHora.toString(), user: info.state.userInfo.id
+  }
     
     try {
       await updateProfesor(params.id, nuevosDatos)
-      await createAuditoria(auditoria)
       setAlerta(1)
+      reRender()
+      //await createAuditoria(auditoria)
+      
     } catch {
       setAlerta(2)
     }
@@ -90,14 +93,45 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     }
   }
 
-  $(document).ready(function() {
-		$('#algo').on('hidden.bs.modal', function() {
-		  window.location.reload()
-		});
-	  });
+  $(document).ready(function(){
+    $('.toast').toast({delay:3000})
+    $('.toast').toast('show');
+    if (alerta == 1){
+      $('.toast').on('hidden.bs.toast', function(){
+        window.location.reload()
+      });
+    } else {
+      $('.toast').on('hidden.bs.toast', function(){
+        setAlerta(0)
+      });
+    }
+  });
   
   return (
     <div>
+
+      {/*EXITO*/ alerta == 1 && 
+          <div className="toast shadow" style={{position: 'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)', zIndex:999999}}>
+            <div className="toast-header bg-success text-light justify-content-center">
+              ¡Todo correcto!
+            </div>
+            <div className="toast-body bg-light">
+              <img className="img-fluid" src={exito}/>
+              <p className='h2 text-success text-center font-weight-bold'>¡Disponibilidad actualizada con éxito!</p>
+            </div>
+          </div>}
+        
+        {/*ERROR*/ alerta == 2 && 
+          <div className="toast shadow" style={{position: 'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)', zIndex:999999}}>
+          <div className="toast-header bg-danger text-light">
+            ¡Error!
+          </div>
+          <div className="toast-body bg-light">
+            <img className="img-fluid" src={error}/>
+            <p className='h2 text-danger text-center font-weight-bold'>Ha ocurrido un problema, intentalo de nuevo</p>
+          </div>
+        </div>}
+
       <div className="container-flex">
       <h2 className='h2 text-center' style={{background: '#03102C', color:'white'}}>Horario de Clases</h2>
       <div className="row justify-content-center m-0">
@@ -207,22 +241,6 @@ export function Horario({matrizD, matrizV, data, modificar}) {
           {modificar && <button className="btn rounded border" onClick={() => convertirAString(matrizDiurno, matrizVespertino)} style={{background:'black', color:'white'}} data-toggle="modal" data-target="#exito">Aplicar Cambios</button>}
         </div>
       </div>
-      {alerta == 1 && 
-					<div className="modal" id="exito">
-						<div className="modal-dialog modal-dialog-centered">
-							<div className="modal-content rounded shadow">
-
-							<div className="modal-body">
-								<img className="img-fluid ml-5" src={exito}/>
-								<p className='h2 text-success text-center font-weight-bold'>¡Disponibilidad actualizada con éxito!</p>
-							</div>
-
-							<div className="modal-footer bg-success">
-								<button type="button" className="btn text-light" data-dismiss="modal">Cerrar</button>
-							</div>
-							</div>
-						</div>
-					</div>}
     </div>
     );
   }
