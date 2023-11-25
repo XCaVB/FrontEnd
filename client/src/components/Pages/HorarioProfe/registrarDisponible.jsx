@@ -1,4 +1,4 @@
-import { Header } from '../../Headers/Header'
+import { Header } from '../../Headers/HeaderHome'
 import { Horario } from "./Horario"
 import { getProfesor } from '../../../api/horario.api'
 import horarioBase from "../../../data/horarioBase"

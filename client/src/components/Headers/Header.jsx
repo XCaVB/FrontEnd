@@ -2,11 +2,13 @@ import logo from "../../images/logo.png"
 import "../../css/styles.css"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
+import { EventosPorFecha } from "./EventosPorFecha";
 import { getAllAuditorias } from "../../api/horario.api";
 
 export function Header( {estado} ){
 
 	const [cacheNotif, setCacheNotif] = useState([])
+	
 
 	useEffect(() => async function(){
 		const {data} = await getAllAuditorias()
@@ -25,10 +27,36 @@ export function Header( {estado} ){
 		$('[data-toggle="tooltip"]').tooltip();
 	});
 
+	const [eventosAgrupadosArray, setEventosAgrupadosArray] = useState([])
 
-	const flecha = (abierto) => {
-		//if(abierto)?<i className=""></i>
-	}
+	useEffect(function agruparFecha() {
+		// Crear un objeto para almacenar los eventos agrupados por fecha
+			const eventosAgrupados = {};
+			// Iterar sobre cada evento y agruparlos por fecha
+			cacheNotif.forEach((evento) => {
+			const fecha = evento.fechaHora.split(",")[0]; // Obtener la fecha sin la hora
+			if (!eventosAgrupados[fecha]) {
+				eventosAgrupados[fecha] = [];
+			}
+			eventosAgrupados[fecha].push(evento);
+			});
+
+			// Convertir el objeto a un arreglo de objetos
+			const eventosAgrupadosArrayX = Object.entries(eventosAgrupados).map(([fecha, eventos]) => ({
+			fecha,
+			eventos
+			}));
+
+
+			// Ordenar en forma descendente
+			const eventosAgrupadosArrayOrdenado = eventosAgrupadosArrayX.sort((a, b) => {
+				// Comparar las fechas en formato YYYY-MM-DD
+				return new Date(b.fecha) - new Date(a.fecha);
+			  });
+			  
+			setEventosAgrupadosArray(eventosAgrupadosArrayOrdenado)
+			console.log(eventosAgrupadosArrayOrdenado);
+		}, [cacheNotif])
 
 	return(
 		<header className="header shadow" style={{padding: 9}}>
@@ -48,7 +76,6 @@ export function Header( {estado} ){
 				</div>
 				<div className="col-1 p-0">
 					{/*Boton VOLVER o CERRAR SESION*/}
-					{estado === "salir" && <Link className="btn" style={{background: 'gray', color:'white'}} to={"/"}>Volver</Link>}
 					{estado === "cerrar" && <Link className="btn" style={{background: '#A90429', color:'white'}} to={"/"}>Cerrar sesión</Link>}
 				</div>
 			</div>
@@ -64,12 +91,14 @@ export function Header( {estado} ){
 						</div>
 
 						<div className="modal-body">
-							<div className="text-dark">{cacheNotif.map((cambio) => (
+							{/*<div className="text-dark">{cacheNotif.map((cambio) => (
 								<div key={cambio.id}>
-									<button className="btn d-flex" data-toggle='collapse' data-target={`#cambio${cambio.id}`} > {cambio.fechaHora.split(",")[0]}{flecha()} </button>
+									<button className="btn d-flex" data-toggle='collapse' data-target={`#cambio${cambio.id}`} onClick={() => flecha(abierto)}> {cambio.fechaHora.split(",")[0]} {} </button>
 									<div id={`cambio${cambio.id}`} className="collapse">{`${cambio.fechaHora.split(",")[1]}: texto de ejemplo`}<hr/></div>
 								</div>
 							))}</div>
+							<button className="btn btn-warnig" onClick={() => console.log(eventosAgrupados)}> KI</button>*/}
+							<EventosPorFecha eventosAgrupadosArray={eventosAgrupadosArray}/>
 						</div>
 					</div>
 				</div>

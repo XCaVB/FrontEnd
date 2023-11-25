@@ -4,7 +4,7 @@ import { getProfesorUser, getUsuarioCorreo } from "../../../api/horario.api"
 import '../../../css/ingreso.css'
 import fondo from "../../../images/fondo2.jpg"
 import { Link } from "react-router-dom"
-import { Header } from "../../Headers/Header"
+import { Header } from "../../Headers/HeaderHome"
 
 export function Docentes(){
     const [correo, setNombre] = useState('')
@@ -42,9 +42,9 @@ export function Docentes(){
 
     return(
         <div style={{height:'100vh',backgroundImage: `url(${fondo})`, backgroundSize: 'cover'}}>
-            <Header estado={"salir"}/>
+            <Header/>
             <div className="container text-white text-center rounded shadow p-0" onSubmit={handleSubmit} style={{border: 'solid 3px #03102C', marginTop:'25vh', width: '420px'}}>
-            <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>Ingresa tus credenciales</h4>  
+            <h4 style={{paddingBottom: '5px', margin: 0, background: '#03102C'}}>{<i className="fa fa-mail-reply" style={{cursor:'pointer'}} onClick={() => navigate('../')}></i>} Ingresa tus credenciales</h4>  
                 <form className="ingreso" onSubmit={handleSubmit} style={{justifyContent: "center", padding: 10}}>
                     <input 
                         id="correo"
