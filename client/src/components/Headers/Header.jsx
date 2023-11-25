@@ -55,7 +55,6 @@ export function Header( {estado} ){
 			  });
 			  
 			setEventosAgrupadosArray(eventosAgrupadosArrayOrdenado)
-			console.log(eventosAgrupadosArrayOrdenado);
 		}, [cacheNotif])
 
 	return(

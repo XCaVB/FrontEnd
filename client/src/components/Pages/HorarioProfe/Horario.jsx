@@ -71,13 +71,14 @@ export function Horario({matrizD, matrizV, data, modificar}) {
     fechaHora[1] = fechaHora[1].slice(0,5)
 
     const auditoria = {evento: "MODIFICÓ", objetivo: "HORARIO", fechaHora: fechaHora.toString(), user: info.state.userInfo.id
+
   }
     
     try {
       await updateProfesor(params.id, nuevosDatos)
       setAlerta(1)
       reRender()
-      //await createAuditoria(auditoria)
+      await createAuditoria(auditoria)
       
     } catch {
       setAlerta(2)

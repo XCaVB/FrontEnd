@@ -8,10 +8,18 @@ import axios from 'axios'
 
 //Hora-Chile//
 const timeApi = axios.create({
-    baseURL: 'https://worldtimeapi.org/api/timezone/America/Santiago',
+    baseURL: 'https://worldtimeapi.org/api/timezone/America/Santiago'
 })
 
 export const getHoraChile = () => timeApi.get('/')
+
+//Login//
+const loginApi = axios.create({
+    baseURL: 'http://localhost:8000/'
+})
+
+export const loginDocente = (data) => loginApi.post('/logindocente/', data)
+export const loginAdministrativo = (data) => loginApi.post('/loginsecretario/', data)
 
 //---PROFESOR---//
 const profesoresApi = axios.create({
