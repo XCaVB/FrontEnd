@@ -16,8 +16,6 @@ export function EdicionHoraria() {
     const [cursos, setCursos] = useState([]);
     const [cursosDisponibles, setCursosDisponibles] = useState([]);
     const [cursosSeleccionados, setCursosSeleccionados] = useState([]);
-    const [cursosToShow, setCursosToShow] = useState(10);
-    const cursosToShowIncrement = 10;
     const [cursosOriginales, setCursosOriginales] = useState([]); // Mantenemos una copia de los cursos originales
 
     const [planificacionAcad, setPlanificacionAcad] = useState([]);
@@ -153,18 +151,48 @@ export function EdicionHoraria() {
     const guardarEnModuloDPlanificacion = () => {
         // Copia de modelosDVacios para su almacenamiento en moduloDPlanificacion
         const nuevosModelosD = { ...modelosDVacios };
+        const nuevosModelosV = { ...modelosVVacios };
     
         // Agregar nuevos modelos en el estado `moduloDPlanificacion`
         setModuloDPlanificacion(nuevosModelosD);
+        setModuloVPlanificacion(nuevosModelosV);
         if (jornadita === 'Diurno') {
             setHorarioD(horarioBase.horarioDiurnoBase);
-            console.log(nuevosModelosD)
-            console.log('asd')
-            console.log(modelosDVacios)
         } else if (jornadita === 'Vespertino') {
             setHorarioV(horarioBase.horarioVespertinoBase);
         }
     };
+
+  // Función para unir los arreglos
+  const unirArreglos = () => {
+    const arreglosD = Object.values(moduloDPlanificacion);
+    if (arreglosD.length === 0) {
+        console.log('No hay arreglos dentro de moduloDPlanificacion.');
+        return;
+    }
+
+    let horarioSobrePuesto = false; // Bandera para verificar si hay horario que se sobreponen
+
+    const resultadoD = arreglosD.reduce((acc, current) => {
+        return acc.map((row, rowIndex) =>
+            row.map((item, colIndex) => {
+                if (item !== 0 && current[rowIndex][colIndex] !== 0) {
+                    horarioSobrePuesto = true;
+                    alert('¡Hay un horario que se sobre pone!');
+                    return item; // Se encontró un tope de horario, se interrumpe la operación
+                }
+                return item + current[rowIndex][colIndex];
+            })
+        );
+    });
+    console.log(resultadoD)
+    if (!horarioSobrePuesto) {
+        setModuloDCompleto(resultadoD);
+    }
+};
+  
+  
+
 
     // Estado para modelos diurnos y vespertinos
     const [modelosDVacios, setModelosDVacios] = useState({});
@@ -210,19 +238,31 @@ export function EdicionHoraria() {
         const asignarCursoEnMatriz = () => {
             const cursoSeleccionado = cursos.find((curso) => curso.id === props.asignar);
             if (cursoSeleccionado) {
-              setNombreAsignatura(cursoSeleccionado.nombreAsignatura);
-            }
-        
-            if (props.jornadas === 'Vespertino') {
-              const nuevaMatrizVespertino = [...horarioV];
-              nuevaMatrizVespertino[props.fila][props.columna] = props.asignar;
-              asignarModeloVVacio(props.asignar, nuevaMatrizVespertino);
-            } else if (props.jornadas === 'Diurno') {
-              const nuevaMatrizDiurno = [...horarioD];
-              nuevaMatrizDiurno[props.fila][props.columna] = props.asignar;
-              asignarModeloDVacio(props.asignar, nuevaMatrizDiurno);
+              let nuevoHorarioV = [...horarioV];
+              let nuevoHorarioD = [...horarioD];
+          
+              if (props.jornadas === 'Vespertino') {
+                if (horarioV[props.fila][props.columna] === props.asignar) {
+                  nuevoHorarioV[props.fila][props.columna] = 0;
+                  asignarModeloVVacio(props.asignar, nuevoHorarioV);
+                } else {
+                  nuevoHorarioV[props.fila][props.columna] = props.asignar;
+                  asignarModeloVVacio(props.asignar, nuevoHorarioV);
+                }
+              } else if (props.jornadas === 'Diurno') {
+                if (horarioD[props.fila][props.columna] === props.asignar) {
+                  nuevoHorarioD[props.fila][props.columna] = 0;
+                  asignarModeloDVacio(props.asignar, nuevoHorarioD);
+                } else {
+                  nuevoHorarioD[props.fila][props.columna] = props.asignar;
+                  asignarModeloDVacio(props.asignar, nuevoHorarioD);
+                }
+              }
             }
           };
+          
+          
+          
         
           return (
             <div
@@ -296,25 +336,28 @@ export function EdicionHoraria() {
     return (
         <div>
             <div className='contenedorPrincipal'>
-                <div className='horarioProfesor'>
-                    <div className='d-flex'>
-                        <h1 className='col-11'>Asignación al profesor{' '}
+                <div className='d-flex flex-column m-0' style={{background: '#03102C', color: 'white'}}>
+                    <div className='d-flex col-12 justify-content-center m-0'>
+                        <h1 className='h1'>Asignación al profesor{' '}
                             {profesor.map((item) => {
                                 if (item.id === usuarioId) {
                                     const usuarioAsociado = usuarios.find(usuario => usuario.id === item.user);
                                     return usuarioAsociado ? usuarioAsociado.first_name : '';
                                 }
-                                return null;
+                                return null; 
                             })}
                         </h1>
-                        <button className="btn paginaSecretarioDerecha col-1"><Link to={`/Administrativos/buscar-profesor/${id}/`} style={{ color: "white" }}>Volver Atras</Link>
-                        </button>
+                        <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} ><Link to={`/Administrativos/buscar-profesor/${id}/`}>Volver</Link>
+                        </button> 
                     </div>
                 </div>
             </div>
-            <div className="row">
-                <div className='col-6'>
-                    <div className="d-flex p-2 justify-content-center">
+            <div className="row justify-content-center mr-0">
+                <div className="container rounded-lg m-1 shadow col-6" style={{border: 'solid 3px #A90429'}}>
+                    <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
+                        Seleccion Asignaturas
+                    </div>
+                    <div className="d-flex justify-content-center m-0">
                         <input
                             className="form-control inputBuscar text-center"
                             value={busqueda}
@@ -322,11 +365,10 @@ export function EdicionHoraria() {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className='text-center'>ASIGNATURAS PARA INSCRIBIR</div>
-                    <div className="table-responsive">
-                        <table className="table table-sm table-bordered">
+                    <div className="table-responsive" style={{height: '60vh'}}>
+                        <table className="table table-sm table-striped table-bordered table-hover">
                             <thead className='text-center'>
-                                <tr>
+                                <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                                     <th>Materia</th>
                                     <th>Curso</th>
                                     <th>Asignatura</th>
@@ -340,7 +382,6 @@ export function EdicionHoraria() {
                             <tbody>
                             {cursosDisponibles
                                 .filter((curso) => curso.nombreAsignatura.toLowerCase().includes(busqueda.toLowerCase()))
-                                .slice(0, cursosToShow)
                                 .map((curso) => (
                                 <tr key={curso.id}>
                                     <td className="text-center">{curso.materia}</td>
@@ -407,7 +448,7 @@ export function EdicionHoraria() {
                                         </select>
                                     </td>
                                     <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target={`.modal-${curso.id}`}>
+                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" class="btn btn-primary" data-toggle="modal" data-target={`.modal-${curso.id}`}>
                                     Ingreso Horario
                                     </button>
                                     <div class={`modal fade modal-${curso.id}`} tabindex="-1" role="dialog" aria-labelledby={`modalLabel-${curso.id}`} aria-hidden="true">
@@ -540,10 +581,10 @@ export function EdicionHoraria() {
                                                 </div>
                                                 </div>
                                                 <div className="modal-footer">
-                                                    <button type="button" className="btn btn-secondary" onClick={cerrarModal} data-dismiss="modal">
+                                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" onClick={cerrarModal} data-dismiss="modal">
                                                         Cancelar
                                                     </button>
-                                                    <button type="button" className="btn btn-primary" data-dismiss="modal">
+                                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" data-dismiss="modal">
                                                         Guardar
                                                     </button>
                                                 </div>
@@ -552,7 +593,9 @@ export function EdicionHoraria() {
                                     </div>
                                     </td>
                                     <td className="text-center">
-                                    <button onClick={() => {
+                                    <button
+                                    className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}}
+                                    onClick={() => {
                                         if (!cursoPeriodos[curso.id]) {
                                             alert("Selecciona un Periodo");
                                         } else if (!cursoJornada[curso.id]) {
@@ -560,15 +603,21 @@ export function EdicionHoraria() {
                                         } else if (!cursoActividad[curso.id]) {
                                             alert("Selecciona una Actividad");
                                         } else {
-                                            const periodo = cursoPeriodos[curso.id];
-                                            const jornada = cursoJornada[curso.id];
-                                            const actividad = cursoActividad[curso.id];
+                                        const periodo = cursoPeriodos[curso.id];
+                                        const jornada = cursoJornada[curso.id];
+                                        const actividad = cursoActividad[curso.id];
+                                        
+                                        guardarEnModuloDPlanificacion();
+
+                                        if (!unirArreglos()) {
                                             agregarCurso(curso, periodo, jornada, actividad);
-                                            guardarEnModuloDPlanificacion();
-                                            
+                                        } else {
+                                            alert("Hay un horario que se sobrepone");
                                         }
-                                    }}>
-                                        Agregar
+                                        }
+                                    }}
+                                    >
+                                    Agregar
                                     </button>
                                     </td>
                                 </tr>
@@ -576,25 +625,20 @@ export function EdicionHoraria() {
                             }
                             </tbody>
                         </table>
-                        {busqueda === '' && (
-                            <div className="text-center">
-                                <button onClick={() => setCursosToShow(cursosToShow + cursosToShowIncrement)}>
-                                    Mostrar más cursos
-                                </button>
-                            </div>
-                        )}
                     </div>
                 </div>
-                <div className='col-6'>
-                    <div className='container'>
-                    <div className='text-center'>ASIGNATURAS INSCRITAS</div>
+                <div className='col-5'>
+                    <div className="container rounded-lg m-2 shadow col-12" style={{border: 'solid 3px #A90429'}}>
+                        <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
+                        Asignaturas Agregadas
+                        </div>
                         <div className="table-responsive">
-                            <table className="table table-sm table-bordered">
+                            <table className="table table-sm table-striped table-bordered table-hover">
                                 <thead className='text-center'>
-                                    <tr>
+                                    <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                                         <th>Materia</th>
                                         <th>Curso</th>
-                                        <th>Asignaturas Inscritas</th>
+                                        <th>Asignatura</th>
                                         <th>Periodo</th>
                                         <th>Jornada</th>
                                         <th>Actividad</th>
@@ -611,7 +655,7 @@ export function EdicionHoraria() {
                                             <td className='text-center'>{curso.jornada}</td>
                                             <td className='text-center'>{curso.actividad}</td>
                                             <td className='text-center'>
-                                                <button onClick={() => eliminarCurso(curso)}>
+                                                <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCurso(curso)}>
                                                     Eliminar
                                                 </button>
                                             </td>
@@ -620,19 +664,24 @@ export function EdicionHoraria() {
                                 </tbody>
                             </table>
                         </div>
+                        <div className='text-center'>
+                        <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={guardarCambiosAPI}>Guardar Cambios</button> 
+                        <button onClick={()=>(console.log(moduloDPlanificacion))}></button>
+                        <button onClick={unirArreglos}>UNIR</button>
+                        <button onClick={()=>(console.log(moduloDCompleto))}>MOSTRAR</button>
                     </div>
-                    <div className='text-center'>
-                        <button onClick={guardarCambiosAPI}>Guardar Cambios</button> 
                     </div>
-                    <hr/>
-                    <div className='container'>
+                    <div className="container rounded-lg m-2 shadow col-12" style={{border: 'solid 3px #A90429'}}>
+                        <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
+                        Asignaturas Previamente Inscritas
+                        </div>
                         <div className="table-responsive">
-                            <table className="table table-sm table-bordered">
+                            <table className="table table-sm table-striped table-bordered table-hover">
                                 <thead className='text-center'>
-                                    <tr>
+                                    <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
                                         <th>Materia</th>
                                         <th>Curso</th>
-                                        <th>Asignaturas Previas</th>
+                                        <th>Asignatura</th>
                                         <th>Periodo</th>
                                         <th>Jornada</th>
                                         <th>Actividad</th>
@@ -652,7 +701,7 @@ export function EdicionHoraria() {
                                         <td className='text-center'>{item.jornada}</td>
                                         <td className='text-center'>{item.actividad}</td>
                                         <td className='text-center'>
-                                            <button onClick={() => eliminarCursoAPI(item.id)}>
+                                            <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCursoAPI(item.id)}>
                                                 Eliminar
                                             </button>
                                         </td>
