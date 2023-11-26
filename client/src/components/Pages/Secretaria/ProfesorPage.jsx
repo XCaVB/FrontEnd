@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getUsuariosID, getProfesores } from '../../../api/horario.api';
+import { getUsuariosID, getProfesores, getAllCursos } from '../../../api/horario.api';
 import horario from "../../../data/horarioCalendario"
 import { ColorHorario } from './colorHorario';
 
@@ -12,11 +12,16 @@ export function ProfesorPage({matrizD, matrizV}) {
   const [usuarios, setUsuarios]= useState([]);
   const [horarioD, setHorarioD] = useState(matrizD);
   const [horarioV, setHorarioV] = useState(matrizV);
+  const [moduloD, setModuloD] = useState();
+  const [moduloV, setModuloV] = useState();
+  const [curso, setCurso] = useState();
 
   const peticionGet = async () => {
     try {
       // Utiliza la función correspondiente para obtener la información del profesor.
       const responseProfesor = await getProfesores();
+      const responseCurso = await getAllCursos();
+      setCurso(responseCurso.data);
 
       // Realiza la comprobación de usuarioId en los datos obtenidos por getProfesores
       for (const profesor of responseProfesor.data) {
@@ -26,6 +31,8 @@ export function ProfesorPage({matrizD, matrizV}) {
           // Si usuarioId coincide con el "user" de un profesor, establece los horarios
           setHorarioD(JSON.parse(profesor.horarioDiurno));
           setHorarioV(JSON.parse(profesor.horarioVespertino));
+          setModuloD(JSON.parse(profesor.modulosDiurno));
+          setModuloV(JSON.parse(profesor.modulosVespertino));
           break; // Puedes salir del bucle una vez que encuentres una coincidencia
         }
       }
@@ -52,7 +59,8 @@ export function ProfesorPage({matrizD, matrizV}) {
         </div>
         <div className='d-flex justify-content-center col-12 m-0'>
             <h3><i className='fa fa-address-card mr-2'></i><a className="text-light" href={`mailto:${usuarios.email}`}>{usuarios.email}</a></h3>
-            <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={() => navigate(`/administrativos/buscar-profesor`)}>Volver</button> 
+            <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} ><Link to={`/Administrativos/buscar-profesor/`}>Volver</Link>
+            </button> 
         </div>
       </div>
 
@@ -92,12 +100,24 @@ export function ProfesorPage({matrizD, matrizV}) {
                     {armar_horario.horarioD.map((fila, index) => (
                       <tr key={index}>
                       <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][0]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][1]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][2]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][3]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][4]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioD[index][5]}/></td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][0]} modulo={moduloD && moduloD[index] && moduloD[index][0]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][1]} modulo={moduloD && moduloD[index] && moduloD[index][1]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][2]} modulo={moduloD && moduloD[index] && moduloD[index][2]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][3]} modulo={moduloD && moduloD[index] && moduloD[index][3]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][4]} modulo={moduloD && moduloD[index] && moduloD[index][4]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioD[index][5]} modulo={moduloD && moduloD[index] && moduloD[index][5]} />
+                      </td>
                       </tr>
                     ))}
                   </tbody>
@@ -133,12 +153,24 @@ export function ProfesorPage({matrizD, matrizV}) {
                     {armar_horario.horarioV.map((fila, index) => (
                       <tr key={index}>
                       <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][0]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][1]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][2]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][3]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][4]}/></td>
-                      <td className="p-1 "><ColorHorario estado={horarioV[index][5]}/></td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][0]} modulo={moduloV && moduloV[index] && moduloV[index][0]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][1]} modulo={moduloV && moduloV[index] && moduloV[index][1]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][2]} modulo={moduloV && moduloV[index] && moduloV[index][2]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][3]} modulo={moduloV && moduloV[index] && moduloV[index][3]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][4]} modulo={moduloV && moduloV[index] && moduloV[index][4]} />
+                      </td>
+                      <td className="p-1 ">
+                        <ColorHorario estado={horarioV[index][5]} modulo={moduloV && moduloV[index] && moduloV[index][5]} />
+                      </td>
                       </tr>
                     ))}
                   </tbody>

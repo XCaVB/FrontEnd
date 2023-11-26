@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import "../../../css/Pages.css";
 import horario from "../../../data/horarioCalendario"
 import horarioBase from '../../../data/horarioBase';
-import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad} from '../../../api/horario.api';
+import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad, updateProfesor} from '../../../api/horario.api';
 
 export function EdicionHoraria() {
     const armar_horario = horario
@@ -25,8 +25,6 @@ export function EdicionHoraria() {
 
     const [jornadita, setJornadita] = useState();
     const [modalTitle, setModalTitle] = useState('Debes seleccionar una Jornada'); // Título inicial del modal
-    const matrizDiurno = horarioBase.horarioDiurnoBase;
-    const matrizVespertino = horarioBase.horarioVespertinoBase;
 
     const [nombreAsignatura, setNombreAsignatura] = useState();
 
@@ -120,97 +118,34 @@ export function EdicionHoraria() {
     
     const [horarioD, setHorarioD] = useState();
     const [horarioV, setHorarioV] = useState();
-    const [moduloDPlanificacion, setModuloDPlanificacion] = useState([]);
-    const [moduloVPlanificacion, setModuloVPlanificacion] = useState();
-    const [moduloDCompleto, setModuloDCompleto] = useState();
-    const [moduloVCompleto, setModuloVCompleto] = useState();
 
     useEffect(() => {
     const profesorEncontrado = profesor.find((profesorItem) => profesorItem.id === usuarioId);
 
     if (profesorEncontrado) {
-        setHorarioD(JSON.parse(profesorEncontrado.horarioDiurno));
-        setHorarioV(JSON.parse(profesorEncontrado.horarioVespertino));
+        setHorarioD(horarioBase.horarioDiurnoBase);
+        setHorarioV(horarioBase.horarioVespertinoBase);
     }
     }, [profesor, usuarioId]);
-
-    // Función para cerrar el modal y restablecer los modelos
-    const cerrarModal = () => {
-        // Restablecer modelosVVacios y modelosDVacios
-        setModelosVVacios(horarioBase.horarioVespertinoBase);
-        setModelosDVacios(horarioBase.horarioDiurnoBase);
     
-        // Actualizar horarioD y horarioV con los nuevos modelos
-        if (jornadita === 'Diurno') {
-            setHorarioD(horarioBase.horarioDiurnoBase);
-        } else if (jornadita === 'Vespertino') {
-            setHorarioV(horarioBase.horarioVespertinoBase);
-        }
-    };
-
-    const guardarEnModuloDPlanificacion = () => {
-        // Copia de modelosDVacios para su almacenamiento en moduloDPlanificacion
-        const nuevosModelosD = { ...modelosDVacios };
-        const nuevosModelosV = { ...modelosVVacios };
-    
-        // Agregar nuevos modelos en el estado `moduloDPlanificacion`
-        setModuloDPlanificacion(nuevosModelosD);
-        setModuloVPlanificacion(nuevosModelosV);
-        if (jornadita === 'Diurno') {
-            setHorarioD(horarioBase.horarioDiurnoBase);
-        } else if (jornadita === 'Vespertino') {
-            setHorarioV(horarioBase.horarioVespertinoBase);
-        }
-    };
-
-  // Función para unir los arreglos
-  const unirArreglos = () => {
-    const arreglosD = Object.values(moduloDPlanificacion);
-    if (arreglosD.length === 0) {
-        console.log('No hay arreglos dentro de moduloDPlanificacion.');
-        return;
-    }
-
-    let horarioSobrePuesto = false; // Bandera para verificar si hay horario que se sobreponen
-
-    const resultadoD = arreglosD.reduce((acc, current) => {
-        return acc.map((row, rowIndex) =>
-            row.map((item, colIndex) => {
-                if (item !== 0 && current[rowIndex][colIndex] !== 0) {
-                    horarioSobrePuesto = true;
-                    alert('¡Hay un horario que se sobre pone!');
-                    return item; // Se encontró un tope de horario, se interrumpe la operación
-                }
-                return item + current[rowIndex][colIndex];
-            })
-        );
-    });
-    console.log(resultadoD)
-    if (!horarioSobrePuesto) {
-        setModuloDCompleto(resultadoD);
-    }
-};
   
-  
-
-
     // Estado para modelos diurnos y vespertinos
     const [modelosDVacios, setModelosDVacios] = useState({});
     const [modelosVVacios, setModelosVVacios] = useState({});
 
     // Función para asignar modelo diurno
-    const asignarModeloDVacio = (cursoId, nuevaMatriz) => {
+    const asignarModeloDVacio = (nuevaMatriz) => {
         setModelosDVacios(prevModelos => ({
             ...prevModelos,
-            [cursoId]: nuevaMatriz
+            nuevaMatriz
         }));
     };
 
     // Función para asignar modelo vespertino
-    const asignarModeloVVacio = (cursoId, nuevaMatriz) => {
+    const asignarModeloVVacio = (nuevaMatriz) => {
         setModelosVVacios(prevModelos => ({
             ...prevModelos,
-            [cursoId]: nuevaMatriz
+            nuevaMatriz
         }));
     };
 
@@ -218,66 +153,86 @@ export function EdicionHoraria() {
         const [color, setColor] = useState(() => {
             if (props.estado === 0) {
                 return 'white';
-            } else if (props.estado === 1) {
+            } else if (props.estado > 0) {
                 return 'green';
-            } else if (props.estado === 2) {
-                return 'red';
             }
         });
     
         useEffect(() => {
             if (props.estado === 0) {
                 setColor('white');
-            } else if (props.estado === 1) {
+            } else if (props.estado > 0) {
                 setColor('green');
-            } else if (props.estado === 2) {
-                setColor('red');
             }
         }, [props.estado]);
-    
+
         const asignarCursoEnMatriz = () => {
             const cursoSeleccionado = cursos.find((curso) => curso.id === props.asignar);
-            if (cursoSeleccionado) {
-              let nuevoHorarioV = [...horarioV];
-              let nuevoHorarioD = [...horarioD];
-          
+            if (cursoSeleccionado) {    
+                let nuevoHorarioV = horarioV;
+                let nuevoHorarioD = horarioD;
+
+              console.log(nuevoHorarioD)
               if (props.jornadas === 'Vespertino') {
                 if (horarioV[props.fila][props.columna] === props.asignar) {
                   nuevoHorarioV[props.fila][props.columna] = 0;
-                  asignarModeloVVacio(props.asignar, nuevoHorarioV);
+                  asignarModeloVVacio(nuevoHorarioV);
                 } else {
-                  nuevoHorarioV[props.fila][props.columna] = props.asignar;
-                  asignarModeloVVacio(props.asignar, nuevoHorarioV);
+                    // Verificar si previamente hay un ID de curso asignado mayor a 0 en esa posición
+                    if (horarioV[props.fila][props.columna] > 0) {
+                        alert("Ya hay una asignatura")
+                    } else {
+                        nuevoHorarioV[props.fila][props.columna] = props.asignar;
+                        asignarModeloVVacio(nuevoHorarioV);
+                    }
                 }
               } else if (props.jornadas === 'Diurno') {
                 if (horarioD[props.fila][props.columna] === props.asignar) {
                   nuevoHorarioD[props.fila][props.columna] = 0;
-                  asignarModeloDVacio(props.asignar, nuevoHorarioD);
+                  asignarModeloDVacio(nuevoHorarioD);
+                  
                 } else {
-                  nuevoHorarioD[props.fila][props.columna] = props.asignar;
-                  asignarModeloDVacio(props.asignar, nuevoHorarioD);
+                    // Verificar si previamente hay un ID de curso asignado mayor a 0 en esa posición
+                    if (horarioD[props.fila][props.columna] > 0) {
+                        alert("Ya hay una asignatura")
+                    } else {
+                      nuevoHorarioD[props.fila][props.columna] = props.asignar;
+                      asignarModeloDVacio(nuevoHorarioD);
+                    }
                 }
               }
             }
           };
-          
-          
-          
-        
+
           return (
             <div
               className="p-4 w-90 h-90"
               onClick={asignarCursoEnMatriz}
-              style={{ background: color, cursor: 'pointer' }}
+              style={{ background: color , cursor: 'pointer' }}
             >
-                {props.nombreA === props.asignar && <p>{cursos[props.asignar-1].nombreAsignatura}</p>}
+                {props.nombreA === props.asignar && <p className='text-light'>{cursos[props.asignar-1].nombreAsignatura}</p>}
             </div>
-          );
-        };
-    
+        );
+    };
+
+    //Realizar un sistema que agarre el arreglo de modelosDVacios.nuevaMatriz y valla posicion por posicion sacando numeros desde el 1 hasta 200 y los agrege a otro arreglo en la misma posicion que estaban anterior con el mismo numero.
+    // MEJOR EN VEZ DE PASARLO COMO UN ARREGLO DE ARREGLOS, SOLO UN ARRGLO BASADO EN EL ID DEL CURSO DICIENDO ESPECIFICAMENTE EL HORARIO (EJ: LU 1200 - 1730).
 
     const guardarCambiosAPI = async () => {
-        for (const cursoSeleccionado of cursosSeleccionados) {
+        try {
+            const profesorActualizado = {
+                ...profesor[usuarioId-1], // Copia los datos originales del profesor
+                modulosDiurno: JSON.stringify(modelosDVacios.nuevaMatriz),
+                modulosVespertino: JSON.stringify(modelosVVacios.nuevaMatriz)
+            };
+    
+            // Llamar a la función updateProfesor con el profesor actualizado
+            await updateProfesor(usuarioId, profesorActualizado);
+        } catch (error) {
+            alert('Error al realizar los cambios al profesor:', error);
+        }
+
+        for (const cursoSeleccionado of cursosSeleccionados)    {
             const { id, periodo, actividad, jornada } = cursoSeleccionado;
     
             // Verificar si ya existe una planificación académica para el profesor, curso, período, actividad y jornada seleccionados.
@@ -331,7 +286,7 @@ export function EdicionHoraria() {
 
     useEffect(() => {
         peticionGet();
-    }, [id]);
+    }, []);
 
     return (
         <div>
@@ -484,42 +439,42 @@ export function EdicionHoraria() {
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][1]}
                                                                 nombreA={horarioV[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][2]}
                                                                 nombreA={horarioV[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][3]}
                                                                 nombreA={horarioV[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][4]}
                                                                 nombreA={horarioV[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioV[index][5]}
                                                                 nombreA={horarioV[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
-                                                                modulo={modelosVVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 </tr>
                                                             ))
@@ -533,42 +488,42 @@ export function EdicionHoraria() {
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][1]}
                                                                 nombreA={horarioD[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][2]}
                                                                 nombreA={horarioD[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][3]}
                                                                 nombreA={horarioD[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][4]}
                                                                 nombreA={horarioD[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 <td className="p-1 "><ColorHorario estado={horarioD[index][5]}
                                                                 nombreA={horarioD[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
-                                                                modulo={modelosDVacios[curso.id]}/>
+                                                                />
                                                                 </td>
                                                                 </tr>
                                                             ))
@@ -581,7 +536,7 @@ export function EdicionHoraria() {
                                                 </div>
                                                 </div>
                                                 <div className="modal-footer">
-                                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" onClick={cerrarModal} data-dismiss="modal">
+                                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" data-dismiss="modal">
                                                         Cancelar
                                                     </button>
                                                     <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" data-dismiss="modal">
@@ -594,31 +549,26 @@ export function EdicionHoraria() {
                                     </td>
                                     <td className="text-center">
                                     <button
-                                    className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}}
-                                    onClick={() => {
-                                        if (!cursoPeriodos[curso.id]) {
-                                            alert("Selecciona un Periodo");
-                                        } else if (!cursoJornada[curso.id]) {
-                                            alert("Selecciona una Jornada");
-                                        } else if (!cursoActividad[curso.id]) {
-                                            alert("Selecciona una Actividad");
-                                        } else {
-                                        const periodo = cursoPeriodos[curso.id];
-                                        const jornada = cursoJornada[curso.id];
-                                        const actividad = cursoActividad[curso.id];
-                                        
-                                        guardarEnModuloDPlanificacion();
-
-                                        if (!unirArreglos()) {
-                                            agregarCurso(curso, periodo, jornada, actividad);
-                                        } else {
-                                            alert("Hay un horario que se sobrepone");
-                                        }
-                                        }
-                                    }}
+                                        className="btn btn-danger m-2"
+                                        style={{ color: 'white', background: '#A90429' }}
+                                        onClick={() => {
+                                            if (!cursoPeriodos[curso.id]) {
+                                                alert("Selecciona un Periodo");
+                                            } else if (!cursoJornada[curso.id]) {
+                                                alert("Selecciona una Jornada");
+                                            } else if (!cursoActividad[curso.id]) {
+                                                alert("Selecciona una Actividad");
+                                            } else {
+                                                    const periodo = cursoPeriodos[curso.id];
+                                                    const jornada = cursoJornada[curso.id];
+                                                    const actividad = cursoActividad[curso.id];
+                                                    agregarCurso(curso, periodo, jornada, actividad);
+                                                }
+                                        }}
                                     >
-                                    Agregar
+                                        Agregar
                                     </button>
+
                                     </td>
                                 </tr>
                                 ))
@@ -666,9 +616,7 @@ export function EdicionHoraria() {
                         </div>
                         <div className='text-center'>
                         <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={guardarCambiosAPI}>Guardar Cambios</button> 
-                        <button onClick={()=>(console.log(moduloDPlanificacion))}></button>
-                        <button onClick={unirArreglos}>UNIR</button>
-                        <button onClick={()=>(console.log(moduloDCompleto))}>MOSTRAR</button>
+                        <button onClick={()=>(console.log(profesor[usuarioId]))}>MODELOSDVA</button>
                     </div>
                     </div>
                     <div className="container rounded-lg m-2 shadow col-12" style={{border: 'solid 3px #A90429'}}>
