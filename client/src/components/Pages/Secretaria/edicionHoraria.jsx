@@ -228,7 +228,114 @@ export function EdicionHoraria() {
     // Función para dividir un arreglo en subarreglos basados en la cantidad de elementos
     // Verifica si el objeto modelosDVacios está definido
 
+    const [nuevasMatricesD, setNuevasMatricesD] = useState({});
+    const [arreglosPorMatrizD, setArreglosPorMatrizD] = useState({});
+    const MatrizComponentD = () => {
+        const dias = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
+        const horas = ['8:30 - 9:15', '9:25 - 10:10', '10:20 - 11:05', '11:15 - 12:00', '12:10 - 12:55', '13:05 - 13:50', '14:00 - 14:45', '14:55 - 15:50', '15:50 - 16:35', '16:45 - 17:30', '17:40 - 18:25', '18:35 - 19:20', '19:30 - 20:15', '20:25 - 21:10'];
+          // Encuentra los números únicos en la matriz
+        const numerosUnicos = [...new Set(modelosDVacios.nuevaMatriz.flat())];
+
+        // Crea un objeto para almacenar las nuevas matrices
+        let nuevas_matrices = {};
+
+        // Para cada número único, crea una nueva matriz
+        for (let numero of numerosUnicos) {
+            if (numero !== 0) {  // Ignora los ceros
+            // Crea una copia de la matriz original
+            let nuevaMatriz = modelosDVacios.nuevaMatriz.map(fila => fila.slice());
+            // Reemplaza todos los números que no sean el número actual con ceros
+            nuevaMatriz = nuevaMatriz.map(fila => fila.map(valor => valor === numero ? numero : 0));
+            // Almacena la nueva matriz en el objeto
+            nuevas_matrices[`${numero}`] = nuevaMatriz;
+            }
+        }
+
+        // Actualiza el estado de forma síncrona
+        setNuevasMatricesD(nuevas_matrices);
+
+        // Crea un arreglo vacío para almacenar los arreglos por matriz
+        let nuevosArreglosPorMatriz = {};
+
+        // Recorre cada matriz en nuevasMatrices
+        for (let numero in nuevas_matrices) {
+            let matriz = nuevas_matrices[numero];
+            let nuevoArreglo = [];
+
+            // Recorre cada fila y columna de la matriz
+            for (let i = 0; i < matriz.length; i++) {
+            for (let j = 0; j < matriz[i].length; j++) {
+                // Si el número es mayor a 0, agrega el string correspondiente al arreglo
+                if (matriz[i][j] > 0) {
+                nuevoArreglo.push(`${dias[j]} ${horas[i]}`);
+                }
+            }
+            }
+
+            // Almacena el arreglo en el objeto por número único
+            nuevosArreglosPorMatriz[numero] = nuevoArreglo;
+        }
+
+        // Actualiza el estado de forma síncrona
+        setArreglosPorMatrizD(nuevosArreglosPorMatriz);
+
+        // Devuelve el estado actualizado
+        return arreglosPorMatrizD;
+        };
+
+    const [nuevasMatricesV, setNuevasMatricesV] = useState({});
+    const [arreglosPorMatrizV, setArreglosPorMatrizV] = useState({});
+    const MatrizComponentV = () => {
+          // Encuentra los números únicos en la matriz
+        const numerosUnicos = [...new Set(modelosDVacios.nuevaMatriz.flat())];
+      
+          // Crea un objeto para almacenar las nuevas matrices
+        let nuevas_matrices = {};
+      
+          // Para cada número único, crea una nueva matriz
+        for (let numero of numerosUnicos) {
+            if (numero !== 0) {  // Ignora los ceros
+              // Crea una copia de la matriz original
+              let nuevaMatriz = modelosDVacios.nuevaMatriz.map(fila => fila.slice());
+              // Reemplaza todos los números que no sean el número actual con ceros
+              nuevaMatriz = nuevaMatriz.map(fila => fila.map(valor => valor === numero ? numero : 0));
+              // Almacena la nueva matriz en el objeto
+              nuevas_matrices[`${numero}`] = nuevaMatriz;
+            
+            }
+        };
+          // Actualiza el estado con las nuevas matrices
+        setNuevasMatricesV(nuevas_matrices);
+        const dias = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
+        const horas = ['19:00 - 19:45', '19:46 - 20:30', '20:40 - 21:25', '21:26 - 22:10', '22:20 - 23:05', '23:05 - 23:50'];
+
+        let nuevosArreglosPorMatriz = {}; // Objeto para almacenar los arreglos por matriz
+
+        // Recorre cada matriz en nuevasMatrices
+        for (let numero in nuevas_matrices) {
+            let matriz = nuevas_matrices[numero];
+            let nuevoArreglo = [];
+    
+            // Recorre cada fila y columna de la matriz
+            for (let i = 0; i < matriz.length; i++) {
+                for (let j = 0; j < matriz[i].length; j++) {
+                    // Si el número es mayor a 0, agrega el string correspondiente al arreglo
+                    if (matriz[i][j] > 0) {
+                        nuevoArreglo.push(`${dias[j]} ${horas[i]}`);
+                    }
+                }
+            }
+    
+            nuevosArreglosPorMatriz[numero] = nuevoArreglo; // Almacena el arreglo en el objeto por número único
+        }
+    
+        // Actualiza el estado con los nuevos arreglos por matriz
+        setArreglosPorMatrizV(nuevosArreglosPorMatriz);
+        return arreglosPorMatrizV; // Devuelve el estado actualizado
+    };
+
     const guardarCambiosAPI = async () => {
+        let modulosTotal;
         try {
             const profesorActualizado = {
                 ...profesor[usuarioId-1], // Copia los datos originales del profesor
@@ -249,18 +356,25 @@ export function EdicionHoraria() {
             const planificacionExistente = planificacionAcad.find(item => {
                 return item.profesor === usuarioId && item.curso === id && item.periodo === "202310" && item.periodo === "202305" && item.actividad === actividad && item.jornada === jornada;
             });
-    
+            
             console.log(planificacionExistente);
     
             if (!planificacionExistente) {
                 // Si no existe una planificación, crear una nueva utilizando la función createPlanificacionAcad
                 try {
                     const periodoNuevo = periodo === "Semestral" ? 202310 : periodo === "Trimestral" ? 202305 : periodo;
+
+                    if (jornada === "Diurno") {
+                        modulosTotal = MatrizComponentD(); // Asignar valor a modulosTotal
+                    } else if (jornada === "Vespertino") {
+                        modulosTotal = MatrizComponentV(); // Asignar otro valor a modulosTotal
+                    }
     
                     await createPlanificacionAcad({
                         periodo: periodoNuevo,
                         actividad: actividad, // Reemplaza esto con el valor correcto
                         jornada: jornada, // Reemplaza esto con el valor correcto
+                        modulos: JSON.stringify(modulosTotal[id]),
                         profesor: usuarioId,
                         curso: id,
                     });
@@ -274,7 +388,6 @@ export function EdicionHoraria() {
                 }
             }
         }
-        
     };
 
     const delCursosModuloD = (cursoid) => {
@@ -608,6 +721,8 @@ export function EdicionHoraria() {
                                                     const jornada = cursoJornada[curso.id];
                                                     const actividad = cursoActividad[curso.id];
                                                     agregarCurso(curso, periodo, jornada, actividad);
+                                                    MatrizComponentD();
+                                                    MatrizComponentV();
                                                 }
                                         }}
                                     >
@@ -661,7 +776,7 @@ export function EdicionHoraria() {
                         </div>
                         <div className='text-center'>
                         <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={guardarCambiosAPI}>Guardar Cambios</button> 
-                        <button onClick={()=>(console.log(modelosLlamadaD))}>MODELOSDVA</button>
+                        <button onClick={()=>(console.log(MatrizComponent()))}>MODELOSDVA</button>
                         <button onClick={()=>(console.log())}>MODELOSDVA</button>
                     </div>
                     </div>
