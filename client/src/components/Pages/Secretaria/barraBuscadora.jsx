@@ -130,6 +130,9 @@ export function BarraBuscadora(){
               </tbody>
             </table>
           </div>
+          <div className="row justify-content-end">
+            <Link className="btn m-2" to={'/db-management'} style={{background: '#A90429', color:'white'}}>DB MANAGEMENT<i className="fa fa-database ml-1"/></Link>
+          </div>
         </div>
     );
 }

@@ -16,7 +16,6 @@ export function Home(){
                 <form className='ingreso' style={{justifyContent: "center", padding: 10}}>
                     <Link className="btn" to={'/docentes'} style={{background: '#A90429', color:'white'}}>DOCENTES</Link>
                     <Link className="btn" to={'/administrativos'} style={{background: '#A90429', color:'white'}}>ADMINISTRATIVOS</Link>
-                    <Link className="btn" to={'/db-management'} style={{background: '#A90429', color:'white'}}>DB MANAGEMENT</Link>
                 </form>
             </div>
         </div>

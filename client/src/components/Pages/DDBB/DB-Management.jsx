@@ -4,6 +4,7 @@ import { Usuarios } from "./Usuarios/Usuarios"
 import { Profesores } from "./Profesores/Profesores"
 import { Cursos } from "./Cursos/Cursos"
 import { Planificaciones } from "./Planificacion/Planificaciones"
+import { useNavigate } from "react-router-dom"
 
 export function DB_Management() {
 
@@ -20,6 +21,8 @@ export function DB_Management() {
     setTimeout(() => setMostrar(aux), 500)
     
   }
+
+  const navigate = useNavigate()
   return(
     <div>
       <Header estado={"cerrar"}/>
@@ -42,8 +45,9 @@ export function DB_Management() {
 
       <div className="row justify-content-center mr-0">
         <div className="container rounded-lg m-2 shadow col-10" style={{border: 'solid 3px #A90429'}}>
-          <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
-            DB Management
+          <div className="row justify-content-end p-2 align-content-center" style={{background:'#03102C', color:'white', fontSize: 22}}>
+            <p className="h2 mx-auto">DB MANAGEMENT</p>
+            <button className="btn btn-secondary" onClick={() => navigate(-1)}>Volver</button>
           </div>
 
           <div className="row">

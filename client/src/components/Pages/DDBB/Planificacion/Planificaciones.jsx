@@ -121,7 +121,29 @@ export function Planificaciones ({alerta}) {
 
 	const armarExcel = () => {
 
-		const filas = planificaciones.map(fila => ({
+		// Datos adicionales para las primeras tres filas
+		const datosAdicionales = [
+			["UNIVERSIDAD ANDRES BELLO"],
+			["PROGRAMACION ACADEMICA"],
+			["Usuario: "],
+		  ];
+		
+		  // Transformar los datos adicionales en un formato adecuado
+		  const filasDatosAdicionales = datosAdicionales.map(fila => ({
+			campus: fila[0],
+			departamento: '', // Puedes dejar estas columnas vacías o llenarlas según sea necesario
+			periodo: '',
+			materia: '',
+			curso: '',
+			jornada: '',
+			rut_docente: '',
+			nombre_docente: '',
+			asignatura: '',
+			tipo: '',
+		  }));
+		
+		  // Filas de las planificaciones
+		  const filasPlanificaciones = planificaciones.map(fila => ({
 			campus: "ANTONIO VARAS",
 			departamento: mostrarDepartamento(fila.profesor, 1),
 			periodo: fila.periodo,
@@ -131,25 +153,60 @@ export function Planificaciones ({alerta}) {
 			rut_docente: mostrarRut(fila.profesor, 1),
 			nombre_docente: mostrarNombre(fila.profesor, 1),
 			asignatura: mostrarAsignatura(fila.curso, 1),
-			tipo: fila.actividad
-		}))
+			tipo: fila.actividad,
+		  }));
 		
-		const headers = [
+		  // Combinar las filas de datos adicionales y planificaciones
+		  const filasCombinadas = [...filasDatosAdicionales, ...filasPlanificaciones];
+		
+		  // Encabezados
+		  const headers = [
 			"Campus", "Departamento", "Periodo", "Materia", "Curso", "Jornada", "RUT Docente", "Nombre Docente", "Asignatura", "Tipo"
-		]
-
-		const workbook = utils.book_new()
-		const worksheet = utils.json_to_sheet([])
+		  ];
 		
-		utils.sheet_add_aoa(worksheet, [headers])
-		utils.sheet_add_json(worksheet, filas, {skipHeader: true, origin: -1})
-		utils.book_append_sheet(workbook, worksheet, "VARAS 202310")
+		  // Crear el libro y la hoja de cálculo
+		  const workbook = utils.book_new();
+		  const worksheet = utils.json_to_sheet([]);
+		
+		  // Agregar datos adicionales
+		  utils.sheet_add_json(worksheet, filasCombinadas, { skipHeader: true, origin: 0 });
+			
+		  // Agregar encabezados
+		  utils.sheet_add_aoa(worksheet, [headers], { skipHeader: true, origin: 3 });
+		  
+			// Obtener la referencia de la hoja de cálculo
+			const ref = worksheet['!ref'];
+			const range = utils.decode_range(ref);
 
-		const range = utils.decode_range(worksheet["!ref"] ?? "")
-		const rowCount = range.e.r;
-		const columnCount = range.e.c
+			// Establecer color de fondo para las celdas de los encabezados
+			for (let C = range.s.c; C <= range.e.c; C++) {
+				const headerCell = worksheet[utils.encode_cell({ r: range.s.r, c: C })];
+				if (headerCell && headerCell.s) {
+					// Establecer color de fondo directamente en el estilo de la celda
+					headerCell.s = {
+						...headerCell.s,
+						fill: { bgColor: { rgb: "03102C" } }, // Establecer color de fondo
+						font: { color: { rgb: "FFFFFF" }, bold: true }, // Texto en blanco y en negrita
+					};
+				}
+			}
 
-		writeFile(workbook, "Programacion_2023.xlsx", {cellStyles: true})
+			// Establecer el ancho predeterminado de las columnas
+			worksheet['!cols'] = [{ width: 20 }]; // Puedes ajustar el valor según sea necesario
+
+			// Establecer la altura predeterminada de las filas
+			for (let R = range.s.r; R <= range.e.r; R++) {
+				const row = worksheet[utils.encode_row(R)];
+				if (row && row.s) {
+					row.hpt = 50 * 20; // Altura en puntos (15 es el valor que proporcionaste)
+				}
+			}
+		  
+		  // Agregar la hoja de cálculo al libro
+		  utils.book_append_sheet(workbook, worksheet, "VARAS 202310");
+		  
+		  // Escribir el archivo
+		  writeFile(workbook, "Programacion_2023.xlsx", { cellStyles: true });
 	}
 	
 	return (
@@ -194,7 +251,7 @@ export function Planificaciones ({alerta}) {
 				</div>  
         {/* Agregar otro a la BBDD */}
         <div className="btn btn-success m-2" data-toggle="modal" data-target="#agregar" onClick={() => setID('agregar')}>+</div>
-				<button className="btn btn-dark shadow" onClick={armarExcel}>
+				<button className="btn btn-dark shadow" onClick={armarExcel}> <i className="fa fa-download mr-1"/>
 					Descargar Planificación Académica
 				</button>
 		{ID === "entrar" && <ModalPlanificacion identificador={ID+String(elementoSeleccionado.id)} data1={elementoSeleccionado} usuarios={usuarios} docentes={profesores} cursos={cursos} alertaEnviada={sacarAlerta}/>}
