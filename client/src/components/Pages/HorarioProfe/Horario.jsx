@@ -1,5 +1,5 @@
-import { updateProfesor, createAuditoria, getHoraChile } from '../../../api/horario.api'
-import { useState } from "react";
+import { updateProfesor, createAuditoria, getHoraChile, getAllCursos } from '../../../api/horario.api'
+import { useEffect, useState } from "react";
 import { BotonHorario } from "./botonHorario";
 import horario from "../../../data/horarioCalendario"
 import "../../../css/styles.css"
@@ -14,6 +14,41 @@ export function Horario({matrizD, matrizV, data, modificar}) {
   const armar_horario = horario
   const matrizDiurno = matrizD
   const matrizVespertino = matrizV
+  const [cursos, setCursos] = useState(null)
+  const [moduloD, setModuloD] = useState(JSON.parse(data.modulosDiurno))
+  const [moduloV, setModuloV] = useState(JSON.parse(data.modulosVespertino))
+
+  useEffect(() => async function cargaCursos() {
+    const {data} = await getAllCursos()
+    setCursos(data)
+
+  }, [])
+
+  const mostrarCursoD = (fila, columna) => {
+    let nombre = ""
+    const idCurso = moduloD[fila][columna]
+
+    cursos.forEach((curso) => {
+      if (curso.id == idCurso) {
+        nombre = curso.nombreAsignatura
+      }
+    })
+
+    return nombre
+  }
+
+  const mostrarCursoV = (fila, columna) => {
+    let nombre = ""
+    const idCurso = moduloV[fila][columna]
+
+    cursos.forEach((curso) => {
+      if (curso.id == idCurso) {
+        nombre = curso.nombreAsignatura
+      }
+    })
+
+    return nombre
+  }
 
   const sacarDatoD = (lista) => {
     matrizDiurno[lista[1]][lista[2]] = lista[0]
@@ -181,12 +216,12 @@ export function Horario({matrizD, matrizV, data, modificar}) {
                     {armar_horario.horarioD.map((fila, index) => (
                       <tr key={index}>
                       <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={0} estado={matrizDiurno[index][0]} modificar={modificar}/></td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={1} estado={matrizDiurno[index][1]} modificar={modificar}/></td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={2} estado={matrizDiurno[index][2]} modificar={modificar}/></td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={3} estado={matrizDiurno[index][3]} modificar={modificar}/></td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={4} estado={matrizDiurno[index][4]} modificar={modificar}/></td>
-                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={5} estado={matrizDiurno[index][5]} modificar={modificar}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={0} estado={matrizDiurno[index][0]} modificar={modificar} texto={cursos && mostrarCursoD(index,0)}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={1} estado={matrizDiurno[index][1]} modificar={modificar} texto={cursos && mostrarCursoD(index,1)}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={2} estado={matrizDiurno[index][2]} modificar={modificar} texto={cursos && mostrarCursoD(index,2)}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={3} estado={matrizDiurno[index][3]} modificar={modificar} texto={cursos && mostrarCursoD(index,3)}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={4} estado={matrizDiurno[index][4]} modificar={modificar} texto={cursos && mostrarCursoD(index,4)}/></td>
+                      <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoD} fila={index} columna={5} estado={matrizDiurno[index][5]} modificar={modificar} texto={cursos && mostrarCursoD(index,5)}/></td>
                       </tr>
                     ))}
                   </tbody>
@@ -222,12 +257,12 @@ export function Horario({matrizD, matrizV, data, modificar}) {
                   {armar_horario.horarioV.map((fila, index) => (
                     <tr key={index}>
                     <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={0} estado={matrizVespertino[index][0]} modificar={modificar}/></td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={1} estado={matrizVespertino[index][1]} modificar={modificar}/></td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={2} estado={matrizVespertino[index][2]} modificar={modificar}/></td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={3} estado={matrizVespertino[index][3]} modificar={modificar}/></td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={4} estado={matrizVespertino[index][4]} modificar={modificar}/></td>
-                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={5} estado={matrizVespertino[index][5]} modificar={modificar}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={0} estado={matrizVespertino[index][0]} modificar={modificar} texto={cursos && mostrarCursoD(index,0)}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={1} estado={matrizVespertino[index][1]} modificar={modificar} texto={cursos && mostrarCursoD(index,1)}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={2} estado={matrizVespertino[index][2]} modificar={modificar} texto={cursos && mostrarCursoD(index,2)}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={3} estado={matrizVespertino[index][3]} modificar={modificar} texto={cursos && mostrarCursoD(index,3)}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={4} estado={matrizVespertino[index][4]} modificar={modificar} texto={cursos && mostrarCursoD(index,4)}/></td>
+                    <td className="p-1"><BotonHorario onDatosEnviados={sacarDatoV} fila={index} columna={5} estado={matrizVespertino[index][5]} modificar={modificar} texto={cursos && mostrarCursoD(index,5)}/></td>
                     </tr>
                   ))}
                 </tbody>

@@ -59,7 +59,7 @@ export function DB_Management() {
             </div>
             <div type="button" className="btn align-self-center p-1" style={{background: 'grey', color:'white'}} onClick={() => recargarTabla(mostrar)}><i className="fa fa-refresh m-1"></i>Actualizar tabla</div>
             
-            <p className="align-self-center ml-5 mr-2 mb-0">Ordenar por: </p>
+            {/*<p className="align-self-center ml-5 mr-2 mb-0">Ordenar por: </p>
             <div className="form-check-inline">
               <label className="form-check-label">
                 <input type="radio" className="form-check-input" name="optradio" defaultChecked></input>ID
@@ -74,7 +74,7 @@ export function DB_Management() {
               <label className="form-check-label">
                 <input type="radio" className="form-check-input" name="optradio" ></input>Rut
               </label>
-            </div>
+            </div>*/}
           </div>
           
           {/*-- TABLAS --*/}

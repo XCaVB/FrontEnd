@@ -151,7 +151,7 @@ export function Planificaciones ({alerta}) {
 
 		writeFile(workbook, "Programacion_2023.xlsx", {cellStyles: true})
 	}
-	console.log(elementoSeleccionado);
+	
 	return (
 		<div>
 			<div className="table-responsive" style={{height: '60vh'}}>
