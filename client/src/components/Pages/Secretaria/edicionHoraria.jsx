@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import "../../../css/Pages.css";
 import horario from "../../../data/horarioCalendario"
 import horarioBase from '../../../data/horarioBase';
@@ -118,6 +118,8 @@ export function EdicionHoraria() {
     
     const [horarioD, setHorarioD] = useState();
     const [horarioV, setHorarioV] = useState();
+    const [modelosLlamadaD, setModelosLlamadaD] = useState();
+    const [modelosLlamadaV, setModelosLlamadaV] = useState();
 
     useEffect(() => {
     const profesorEncontrado = profesor.find((profesorItem) => profesorItem.id === usuarioId);
@@ -125,10 +127,15 @@ export function EdicionHoraria() {
     if (profesorEncontrado) {
         setHorarioD(horarioBase.horarioDiurnoBase);
         setHorarioV(horarioBase.horarioVespertinoBase);
+        setModelosLlamadaD(JSON.parse(profesorEncontrado.modulosDiurno))
+        setModelosLlamadaV(JSON.parse(profesorEncontrado.modulosVespertino))
     }
     }, [profesor, usuarioId]);
     
-  
+    const asignarModulosExistente = ()=>{
+        setHorarioD(profesor[usuarioId-1].modulosDiurno)
+        setHorarioV(profesor[usuarioId-1].modulosVespertino)
+    }
     // Estado para modelos diurnos y vespertinos
     const [modelosDVacios, setModelosDVacios] = useState({});
     const [modelosVVacios, setModelosVVacios] = useState({});
@@ -169,17 +176,17 @@ export function EdicionHoraria() {
         const asignarCursoEnMatriz = () => {
             const cursoSeleccionado = cursos.find((curso) => curso.id === props.asignar);
             if (cursoSeleccionado) {    
-                let nuevoHorarioV = horarioV;
-                let nuevoHorarioD = horarioD;
+                let nuevoHorarioV = modelosLlamadaV;
+                let nuevoHorarioD = modelosLlamadaD;
 
               console.log(nuevoHorarioD)
               if (props.jornadas === 'Vespertino') {
-                if (horarioV[props.fila][props.columna] === props.asignar) {
+                if (modelosLlamadaV[props.fila][props.columna] === props.asignar) {
                   nuevoHorarioV[props.fila][props.columna] = 0;
                   asignarModeloVVacio(nuevoHorarioV);
                 } else {
                     // Verificar si previamente hay un ID de curso asignado mayor a 0 en esa posición
-                    if (horarioV[props.fila][props.columna] > 0) {
+                    if (modelosLlamadaV[props.fila][props.columna] > 0) {
                         alert("Ya hay una asignatura")
                     } else {
                         nuevoHorarioV[props.fila][props.columna] = props.asignar;
@@ -187,13 +194,13 @@ export function EdicionHoraria() {
                     }
                 }
               } else if (props.jornadas === 'Diurno') {
-                if (horarioD[props.fila][props.columna] === props.asignar) {
+                if (modelosLlamadaD[props.fila][props.columna] === props.asignar) {
                   nuevoHorarioD[props.fila][props.columna] = 0;
                   asignarModeloDVacio(nuevoHorarioD);
                   
                 } else {
                     // Verificar si previamente hay un ID de curso asignado mayor a 0 en esa posición
-                    if (horarioD[props.fila][props.columna] > 0) {
+                    if (modelosLlamadaD[props.fila][props.columna] > 0) {
                         alert("Ya hay una asignatura")
                     } else {
                       nuevoHorarioD[props.fila][props.columna] = props.asignar;
@@ -217,6 +224,9 @@ export function EdicionHoraria() {
 
     //Realizar un sistema que agarre el arreglo de modelosDVacios.nuevaMatriz y valla posicion por posicion sacando numeros desde el 1 hasta 200 y los agrege a otro arreglo en la misma posicion que estaban anterior con el mismo numero.
     // MEJOR EN VEZ DE PASARLO COMO UN ARREGLO DE ARREGLOS, SOLO UN ARRGLO BASADO EN EL ID DEL CURSO DICIENDO ESPECIFICAMENTE EL HORARIO (EJ: LU 1200 - 1730).
+
+    // Función para dividir un arreglo en subarreglos basados en la cantidad de elementos
+    // Verifica si el objeto modelosDVacios está definido
 
     const guardarCambiosAPI = async () => {
         try {
@@ -264,13 +274,46 @@ export function EdicionHoraria() {
                 }
             }
         }
+        
     };
 
-    const eliminarCursoAPI = async (planificacionId) => {
+    const delCursosModuloD = (cursoid) => {
+        const indice = modelosLlamadaD.findIndex((curso) => curso[0] === cursoid);
+    
+        // Si encuentra el índice, reemplaza los elementos por 0
+        if (indice !== -1) {
+            modelosLlamadaD[indice] = modelosLlamadaD[indice].map(() => 0);
+        }
+    
+        return modelosLlamadaD;
+    };    
+    const delCursosModuloV = (cursoid) => {
+        const indice = modelosLlamadaV.findIndex((curso) => curso[0] === cursoid);
+    
+        // Si encuentra el índice, reemplaza los elementos por 0
+        if (indice !== -1) {
+            modelosLlamadaV[indice] = modelosLlamadaV[indice].map(() => 0);
+        }
+    
+        return modelosLlamadaV;
+    };
+
+    const eliminarCursoAPI = async (planificacionId, cursoid) => {
         try {
             // Llamada a la API para eliminar la planificación académica por su ID
             await deletePlanificacionAcad(planificacionId);
-    
+
+            delCursosModuloD(cursoid);
+            delCursosModuloV(cursoid);
+            const profesorActualizado = {
+                ...profesor[usuarioId-1], // Copia los datos originales del profesor
+                modulosDiurno: JSON.stringify(modelosLlamadaD),
+                modulosVespertino: JSON.stringify(modelosLlamadaV)
+            };
+
+            // Llamar a la función updateProfesor con el profesor actualizado
+            await updateProfesor(usuarioId, profesorActualizado);
+            
             // Actualizar la lista de planificaciones académicas después de eliminar
             const responsePlanificacionAcad = await getPlanificacionAcad();
             setPlanificacionAcad(responsePlanificacionAcad.data);
@@ -288,6 +331,8 @@ export function EdicionHoraria() {
         peticionGet();
     }, []);
 
+    const navigate = useNavigate()
+
     return (
         <div>
             <div className='contenedorPrincipal'>
@@ -302,7 +347,7 @@ export function EdicionHoraria() {
                                 return null; 
                             })}
                         </h1>
-                        <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} ><Link to={`/Administrativos/buscar-profesor/${id}/`}>Volver</Link>
+                        <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
                         </button> 
                     </div>
                 </div>
@@ -403,12 +448,12 @@ export function EdicionHoraria() {
                                         </select>
                                     </td>
                                     <td>
-                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" class="btn btn-primary" data-toggle="modal" data-target={`.modal-${curso.id}`}>
+                                    <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} type="button" data-toggle="modal" data-target={`.modal-${curso.id}`} onClick={()=>(asignarModulosExistente)} >
                                     Ingreso Horario
                                     </button>
-                                    <div class={`modal fade modal-${curso.id}`} tabindex="-1" role="dialog" aria-labelledby={`modalLabel-${curso.id}`} aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
-                                            <div class="modal-content">
+                                    <div className={`modal fade modal-${curso.id}`} tabIndex="-1" role="dialog" aria-labelledby={`modalLabel-${curso.id}`} aria-hidden="true">
+                                        <div className="modal-dialog modal-xl">
+                                            <div className="modal-content">
                                                 <div className="modal-header">
                                                     <h5 className="modal-title" id="exampleModalLabel">{modalTitle}</h5>
                                                 </div>
@@ -434,43 +479,43 @@ export function EdicionHoraria() {
                                                             armar_horario.horarioV.map((fila, index) => (
                                                                 <tr key={index}>
                                                                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][0]}
-                                                                nombreA={horarioV[index][0]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][0]}
+                                                                nombreA={modelosLlamadaV[index][0]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][1]}
-                                                                nombreA={horarioV[index][1]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][1]}
+                                                                nombreA={modelosLlamadaV[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][2]}
-                                                                nombreA={horarioV[index][2]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][2]}
+                                                                nombreA={modelosLlamadaV[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][3]}
-                                                                nombreA={horarioV[index][3]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][3]}
+                                                                nombreA={modelosLlamadaV[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][4]}
-                                                                nombreA={horarioV[index][4]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][4]}
+                                                                nombreA={modelosLlamadaV[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioV[index][5]}
-                                                                nombreA={horarioV[index][5]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaV[index][5]}
+                                                                nombreA={modelosLlamadaV[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
@@ -483,43 +528,43 @@ export function EdicionHoraria() {
                                                             armar_horario.horarioD.map((fila, index) => (
                                                                 <tr key={index}>
                                                                 <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][0]}
-                                                                nombreA={horarioD[index][0]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][0]}
+                                                                nombreA={modelosLlamadaD[index][0]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={0}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][1]}
-                                                                nombreA={horarioD[index][1]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][1]}
+                                                                nombreA={modelosLlamadaD[index][1]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={1}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][2]}
-                                                                nombreA={horarioD[index][2]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][2]}
+                                                                nombreA={modelosLlamadaD[index][2]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={2}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][3]}
-                                                                nombreA={horarioD[index][3]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][3]}
+                                                                nombreA={modelosLlamadaD[index][3]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={3}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][4]}
-                                                                nombreA={horarioD[index][4]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][4]}
+                                                                nombreA={modelosLlamadaD[index][4]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={4}
                                                                 />
                                                                 </td>
-                                                                <td className="p-1 "><ColorHorario estado={horarioD[index][5]}
-                                                                nombreA={horarioD[index][5]}
+                                                                <td className="p-1 "><ColorHorario estado={modelosLlamadaD[index][5]}
+                                                                nombreA={modelosLlamadaD[index][5]}
                                                                 asignar={curso.id}
                                                                 jornadas={jornadita}
                                                                 fila={index} columna={5}
@@ -616,7 +661,8 @@ export function EdicionHoraria() {
                         </div>
                         <div className='text-center'>
                         <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={guardarCambiosAPI}>Guardar Cambios</button> 
-                        <button onClick={()=>(console.log(profesor[usuarioId]))}>MODELOSDVA</button>
+                        <button onClick={()=>(console.log(modelosLlamadaD))}>MODELOSDVA</button>
+                        <button onClick={()=>(console.log())}>MODELOSDVA</button>
                     </div>
                     </div>
                     <div className="container rounded-lg m-2 shadow col-12" style={{border: 'solid 3px #A90429'}}>
@@ -649,7 +695,7 @@ export function EdicionHoraria() {
                                         <td className='text-center'>{item.jornada}</td>
                                         <td className='text-center'>{item.actividad}</td>
                                         <td className='text-center'>
-                                            <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCursoAPI(item.id)}>
+                                            <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCursoAPI(item.id,cursoDetails.id)}>
                                                 Eliminar
                                             </button>
                                         </td>

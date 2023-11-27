@@ -59,7 +59,7 @@ export function ProfesorPage({matrizD, matrizV}) {
         </div>
         <div className='d-flex justify-content-center col-12 m-0'>
             <h3><i className='fa fa-address-card mr-2'></i><a className="text-light" href={`mailto:${usuarios.email}`}>{usuarios.email}</a></h3>
-            <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} ><Link to={`/Administrativos/buscar-profesor/`}>Volver</Link>
+            <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
             </button> 
         </div>
       </div>
