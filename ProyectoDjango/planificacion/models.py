@@ -31,6 +31,7 @@ class PlanificacionAcademica(models.Model):
     actividad = models.CharField(max_length=255, default='')
     jornada = models.CharField(max_length=255)
     modulos = models.CharField(max_length=255, default='')
+    modalidad = models.CharField(max_length=255, default='')
 
 
 """
