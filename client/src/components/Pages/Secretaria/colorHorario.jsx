@@ -6,7 +6,7 @@ export const ColorHorario = (props) => {
         if (props.estado === 0) {
             return 'white';
         } else if (props.estado === 1) {
-            return 'green';
+            return 'lime';
         } else if (props.estado === 2) {
             return 'red';
         }
@@ -16,7 +16,7 @@ export const ColorHorario = (props) => {
         if (props.estado === 0) {
             setColor('white');
         } else if (props.estado === 1) {
-            setColor('green');
+            setColor('lime');
         } else if (props.estado === 2) {
             setColor('red');
         }

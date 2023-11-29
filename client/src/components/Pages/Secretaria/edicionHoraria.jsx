@@ -21,6 +21,7 @@ export function EdicionHoraria() {
     const [planificacionAcad, setPlanificacionAcad] = useState([]);
     const [cursoPeriodos, setCursoPeriodos] = useState({});
     const [cursoJornada, setCursoJornada] = useState({});
+    const [cursoModalidad, setCursoModalidad] = useState({});
     const [cursoActividad, setCursoActividad] = useState({});
 
     const [jornadita, setJornadita] = useState();
@@ -74,8 +75,8 @@ export function EdicionHoraria() {
         filtrar(e.target.value);
     };
 
-    const agregarCurso = (curso, periodo, jornada, actividad) => {
-        const cursoConTipo = { ...curso, periodo, jornada, actividad };
+    const agregarCurso = (curso, periodo, jornada, actividad, modalidad) => {
+        const cursoConTipo = { ...curso, periodo, jornada, actividad, modalidad};
         setCursosSeleccionados([...cursosSeleccionados, cursoConTipo]);
       
         const cursosRestantes = cursosDisponibles.filter((c) => c.id !== curso.id);
@@ -115,7 +116,9 @@ export function EdicionHoraria() {
     const handleActividadChange = (cursoId, actividad) => {
         setCursoActividad({ ...cursoActividad, [cursoId]: actividad });
     };
-    
+    const handleModalidadChange = (cursoId, modalidad) => {
+        setCursoModalidad({ ...cursoModalidad, [cursoId]: modalidad });
+    };
     const [horarioD, setHorarioD] = useState();
     const [horarioV, setHorarioV] = useState();
     const [modelosLlamadaD, setModelosLlamadaD] = useState();
@@ -350,11 +353,11 @@ export function EdicionHoraria() {
         }
 
         for (const cursoSeleccionado of cursosSeleccionados)    {
-            const { id, periodo, actividad, jornada } = cursoSeleccionado;
+            const { id, periodo, actividad, jornada, modalidad } = cursoSeleccionado;
     
             // Verificar si ya existe una planificación académica para el profesor, curso, período, actividad y jornada seleccionados.
             const planificacionExistente = planificacionAcad.find(item => {
-                return item.profesor === usuarioId && item.curso === id && item.periodo === "202310" && item.periodo === "202305" && item.actividad === actividad && item.jornada === jornada;
+                return item.profesor === usuarioId && item.curso === id && item.periodo === "202310" && item.periodo === "202305" && item.actividad === actividad && item.jornada === jornada && item.modalidad === modalidad;
             });
             
             console.log(planificacionExistente);
@@ -487,6 +490,7 @@ export function EdicionHoraria() {
                                     <th>Asignatura</th>
                                     <th>Periodo</th>
                                     <th>Jornada</th>
+                                    <th>Modalidad</th>
                                     <th>Actividad</th>
                                     <th>Modulo</th>
                                     <th>Acción</th>
@@ -542,6 +546,28 @@ export function EdicionHoraria() {
                                                 onChange={() => handleJornadaChange(curso.id, "Vespertino")}
                                             />
                                             Vespertino
+                                        </label>
+                                    </td>
+                                    <td className="text-justify">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`modalidad-${curso.id}`}
+                                                value="Presencial"
+                                                checked={cursoModalidad[curso.id]?.includes("Presencial")}
+                                                onChange={() => handleModalidadChange(curso.id, "Presencial")}
+                                            />
+                                            Presencial
+                                        </label>
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name={`modalidad-${curso.id}`}
+                                                value="Online"
+                                                checked={cursoModalidad[curso.id]?.includes("Online")}
+                                                onChange={() => handleModalidadChange(curso.id, "Online")}
+                                            />
+                                            Online
                                         </label>
                                     </td>
                                     <td>
@@ -716,11 +742,14 @@ export function EdicionHoraria() {
                                                 alert("Selecciona una Jornada");
                                             } else if (!cursoActividad[curso.id]) {
                                                 alert("Selecciona una Actividad");
+                                            } else if (!cursoModalidad[curso.id]) {
+                                                alert("Selecciona una Modalidad");
                                             } else {
                                                     const periodo = cursoPeriodos[curso.id];
                                                     const jornada = cursoJornada[curso.id];
                                                     const actividad = cursoActividad[curso.id];
-                                                    agregarCurso(curso, periodo, jornada, actividad);
+                                                    const modalidad = cursoModalidad[curso.id];
+                                                    agregarCurso(curso, periodo, jornada, actividad, modalidad);
                                                     MatrizComponentD();
                                                     MatrizComponentV();
                                                 }
@@ -751,6 +780,7 @@ export function EdicionHoraria() {
                                         <th>Asignatura</th>
                                         <th>Periodo</th>
                                         <th>Jornada</th>
+                                        <th>Modalidad</th>
                                         <th>Actividad</th>
                                         <th>Acción</th>
                                     </tr>
@@ -763,6 +793,7 @@ export function EdicionHoraria() {
                                             <td className='text-center'>{curso.nombreAsignatura}</td>
                                             <td className='text-center'>{curso.periodo}</td>
                                             <td className='text-center'>{curso.jornada}</td>
+                                            <td className='text-center'>{curso.modalidad}</td>
                                             <td className='text-center'>{curso.actividad}</td>
                                             <td className='text-center'>
                                                 <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCurso(curso)}>
@@ -793,6 +824,7 @@ export function EdicionHoraria() {
                                         <th>Asignatura</th>
                                         <th>Periodo</th>
                                         <th>Jornada</th>
+                                        <th>Modalidad</th>
                                         <th>Actividad</th>
                                         <th>Acción</th>
                                     </tr>
@@ -808,6 +840,7 @@ export function EdicionHoraria() {
                                         <td className='text-center'>{cursoDetails.nombreAsignatura}</td>
                                         <td className='text-center'>{item.periodo}</td>
                                         <td className='text-center'>{item.jornada}</td>
+                                        <td className='text-center'>{item.modalidad}</td>
                                         <td className='text-center'>{item.actividad}</td>
                                         <td className='text-center'>
                                             <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => eliminarCursoAPI(item.id,cursoDetails.id)}>
