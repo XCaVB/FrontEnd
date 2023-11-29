@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getUsuariosID, getProfesores, getAllCursos } from '../../../api/horario.api';
 import horario from "../../../data/horarioCalendario"
+import logoSM from "../../../images/logo-sm.png"
 import { ColorHorario } from './colorHorario';
 
-export function ProfesorPage({matrizD, matrizV}) {
+export function ProfesorPage({matrizD, matrizV, secretario}) {
   const { id } = useParams();
   const usuarioId = parseInt(id);
   const armar_horario = horario
@@ -50,14 +51,14 @@ export function ProfesorPage({matrizD, matrizV}) {
   }, [id]);
   
   const navigate = useNavigate()
-
+  console.log(secretario);
   return (
     <div>
       <div className='d-flex flex-column m-0' style={{background: '#03102C', color: 'white'}}>
         <div className='d-flex col-12 justify-content-center m-0'>
-        <h1 className='h1'>Horario profesor {usuarios.first_name}</h1>
+        <h1 className='h1'>HORARIO PROFESOR(A) {usuarios.first_name}</h1>
         </div>
-        <div className='d-flex justify-content-center col-12 m-0'>
+        <div className='d-flex justify-content-center col-12 m-0 border-bottom border-danger'>
             <h3><i className='fa fa-address-card mr-2'></i><a className="text-light" href={`mailto:${usuarios.email}`}>{usuarios.email}</a></h3>
             <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
             </button> 
@@ -66,11 +67,13 @@ export function ProfesorPage({matrizD, matrizV}) {
 
       <div className='d-flex'>
         <div className='d-flex flex-column col-2' style={{background: '#03102C'}}>
-          <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={() => navigate(`/administrativos/buscar-profesor/${id}/editar-horario`)}>
-            Crear/Editar horario
+          <button className="btn btn-danger mb-2 mr-2 ml-2 mt-4" style={{color: 'white', background: '#A90429', height:'10vh'}} onClick={() => navigate(`/administrativos/buscar-profesor/${id}/editar-horario`, {state: {info: secretario}})}>
+            Crear/Modificar horario profesor(a)
           </button> 
           <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} disabled>Descargar</button>
+          <img src={logoSM} alt='logoSmall' className='img-fluid my-auto'/>
         </div>
+
 
         <div id="accordion" className='col-10 p-5 mx-auto'>
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import "../../../css/Pages.css";
 import horario from "../../../data/horarioCalendario"
 import horarioBase from '../../../data/horarioBase';
-import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad, updateProfesor} from '../../../api/horario.api';
+import { getProfesores, getUsuarios, getCurso, getPlanificacionAcad, createPlanificacionAcad, deletePlanificacionAcad, updateProfesor, createAuditoria} from '../../../api/horario.api';
 
 export function EdicionHoraria() {
     const armar_horario = horario
@@ -28,6 +28,10 @@ export function EdicionHoraria() {
     const [modalTitle, setModalTitle] = useState('Debes seleccionar una Jornada'); // Título inicial del modal
 
     const [nombreAsignatura, setNombreAsignatura] = useState();
+
+
+    const info = useLocation()
+    console.log(info.state.info.data);
 
     const peticionGet = async () => {
         try {
@@ -386,6 +390,13 @@ export function EdicionHoraria() {
                     // Refrescar la lista de planificaciones académicas después de crear una nueva
                     const responsePlanificacionAcad = await getPlanificacionAcad();
                     setPlanificacionAcad(responsePlanificacionAcad.data);
+                    //Guardar fecha y hora actual para historial de cambios
+                    let fechaHora = (await getHoraChile()).data.datetime
+                    fechaHora = fechaHora.split("T")
+                    fechaHora[1] = fechaHora[1].slice(0,5)
+
+                    //const auditoria = {evento: "Agregó una nueva planificación a", objetivo: "", fechaHora: fechaHora.toString(), user: }
+                    //await createAuditoria(auditoria)
                     alert("Cambios guardados");
                 } catch (error) {
                     alert('Error al crear la planificación académica:', error);
@@ -451,11 +462,11 @@ export function EdicionHoraria() {
     const navigate = useNavigate()
 
     return (
-        <div>
+        <div className='mr-0 mt-3 ml-3 mr-3 shadow' style={{height: '90vh', border: 'solid 3px #A90429', borderRadius: '5px'}}>
             <div className='contenedorPrincipal'>
                 <div className='d-flex flex-column m-0' style={{background: '#03102C', color: 'white'}}>
                     <div className='d-flex col-12 justify-content-center m-0'>
-                        <h1 className='h1'>Asignación al profesor{' '}
+                        <h1 className='h1'>ASIGNACIÓN A PROFESOR(A){' '}
                             {profesor.map((item) => {
                                 if (item.id === usuarioId) {
                                     const usuarioAsociado = usuarios.find(usuario => usuario.id === item.user);
@@ -464,13 +475,13 @@ export function EdicionHoraria() {
                                 return null; 
                             })}
                         </h1>
-                        <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
+                        <button className="btn ml-5 m-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
                         </button> 
                     </div>
                 </div>
             </div>
             <div className="row justify-content-center mr-0">
-                <div className="container rounded-lg m-1 shadow col-6" style={{border: 'solid 3px #A90429'}}>
+                <div className="container rounded-lg m-1 shadow col-6" style={{border: 'solid 3px #A90429', height:'80vh'}}>
                     <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
                         Seleccion Asignaturas
                     </div>

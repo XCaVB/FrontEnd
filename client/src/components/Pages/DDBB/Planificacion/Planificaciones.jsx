@@ -192,13 +192,13 @@ export function Planificaciones ({alerta}) {
 			}
 
 			// Establecer el ancho predeterminado de las columnas
-			worksheet['!cols'] = [{ width: 20 }]; // Puedes ajustar el valor según sea necesario
+			worksheet['!cols'] = [{ width: 20 }]
 
 			// Establecer la altura predeterminada de las filas
 			for (let R = range.s.r; R <= range.e.r; R++) {
-				const row = worksheet[utils.encode_row(R)];
+				const row = worksheet[utils.encode_row(R)]
 				if (row && row.s) {
-					row.hpt = 50 * 20; // Altura en puntos (15 es el valor que proporcionaste)
+					row.hpt = 50 * 20 // Altura en puntos 
 				}
 			}
 		  

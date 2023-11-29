@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import "../../../css/barraBuscadora.css"
 import { getUsuarios, getUsuariosRut , getProfesores} from '../../../api/horario.api';
 
@@ -64,6 +64,9 @@ export function BarraBuscadora(){
         peticionGet();
     },[])
 
+    const navigate = useNavigate()
+    const info = useLocation()
+    console.log(info);
     return(
         <div className="container rounded mt-4 shadow col-10" style={{border: 'solid 3px #A90429'}}>
           <div className="row justify-content-center p-2 mb-3" style={{background:'#03102C', color:'white', fontSize: 22}}>
@@ -116,9 +119,9 @@ export function BarraBuscadora(){
                     <tr key={profesor.id}>
                       <td>{profesor.id}</td>
                       <td>
-                        <Link to={`/Administrativos/buscar-profesor/${profesor.id}`} style={{color: 'black', fontWeight: 'bold'}}>
+                        <div onClick={() => navigate(`/Administrativos/buscar-profesor/${profesor.id}`, {state:{data: info.state.data}})} style={{color: 'black', fontWeight: 'bold', cursor:'pointer'}}>
                           {usuarioCorrespondiente ? usuarioCorrespondiente.first_name : 'N/A'}
-                        </Link>
+                        </div>
                       </td>
                       <td>{usuarioRutCorrespondiente ? usuarioRutCorrespondiente.rut : 'N/A'}</td>
                       <td>{profesor.carrera}</td>

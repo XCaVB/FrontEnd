@@ -4,7 +4,7 @@ import horarioBase from "../../../data/horarioBase"
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from "react"
 
-export function RegistrarHorario(){
+export function RegistrarHorario({secretario}){
 
 
     const [horarioDiurno, setHorarioDiurno] = useState(null)
@@ -27,7 +27,7 @@ export function RegistrarHorario(){
 
     return(
         <div className='container rounded mt-4 mb-4 p-0 col-10' style={{border: 'solid 3px #A90429'}}>
-            {(horarioDiurno !== null) && (horarioVespertino !== null) && <ProfesorPage matrizD={horarioDiurno} matrizV={horarioVespertino} data={data}/>}
+            {(horarioDiurno !== null) && (horarioVespertino !== null) && <ProfesorPage matrizD={horarioDiurno} matrizV={horarioVespertino} secretario={secretario}/>}
 
         </div>
     )

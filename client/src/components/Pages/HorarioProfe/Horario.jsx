@@ -100,7 +100,7 @@ export function Horario({matrizD, matrizV, data, modificar}) {
       user: data.user
     }
 
-    //Guardar fecha y hora actual para notificaciones
+    //Guardar fecha y hora actual para historial de cambios
     let fechaHora = (await getHoraChile()).data.datetime
     fechaHora = fechaHora.split("T")
     fechaHora[1] = fechaHora[1].slice(0,5)
