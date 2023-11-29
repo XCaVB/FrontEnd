@@ -6,7 +6,7 @@ export const ColorHorario = (props) => {
         if (props.estado === 0) {
             return 'white';
         } else if (props.estado === 1) {
-            return 'lime';
+            return 'green';
         } else if (props.estado === 2) {
             return 'red';
         }
@@ -16,7 +16,7 @@ export const ColorHorario = (props) => {
         if (props.estado === 0) {
             setColor('white');
         } else if (props.estado === 1) {
-            setColor('lime');
+            setColor('green');
         } else if (props.estado === 2) {
             setColor('red');
         }
@@ -42,7 +42,7 @@ export const ColorHorario = (props) => {
             style={{ background: color }}
         >
             {(props.modulo !== undefined && props.modulo !== 0 && curso.length > 0) && (
-                <span>{curso[props.modulo - 1].nombreAsignatura}</span>
+                <span className='text-light'>{curso[props.modulo - 1].nombreAsignatura}</span>
             )}
         </div>
     );

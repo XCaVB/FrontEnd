@@ -377,6 +377,7 @@ export function EdicionHoraria() {
                         periodo: periodoNuevo,
                         actividad: actividad, // Reemplaza esto con el valor correcto
                         jornada: jornada, // Reemplaza esto con el valor correcto
+                        modalidad: modalidad,
                         modulos: JSON.stringify(modulosTotal[id]),
                         profesor: usuarioId,
                         curso: id,
@@ -481,7 +482,7 @@ export function EdicionHoraria() {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="table-responsive" style={{height: '60vh'}}>
+                    <div className="table-responsive" style={{height: '70vh'}}>
                         <table className="table table-sm table-striped table-bordered table-hover">
                             <thead className='text-center'>
                                 <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -771,7 +772,7 @@ export function EdicionHoraria() {
                         <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
                         Asignaturas Agregadas
                         </div>
-                        <div className="table-responsive">
+                        <div className="table-responsive" style={{height: '25vh'}}>
                             <table className="table table-sm table-striped table-bordered table-hover">
                                 <thead className='text-center'>
                                     <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
@@ -807,15 +808,13 @@ export function EdicionHoraria() {
                         </div>
                         <div className='text-center'>
                         <button className="btn btn-danger m-2" style={{color: 'white', background: '#A90429'}} onClick={guardarCambiosAPI}>Guardar Cambios</button> 
-                        <button onClick={()=>(console.log(MatrizComponent()))}>MODELOSDVA</button>
-                        <button onClick={()=>(console.log())}>MODELOSDVA</button>
                     </div>
                     </div>
                     <div className="container rounded-lg m-2 shadow col-12" style={{border: 'solid 3px #A90429'}}>
                         <div className="row justify-content-center p-2" style={{background:'#03102C', color:'white', fontSize: 22}}>
                         Asignaturas Previamente Inscritas
                         </div>
-                        <div className="table-responsive">
+                        <div className="table-responsive" style={{height: '37vh'}}>
                             <table className="table table-sm table-striped table-bordered table-hover">
                                 <thead className='text-center'>
                                     <tr style={{background: 'gray', color:'white', textAlign: 'center'}}>
