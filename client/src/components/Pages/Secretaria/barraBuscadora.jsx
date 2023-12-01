@@ -60,13 +60,41 @@ export function BarraBuscadora(){
         setUsuarios(resultadosBusqueda);
     }
 
+    const disponibilidad = (horarioDiurno, horarioVespertino) => {
+      let disponible = false
+      
+      const horarioD = JSON.parse(horarioDiurno)
+      horarioD.forEach((fila) => {
+        fila.map((columna) => {
+          if (columna == 1) {
+            disponible = true
+          }
+        })
+      })
+      
+      const horarioV = JSON.parse(horarioVespertino)
+      horarioV.forEach((fila) => {
+        fila.map((columna) => {
+          if (columna == 1) {
+            disponible = true
+          }
+        })
+      })
+
+      if (disponible) {
+        return <i className="fa fa-check-circle text-success mx-auto"></i>
+      } else {
+        return <i className="fa fa-times-circle rounded text-danger mx-auto"></i>
+      }
+    }
+    
     useEffect(()=>{
         peticionGet();
     },[])
 
     const navigate = useNavigate()
     const info = useLocation()
-    console.log(info);
+    //console.log(info);
     return(
         <div className="container rounded mt-4 shadow col-10" style={{border: 'solid 3px #A90429'}}>
           <div className="row justify-content-center p-2 mb-3" style={{background:'#03102C', color:'white', fontSize: 22}}>
@@ -94,6 +122,7 @@ export function BarraBuscadora(){
                   <th>Carrera</th>
                   <th>Departamento</th>
                   <th>Jornada</th>
+                  <th>Disponibilidad</th>
                 </tr>
               </thead>
               <tbody>
@@ -127,6 +156,7 @@ export function BarraBuscadora(){
                       <td>{profesor.carrera}</td>
                       <td>{profesor.departamento}</td>
                       <td>{profesor.jornada}</td>
+                      <td>{profesor && disponibilidad(profesor.horarioDiurno, profesor.horarioVespertino)}</td>
                     </tr>
                   );
                 })}

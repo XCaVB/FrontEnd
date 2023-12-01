@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react"
 
 export const BotonHorario = (props) => {
-
     const [color, setColor] = useState(() => {
-        if (props.estado === 0){
+        if (props.estado === 8){
             return 'white'
         }
-        if (props.estado === 1){
+        if ( props.texto !== null){
+            console.log(props.texto);
             return 'green'
         }
         if (props.estado === 2){
