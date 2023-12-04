@@ -29,10 +29,6 @@ export function EdicionHoraria() {
 
     const [nombreAsignatura, setNombreAsignatura] = useState();
 
-
-    const info = useLocation()
-    console.log(info.state.info.data);
-
     const peticionGet = async () => {
         try {
             const responseUser = await getUsuarios();
@@ -239,7 +235,7 @@ export function EdicionHoraria() {
     const [arreglosPorMatrizD, setArreglosPorMatrizD] = useState({});
     const MatrizComponentD = () => {
         const dias = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
-        const horas = ['8:30 - 9:15', '9:25 - 10:10', '10:20 - 11:05', '11:15 - 12:00', '12:10 - 12:55', '13:05 - 13:50', '14:00 - 14:45', '14:55 - 15:50', '15:50 - 16:35', '16:45 - 17:30', '17:40 - 18:25', '18:35 - 19:20', '19:30 - 20:15', '20:25 - 21:10'];
+        const horas = ['8:30-9:15', '9:25-10:10', '10:20-11:05', '11:15-12:00', '12:10-12:55', '13:05-13:50', '14:00-14:45', '14:55-15:50', '15:50-16:35', '16:45-17:30', '17:40-18:25', '18:35-19:20', '19:30-20:15', '20:25-21:10'];
           // Encuentra los números únicos en la matriz
         const numerosUnicos = [...new Set(modelosDVacios.nuevaMatriz.flat())];
 
@@ -314,7 +310,7 @@ export function EdicionHoraria() {
           // Actualiza el estado con las nuevas matrices
         setNuevasMatricesV(nuevas_matrices);
         const dias = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
-        const horas = ['19:00 - 19:45', '19:46 - 20:30', '20:40 - 21:25', '21:26 - 22:10', '22:20 - 23:05', '23:05 - 23:50'];
+        const horas = ['19:00-19:45', '19:46-20:30', '20:40-21:25', '21:26-22:10', '22:20-23:05', '23:05-23:50'];
 
         let nuevosArreglosPorMatriz = {}; // Objeto para almacenar los arreglos por matriz
 

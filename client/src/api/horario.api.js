@@ -135,3 +135,5 @@ export const createPlanificacionAcad = (planificacion) => EdicionHorariaAPI.post
 export const updatePlanificacionAcad = (id, planificacion) => EdicionHorariaAPI.put(`planificacion/planificacion-academica/${id}/`, planificacion)
 
 export const deletePlanificacionAcad = (id) => EdicionHorariaAPI.delete(`planificacion/planificacion-academica/${id}/`)
+
+export const getPlanificacionProfe = (profesor) => planApi.get(`/?search=${profesor}`)
