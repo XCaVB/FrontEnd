@@ -18,51 +18,33 @@ export const ColorHorario = (props) => {
         peticionGet();
       }, []);
 
-    const [color, setColor] = useState(() => {
+      const obtenerColor = () => {
+
         let colorResult = '';
-        const cursos = curso;
         if (props.estado === 0) {
             colorResult = 'white';
         } else if (props.estado === 1) {
-            colorResult = 'green';
+            colorResult = '#198754';
         } else if (props.estado === 2) {
             colorResult = 'red';
-        } else {
-            // Itera sobre las claves de jornadas
-            Object.keys(jornadas).forEach((X) => {
-                if (cursos && X === cursos[props.modulo - 1]) {
-                    colorResult = 'blue';
-                }
-            });
         }
         return colorResult;
-    });
+    };
 
-    useEffect(() => {
-        const cursos = curso;
-        if (props.estado === 0) {
-            setColor('white');
-        } else if (props.estado === 1) {
-            setColor('green');
-        } else if (props.estado === 2) {
-            setColor('red');
-        } else {
-            // Itera sobre las claves de jornadas
-            Object.keys(jornadas).forEach((X) => {
-                if (cursos && X === cursos[props.modulo - 1]) {
-                    setColor("blue");
-                }
-            });
-        }
-    }, [props.estado]);
+    const color = obtenerColor();
 
+//curso[props.modulo - 1].nombreAsignatura
+//Object.keys(props.jornadas)[props.modulo-1]
+//Object.keys(props.jornadas)
     return (
         <div
             className="p-4 w-90 h-90"
             style={{ background: color }}
         >
-            {(props.modulo !== undefined && props.modulo !== 0 && curso.length > 0) && (
-                <span className='text-light'>{curso[props.modulo - 1].nombreAsignatura}</span>
+            {props.modulo !== undefined && props.modulo !== 0 && curso && curso.length > 0 && (
+                <span className={color === 'white' ? '' : 'text-white'}>
+                    {curso[props.modulo - 1].nombreAsignatura}
+                </span>
             )}
         </div>
     );

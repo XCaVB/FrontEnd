@@ -137,7 +137,7 @@ const obtenerJornadas = () => {
 
     for (let planificacion of planificaciones) {
       if (matricesSeparadas[planificacion.curso]) {
-        jornadas[planificacion.curso] = planificacion.jornada;
+        jornadas[planificacion.curso] = planificacion.modalidad;
       }
     }
 
@@ -177,21 +177,6 @@ useEffect(() => {
             <h3><i className='fa fa-address-card mr-2'></i><a className="text-light" href={`mailto:${usuarios.email}`}>{usuarios.email}</a></h3>
             <button className="btn ml-5 mb-2" style={{color: 'white', background: 'grey'}} onClick={()=>navigate(-1)}>Volver
             </button> 
-    
-            <button onClick={()=>(transformarArregloAMatriz())}>Profe
-            </button> 
-            <button onClick={()=>(console.log(matrizCompleta))}>completa
-            </button> 
-            <button onClick={()=>(console.log(matricesSeparadas))}>separada
-            </button> 
-            <button onClick={()=>(console.log(planificaciones))}>plani
-            </button> 
-            <button onClick={()=>(console.log(obtenerJornadas()))}>plani
-            </button> 
-            <button onClick={()=>(console.log(planificaciones))}>asdasd
-            </button> 
-            <button onClick={()=>(Object.keys(jornadas).forEach((X) => {console.log(X)}))}>asdsdasdasd
-            </button>
         </div>
       </div>
 
@@ -234,22 +219,22 @@ useEffect(() => {
                       <tr key={index}>
                       <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][0]} modulo={moduloD && moduloD[index] && moduloD[index][0]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][0]} modulo={moduloD && moduloD[index] && moduloD[index][0]} jornadas={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][1]} modulo={moduloD && moduloD[index] && moduloD[index][1]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][1]} modulo={moduloD && moduloD[index] && moduloD[index][1]} jornadas={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][2]} modulo={moduloD && moduloD[index] && moduloD[index][2]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][2]} modulo={moduloD && moduloD[index] && moduloD[index][2]} jornadas={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][3]} modulo={moduloD && moduloD[index] && moduloD[index][3]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][3]} modulo={moduloD && moduloD[index] && moduloD[index][3]} jornadas={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][4]} modulo={moduloD && moduloD[index] && moduloD[index][4]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][4]} modulo={moduloD && moduloD[index] && moduloD[index][4]} jornadas={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][5]} modulo={moduloD && moduloD[index] && moduloD[index][5]} jornadita={jornadas}/>
+                        <ColorHorario estado={horarioD[index][5]} modulo={moduloD && moduloD[index] && moduloD[index][5]} jornadas={jornadas}/>
                       </td>
                       </tr>
                     ))}
