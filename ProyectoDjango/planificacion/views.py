@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from .serializer import *
 from .models import *
+
 
 # Create your views here.
 class SecretarioAcademicoSeri(viewsets.ModelViewSet):
@@ -11,6 +12,8 @@ class SecretarioAcademicoSeri(viewsets.ModelViewSet):
 class PlanificacionAcademicaSeri(viewsets.ModelViewSet):
     serializer_class = PlanificacionAcademicaSerializer
     queryset = PlanificacionAcademica.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['=profesor__id']
 
 class CursoSeri(viewsets.ModelViewSet):
     serializer_class = CursoSerializer
