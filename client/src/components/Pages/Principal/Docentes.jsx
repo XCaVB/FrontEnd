@@ -2,7 +2,7 @@ import { getProfesorUser, getUsuario, loginDocente } from "../../../api/horario.
 import { Header } from "../../Headers/HeaderHome"
 import { useNavigate } from "react-router-dom"
 import fondo from "../../../images/fondo2.jpg"
-import '../../../css/Ingreso.css'
+import '../../../css/ingreso.css'
 import { useState } from "react"
 
 export function Docentes(){

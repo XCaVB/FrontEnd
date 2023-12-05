@@ -1,5 +1,5 @@
 import { createContext, useState } from "react"
-import '../../../css/Ingreso.css'
+import '../../../css/ingreso.css'
 import fondo from "../../../images/fondo2.jpg"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { loginAdministrativo } from "../../../api/horario.api"

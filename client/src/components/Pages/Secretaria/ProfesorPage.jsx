@@ -234,22 +234,22 @@ useEffect(() => {
                       <tr key={index}>
                       <td style={{background:'gray', color:'white', textAlign:'center'}}>{fila.hora}</td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][0]} modulo={moduloD && moduloD[index] && moduloD[index][0]} jornadas={jornadas} />
+                        <ColorHorario estado={horarioD[index][0]} modulo={moduloD && moduloD[index] && moduloD[index][0]} jornadita={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][1]} modulo={moduloD && moduloD[index] && moduloD[index][1]} jornadas={jornadas}/>
+                        <ColorHorario estado={horarioD[index][1]} modulo={moduloD && moduloD[index] && moduloD[index][1]} jornadita={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][2]} modulo={moduloD && moduloD[index] && moduloD[index][2]} jornadas={jornadas}/>
+                        <ColorHorario estado={horarioD[index][2]} modulo={moduloD && moduloD[index] && moduloD[index][2]} jornadita={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][3]} modulo={moduloD && moduloD[index] && moduloD[index][3]} jornadas={jornadas}/>
+                        <ColorHorario estado={horarioD[index][3]} modulo={moduloD && moduloD[index] && moduloD[index][3]} jornadita={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][4]} modulo={moduloD && moduloD[index] && moduloD[index][4]} jornadas={jornadas}/>
+                        <ColorHorario estado={horarioD[index][4]} modulo={moduloD && moduloD[index] && moduloD[index][4]} jornadita={jornadas}/>
                       </td>
                       <td className="p-1 ">
-                        <ColorHorario estado={horarioD[index][5]} modulo={moduloD && moduloD[index] && moduloD[index][5]} jornadas={jornadas}/>
+                        <ColorHorario estado={horarioD[index][5]} modulo={moduloD && moduloD[index] && moduloD[index][5]} jornadita={jornadas}/>
                       </td>
                       </tr>
                     ))}
