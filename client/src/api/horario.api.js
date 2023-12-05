@@ -15,7 +15,7 @@ export const getHoraChile = () => timeApi.get('/')
 
 //Login//
 const loginApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/'
+    baseURL: 'http://localhost:8000/'
 })
 
 export const loginDocente = (data) => loginApi.post('/logindocente/', data)
@@ -23,7 +23,7 @@ export const loginAdministrativo = (data) => loginApi.post('/loginsecretario/', 
 
 //---PROFESOR---//
 const profesoresApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/disponibilidad/profesor/'
+    baseURL: 'http://localhost:8000/disponibilidad/profesor/'
 })
 
 export const getAllProfesores = () => profesoresApi.get('/')
@@ -40,7 +40,7 @@ export const updateProfesor = (id, profesor) => profesoresApi.put(`/${id}/`, pro
 
 //---USUARIOS---//
 const usuariosApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/core/user/'
+    baseURL: 'http://localhost:8000/core/user/'
 })
 
 export const getAllUsuarios = () => usuariosApi.get('/')
@@ -57,14 +57,14 @@ export const deleteUsuario = (id) => usuariosApi.delete(`/${id}`)
 
 //--DATA USUARIOS--//
 const usuario_dataApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/core/user_data/'
+    baseURL: 'http://localhost:8000/core/user_data/'
 })
 
 export const getAllUserData = () => usuario_dataApi.get('/')
 
 //---CURSOS---//
 const cursosApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/planificacion/curso/'
+    baseURL: 'http://localhost:8000/planificacion/curso/'
 })
 
 export const getAllCursos = () => cursosApi.get('/')
@@ -79,7 +79,7 @@ export const deleteCurso = (id) => cursosApi.delete(`/${id}`)
 
 //---PLANIFICACION ACADEMICA---//
 const planApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/planificacion/planificacion-academica/'
+    baseURL: 'http://localhost:8000/planificacion/planificacion-academica/'
 })
 
 export const getAllPlanificacion = () => planApi.get('/')
@@ -95,7 +95,7 @@ export const deletePlanificacion = (id) => planApi.delete(`/${id}`)
 //---AUDITORIA---//
 
 const auditoriaApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/auditoria/auditoria/'
+    baseURL: 'http://localhost:8000/auditoria/auditoria/'
 })
 
 export const getAllAuditorias = () => auditoriaApi.get('/')
@@ -108,7 +108,7 @@ export const deleteAuditoria = (id) => auditoriaApi.delete(`/${id}`)
 
 //---BarraBuscadora---//
 const barraBuscadoraApi = axios.create({
-    baseURL: 'http://3.82.119.255:443/'
+    baseURL: 'http://localhost:8000/'
 })
 
 export const getUsuarios = () => barraBuscadoraApi.get('/core/user')
@@ -123,7 +123,7 @@ export const getProfesoresID = (id) => barraBuscadoraApi.get(`/disponibilidad/pr
 
 //---EDICION HORARIA---//
 const EdicionHorariaAPI = axios.create({
-    baseURL: 'http://3.82.119.255:443/'
+    baseURL: 'http://localhost:8000/'
 })
 
 export const getCurso = () => EdicionHorariaAPI.get('planificacion/curso/')
